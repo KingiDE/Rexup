@@ -21,9 +21,11 @@ By default the backup is created on your Desktop. If you modified the location o
 
 Here is the result from the presentation video on the landing page:
 
-![Result](https://github.com/user-attachments/assets/649c29e5-1a7a-4170-9093-f44786e6a30a)
+![Result](https://github.com/user-attachments/assets/6ede11f1-40a1-4269-857c-3ca5b6ed5c71)
 
 And this is the entire tutorial video:
 
-https://github.com/user-attachments/assets/73cb9d19-b027-4d27-9636-afd231a8fc61
+https://github.com/user-attachments/assets/ccb74685-b009-4633-af42-7c0ce73249f8
+
+
 
