@@ -1,0 +1,32 @@
+{
+	"name": "rexup",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Rexup is a backup creation tool",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"tauri": "tauri",
+		"check": "tsc --noEmit --skipLibCheck",
+		"format": "prettier --write \"**/*.{js,ts,jsx,tsx,css,scss,html,json}\""
+	},
+	"dependencies": {
+		"@tailwindcss/vite": "^4.0.9",
+		"@tauri-apps/api": "^2",
+		"@tauri-apps/plugin-opener": "^2",
+		"prettier": "^3.5.2",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"tailwindcss": "^4.0.9"
+	},
+	"devDependencies": {
+		"@types/react": "^18.3.1",
+		"@types/react-dom": "^18.3.1",
+		"@vitejs/plugin-react": "^4.3.4",
+		"typescript": "~5.6.2",
+		"vite": "^6.0.3",
+		"@tauri-apps/cli": "^2"
+	}
+}
