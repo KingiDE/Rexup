@@ -83,7 +83,7 @@ export default function Overview({
 	>(null);
 
 	return (
-		<div className="bg-gray-900 rounded-md p-4 h-full">
+		<div className="bg-gray-900 rounded-md p-4 min-h-full">
 			{/* Header */}
 			<HeadingII>
 				Overview of Backup: "{currentSelectedBackup[1].name}"
