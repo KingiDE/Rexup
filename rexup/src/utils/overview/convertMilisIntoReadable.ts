@@ -1,3 +1,3 @@
 export function convertMilisIntoReadable(milis: number) {
-  return `${milis / 1000}s`;
+	return `${milis / 1000}s`;
 }
