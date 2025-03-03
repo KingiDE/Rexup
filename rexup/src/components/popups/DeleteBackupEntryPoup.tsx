@@ -1,60 +1,63 @@
 import { Dispatch, SetStateAction } from "react";
 import useFadeIn from "../../hooks/popups/useFadeInOut";
-import { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
 import Popup from "../ui-lib/Popup";
 import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 import { SpacingSmall } from "../ui-lib/Spacing";
 import Button from "../ui-lib/Buttons";
+import { CurrentPopup } from "../../App";
 
 export default function DeleteBackupEntryPoup({
-  backupToDelete,
-  setBackupToDelete,
-  deleteBackupEntry,
+	currentPopup,
+	setCurrentPopup,
+	deleteBackupEntry
 }: {
-  backupToDelete: [string, LocalStateBackupEntry] | null;
-  setBackupToDelete: Dispatch<
-    SetStateAction<[string, LocalStateBackupEntry] | null>
-  >;
-  deleteBackupEntry: (id: string) => void;
+	currentPopup: CurrentPopup;
+	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
+	deleteBackupEntry: (id: string) => void;
 }) {
-  const { wrapper, fadeOut } = useFadeIn(backupToDelete !== null);
+	const { wrapper, fadeOut } = useFadeIn(
+		currentPopup !== null && currentPopup.variant === "removebackupentry"
+	);
 
-  function executeCancelDeletion() {
-    setBackupToDelete(null);
-    fadeOut();
-  }
+	// Cancel deletion
+	function executeCancelDeletion() {
+		setCurrentPopup(null);
+		fadeOut();
+	}
 
-  function localDeleteBackupEntry() {
-    if (!backupToDelete) return;
+	// Confirm deletion
+	function localDeleteBackupEntry() {
+		if (currentPopup === null || currentPopup.variant !== "removebackupentry")
+			return;
 
-    deleteBackupEntry(backupToDelete[0]);
-    setBackupToDelete(null);
-  }
+		deleteBackupEntry(currentPopup.value[0]);
+		setCurrentPopup(null);
+	}
 
-  return (
-    <Popup
-      wrapperRef={wrapper}
-      onCancelAction={executeCancelDeletion}
-      onConfirmAction={localDeleteBackupEntry}
-    >
-      <HeadingIII>Delete Backup Entry</HeadingIII>
-      <DescriptionBlock>
-        Carefully read this warning: Do you really want to delete this backup
-        entry? This action cannot be undone.
-      </DescriptionBlock>
-      <SpacingSmall />
-      <div className="flex gap-4 mt-8">
-        <Button
-          text="Cancel"
-          onClick={executeCancelDeletion}
-          meaning="neutral"
-        />
-        <Button
-          text="Delete"
-          onClick={localDeleteBackupEntry}
-          meaning="negative"
-        />
-      </div>
-    </Popup>
-  );
+	return (
+		<Popup
+			wrapperRef={wrapper}
+			onCancelAction={executeCancelDeletion}
+			onConfirmAction={localDeleteBackupEntry}
+		>
+			<HeadingIII>Delete Backup Entry</HeadingIII>
+			<DescriptionBlock>
+				Carefully read this warning: Do you really want to delete this backup
+				entry? This action cannot be undone.
+			</DescriptionBlock>
+			<SpacingSmall />
+			<div className="flex gap-4 mt-8">
+				<Button
+					text="Cancel"
+					onClick={executeCancelDeletion}
+					meaning="neutral"
+				/>
+				<Button
+					text="Delete"
+					onClick={localDeleteBackupEntry}
+					meaning="negative"
+				/>
+			</div>
+		</Popup>
+	);
 }
