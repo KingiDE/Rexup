@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { LocalStateBackupWithId } from "../useCurrentSelectedBackup";
 import { HistoryFile } from "../useStoredValues";
 import { LogMessage } from "./useLogs";
@@ -12,6 +12,11 @@ export default function useExecutebackups(
 	storedHistory: HistoryFile | null,
 	setStoredHistory: Dispatch<SetStateAction<HistoryFile | null>>
 ) {
+	// Clear logs as soon as the selectedBackup changes
+	useEffect(() => {
+		clearLogs();
+	}, [backup])
+
 	async function executeBackup() {
 		// Clear the logs on start
 		clearLogs();
