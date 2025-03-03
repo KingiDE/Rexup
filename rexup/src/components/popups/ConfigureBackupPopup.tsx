@@ -104,7 +104,6 @@ export default function ConfigureBackupPopup({
 						path
 					);
 				}}
-				variant="folder"
 			/>
 		</Window>
 	);

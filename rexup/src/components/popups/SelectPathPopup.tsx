@@ -11,13 +11,11 @@ import FolderOrFile from "./path-selector/FolderOrFile";
 export default function SelectFolderPopup({
 	isShown,
 	setFinalPath,
-	setIsShown,
-	variant
+	setIsShown
 }: {
 	isShown: boolean;
-	setFinalPath: (path: string) => void;
+	setFinalPath: (path: string, variant: "file" | "folder") => void;
 	setIsShown: Dispatch<SetStateAction<boolean>>;
-	variant: "file" | "folder";
 }) {
 	const {
 		path,
@@ -29,12 +27,14 @@ export default function SelectFolderPopup({
 		updatePath,
 		setPathElements,
 		sortDirEntries
-	} = useSelectFolderPopup(variant, isShown);
+	} = useSelectFolderPopup(isShown);
 
 	const { wrapper } = useFadeInOut(isShown);
 
 	function localConfirm() {
-		setFinalPath(path);
+		if (pathElements.at(-1) === undefined) return;
+
+		setFinalPath(path, pathElements.at(-1)!.variant);
 		setIsShown(false);
 	}
 
@@ -144,14 +144,7 @@ export default function SelectFolderPopup({
 				<SpacingLarge />
 				<div className="flex gap-4 mt-auto self-end">
 					<Button text="Cancel" meaning="neutral" onClick={localCancel} />
-					<Button
-						text="Select"
-						meaning="positive"
-						onClick={localConfirm}
-						disabled={
-							variant === "file" && pathElements.at(-1)?.variant !== "file"
-						}
-					/>
+					<Button text="Select" meaning="positive" onClick={localConfirm} />
 				</div>
 			</div>
 		</Popup>

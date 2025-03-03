@@ -129,10 +129,14 @@ export default function useBackupsEntries(
 		const possibleNeededbackup = searchForNeededBackup(folderPairId);
 
 		if (possibleNeededbackup !== null) {
+			// Reset target if variant changed 
+			if(possibleNeededbackup.neededBackup.entries.get(folderPairId)!.variant !== variant) {
+				possibleNeededbackup.neededBackup.entries.get(folderPairId)!.target = "";
+			}
+
 			possibleNeededbackup.neededBackup.entries.get(folderPairId)!.variant =
-				variant;
-			possibleNeededbackup.neededBackup.entries.get(folderPairId)!.origin = "";
-			possibleNeededbackup.neededBackup.entries.get(folderPairId)!.target = "";
+			variant;
+
 			setStoredBackups(possibleNeededbackup.newStoredBackups);
 		}
 	}

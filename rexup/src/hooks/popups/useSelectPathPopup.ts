@@ -8,7 +8,6 @@ type DirectoryEntry = {
 };
 
 export default function useSelectFolderPopup(
-	variant: "file" | "folder",
 	isShown: boolean
 ) {
 	// Path elements on top bar
@@ -52,7 +51,6 @@ export default function useSelectFolderPopup(
 			setDirEntries(
 				(await invoke("read_contents_of", {
 					path: newPath,
-					variant
 				})) as Array<DirectoryEntry>
 			);
 		}

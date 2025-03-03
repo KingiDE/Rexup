@@ -91,28 +91,6 @@ export default function EditBackupEntryPopup({
 			</div>
 			<HeadingIII>{addNewEntry ? "Add" : "Edit"} Backup-Entry</HeadingIII>
 			<SpacingMedium />
-			{/* Change variant */}
-			<HighlightedTextBlock>Change variant:</HighlightedTextBlock>
-			<div className="flex gap-2 relative isolate">
-				<div
-					className={`rounded-md bg-gray-800 absolute h-full w-[80px] -z-10 transition-[left] ${
-						folderEntry[1].variant === "folder" ? "left-[88px]" : "left-0"
-					}`}
-				></div>
-				<div
-					className="cursor-pointer my-[2px] text-center basis-[80px]"
-					onClick={() => updateEntryVariant(folderEntry[0], "file")}
-				>
-					File
-				</div>
-				<div
-					className="cursor-pointer my-[2px] text-center basis-[80px]"
-					onClick={() => updateEntryVariant(folderEntry[0], "folder")}
-				>
-					Folder
-				</div>
-			</div>
-			<SpacingSmall />
 			{/* Modify origin path */}
 			<HighlightedTextBlock>Origin path:</HighlightedTextBlock>
 			<div className="flex gap-2">
@@ -145,10 +123,10 @@ export default function EditBackupEntryPopup({
 				<SelectFolderPopup
 					isShown={showEditPathWindow}
 					setIsShown={setShowEditPathWindow}
-					setFinalPath={path => {
+					setFinalPath={(path, variant) => {
 						updateOriginPath(path);
+						updateEntryVariant(folderEntry[0], variant);
 					}}
-					variant={folderEntry[1].variant}
 				/>
 			</div>
 			<SpacingSmall />

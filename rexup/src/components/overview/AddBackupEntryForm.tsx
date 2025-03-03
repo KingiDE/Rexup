@@ -45,10 +45,14 @@ export function AddBackupEntryForm({
 				hidePopup={() => setCurrentPopup(null)}
 				folderEntry={["not used", inputs]}
 				updateOriginOrTarget={(_id, field, value) => {
-					setInputs({ ...inputs, [field]: value });
+					setInputs(prevInputs => {
+						return { ...prevInputs, [field]: value };
+					});
 				}}
 				updateEntryVariant={(_id, variant) => {
-					setInputs({ ...inputs, origin: "", target: "", variant: variant });
+					setInputs(prevInputs => {
+						return { ...prevInputs, variant };
+					});
 				}}
 				updateMaxSizeFilter={(_id, value) => {
 					setInputs({
