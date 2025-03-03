@@ -68,7 +68,7 @@ pub fn zip_file_safely(
 	}
 
 	// Write to a file in zip_writer
-	if zip_writer.write(&file_contents).is_err() {
+	if zip_writer.write_all(&file_contents).is_err() {
 		return false;
 	}
 
