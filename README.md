@@ -24,7 +24,7 @@ This will compile the entire project, create a `.msi`-installer-file and print i
 > Note: Currently Windows is the only supported operating system. Although this will likely change in the future, you can already adjust the code to your likings and build it to work on other devices. 
 
 **On Windows:**
-Simply download either the `rexup_1.0.0_x64_en-US.msi` or the `rexup_1.0.0_x64-setup.exe` file and follow the installation process after clicking it. 
+Simply download either the `rexup_1.0.0_x64_en-US.msi` or the `rexup_1.0.0_x64-setup.exe` file (of course with their respective version names) and follow the installation process after clicking it. 
 
 ## ⛏️ Workflow
 
