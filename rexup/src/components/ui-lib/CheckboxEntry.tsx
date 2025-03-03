@@ -16,7 +16,7 @@ export default function Checkbox({
 			<div className="flex gap-2 items-center">
 				<button
 					onClick={onClick}
-					className={`cursor-pointer rounded-md h-5 w-5 relative outline outline-1 outline-gray-800 transition-[background] ${
+					className={`cursor-pointer rounded-md h-5 w-5 relative outline-1 outline-gray-800 transition-[background] ${
 						value ? "bg-sky-500" : "bg-none"
 					}`}
 				>

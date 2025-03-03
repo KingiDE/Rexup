@@ -15,7 +15,7 @@ export default function FolderOrFile({
 }) {
 	return (
 		<div
-			className={`h-7 overflow-hidden grid rounded-md -outline-offset-1 outline outline-1 ${isHighlighted ? "outline-gray-50" : "outline-gray-700"}`}
+			className={`h-7 overflow-hidden grid rounded-md -outline-offset-1 outline-1 ${isHighlighted ? "outline-gray-50" : "outline-gray-700"}`}
 		>
 			<Button
 				meaning="neutral"

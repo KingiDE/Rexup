@@ -58,7 +58,7 @@ export default function DocumentationPopup({
 	return (
 		<div
 			ref={documentationPopupRef}
-			className={`transition-[opacity] z-[1] absolute ${offset} px-3 py-2 outline outline-2 outline-gray-800 shadow-[0_0_6px_2px_rgba(0,0,0,0.3)] rounded-md bg-gray-900 max-w-[460px]`}
+			className={`transition-[opacity] z-[1] absolute ${offset} px-3 py-2 outline-2 outline-gray-800 shadow-[0_0_6px_2px_rgba(0,0,0,0.3)] rounded-md bg-gray-900 max-w-[460px]`}
 		>
 			<Text>
 				<TextBlock>
