@@ -40,7 +40,9 @@ export default function ConfigureBackupPopup({
 					)
 				}
 				value={
-					currentPopup && currentPopup.value
+					currentPopup &&
+					currentPopup.value &&
+					currentPopup.variant === "configurebackup"
 						? currentPopup.value[1].isZipped
 						: false
 				}
@@ -57,7 +59,9 @@ export default function ConfigureBackupPopup({
 			<div className="flex gap-2">
 				<Inputs
 					value={
-						currentPopup && currentPopup.value
+						currentPopup &&
+						currentPopup.value &&
+						currentPopup.variant === "configurebackup"
 							? currentPopup.value[1].location
 							: ""
 					}

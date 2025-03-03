@@ -39,8 +39,12 @@ export default function DeleteBackupWarning({
 			<DescriptionBlock>
 				Carefully read this warning: Do you really want to delete the backup
 				called "
-				{currentPopup && currentPopup.value ? currentPopup.value[1].name : ""}"?
-				This action cannot be undone.
+				{currentPopup &&
+				currentPopup.value &&
+				currentPopup.variant === "deletebackup"
+					? currentPopup.value[1].name
+					: ""}
+				"? This action cannot be undone.
 			</DescriptionBlock>
 			<SpacingSmall />
 			<div className="flex gap-4 mt-8">

@@ -4,12 +4,13 @@ import {
 	LocalStateBackupWithId
 } from "./useCurrentSelectedBackup";
 import { BackupsFile } from "./useStoredValues";
+import { CurrentPopup } from "../App";
 
 export default function useBackupsEntries(
 	currentSelectedBackup: LocalStateBackupWithId,
 	storedBackups: BackupsFile | null,
 	setStoredBackups: Dispatch<SetStateAction<BackupsFile | null>>,
-	setShowPopup: Dispatch<SetStateAction<boolean>>
+	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>,
 ) {
 	const [inputs, setInputs] = useState<LocalStateBackupEntry>({
 		origin: "",
@@ -64,7 +65,7 @@ export default function useBackupsEntries(
 			is_active: true
 		});
 
-		setShowPopup(false);
+		setCurrentPopup(null);
 	}
 
 	function deleteBackupEntry(backupEntryId: string) {

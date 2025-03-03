@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import useFadeInOut from "../../hooks/popups/useFadeInOut";
 import { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
 import Button from "../ui-lib/Buttons";
@@ -11,8 +11,8 @@ import useShowDocumentationPopup from "../../hooks/overview/backupEntry/useShowD
 import ListFilters from "./edit-backup-entry/ListFilters";
 
 export default function EditBackupEntryPopup({
-	showEditBackupEntryPopup,
-	setShowEditBackupEntryPopup,
+	showPopup,
+	hidePopup,
 	folderEntry,
 	updateOriginOrTarget,
 	updateEntryVariant,
@@ -20,8 +20,8 @@ export default function EditBackupEntryPopup({
 	updateListFilter,
 	addNewEntry
 }: {
-	showEditBackupEntryPopup: boolean;
-	setShowEditBackupEntryPopup: Dispatch<SetStateAction<boolean>>;
+	showPopup: boolean;
+	hidePopup: () => void;
 	folderEntry: [string, LocalStateBackupEntry];
 	updateOriginOrTarget: (
 		id: string,
@@ -41,7 +41,7 @@ export default function EditBackupEntryPopup({
 	// Only is needed in Create-Entry-Popup
 	addNewEntry?: () => void;
 }) {
-	const { wrapper } = useFadeInOut(showEditBackupEntryPopup);
+	const { wrapper } = useFadeInOut(showPopup);
 
 	function updateOriginPath(path: string) {
 		updateOriginOrTarget(folderEntry[0], "origin", path);
@@ -64,7 +64,7 @@ export default function EditBackupEntryPopup({
 			onKeyDown={async e => {
 				switch (e.key) {
 					case "Escape":
-						setShowEditBackupEntryPopup(false);
+						hidePopup();
 						break;
 				}
 			}}
@@ -85,7 +85,7 @@ export default function EditBackupEntryPopup({
 							/>
 						</svg>
 					}
-					onClick={() => setShowEditBackupEntryPopup(false)}
+					onClick={() => hidePopup()}
 					meaning="neutral"
 				></Button>
 			</div>

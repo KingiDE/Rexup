@@ -50,8 +50,8 @@ export function BackupEntry({
 			className={`relative rounded-md bg-gray-800 p-4 min-w-[400px] outline outline-2 -outline-offset-1 transition-[outline] ${folderEntry[1].origin === "" || folderEntry[1].target === "" ? "outline-yellow-500" : "outline-transparent"}`}
 		>
 			<EditBackupEntryPopup
-				showEditBackupEntryPopup={showEditBackupEntryPopup}
-				setShowEditBackupEntryPopup={setShowEditBackupEntryPopup}
+				showPopup={showEditBackupEntryPopup}
+				hidePopup={() => setShowEditBackupEntryPopup(false)}
 				folderEntry={folderEntry}
 				updateOriginOrTarget={updateOriginOrTarget}
 				updateEntryVariant={updateEntryVariant}

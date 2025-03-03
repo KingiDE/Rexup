@@ -2,19 +2,20 @@ import React from "react";
 import Button from "../ui-lib/Buttons";
 import EditBackupEntryPopup from "../popups/EditBackupEntryPopup";
 import { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
+import { CurrentPopup } from "../../App";
 
 export function AddBackupEntryForm({
 	inputs,
 	setInputs,
 	addNewEntry,
-	showAddBackupEntryPopup,
-	setShowAddBackupEntryPopup
+	currentPopup,
+	setCurrentPopup
 }: {
 	inputs: LocalStateBackupEntry;
 	setInputs: React.Dispatch<React.SetStateAction<LocalStateBackupEntry>>;
 	addNewEntry: () => void;
-	showAddBackupEntryPopup: boolean;
-	setShowAddBackupEntryPopup: React.Dispatch<React.SetStateAction<boolean>>;
+	currentPopup: CurrentPopup;
+	setCurrentPopup: React.Dispatch<React.SetStateAction<CurrentPopup>>;
 }) {
 	return (
 		<>
@@ -33,11 +34,15 @@ export function AddBackupEntryForm({
 						<path d="M11 13H6q-.425 0-.712-.288T5 12t.288-.712T6 11h5V6q0-.425.288-.712T12 5t.713.288T13 6v5h5q.425 0 .713.288T19 12t-.288.713T18 13h-5v5q0 .425-.288.713T12 19t-.712-.288T11 18z" />
 					</svg>
 				}
-				onClick={() => setShowAddBackupEntryPopup(true)}
+				onClick={() =>
+					setCurrentPopup({ variant: "addbackupentry", value: null })
+				}
 			/>
 			<EditBackupEntryPopup
-				showEditBackupEntryPopup={showAddBackupEntryPopup}
-				setShowEditBackupEntryPopup={setShowAddBackupEntryPopup}
+				showPopup={
+					currentPopup !== null && currentPopup.variant === "addbackupentry"
+				}
+				hidePopup={() => setCurrentPopup(null)}
 				folderEntry={["not used", inputs]}
 				updateOriginOrTarget={(_id, field, value) => {
 					setInputs({ ...inputs, [field]: value });

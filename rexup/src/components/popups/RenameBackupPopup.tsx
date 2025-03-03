@@ -17,7 +17,11 @@ export default function RenameBackupPopup({
 	currentPopup: CurrentPopup;
 }) {
 	useEffect(() => {
-		if (currentPopup && currentPopup.value) {
+		if (
+			currentPopup &&
+			currentPopup.value &&
+			currentPopup.variant === "renamebackup"
+		) {
 			setInput(currentPopup.value[1].name);
 			setInvalidInput(currentPopup.value[1].name === "");
 		}
@@ -28,12 +32,19 @@ export default function RenameBackupPopup({
 	);
 
 	const [input, setInput] = useState(
-		currentPopup && currentPopup.value ? currentPopup.value[1].name : ""
+		currentPopup &&
+			currentPopup.value &&
+			currentPopup.variant === "renamebackup"
+			? currentPopup.value[1].name
+			: ""
 	);
 
 	const [invalidInput, setInvalidInput] = useState(
-		(currentPopup && currentPopup.value ? currentPopup.value[1].name : "") ===
-			""
+		(currentPopup &&
+		currentPopup.value &&
+		currentPopup.variant === "renamebackup"
+			? currentPopup.value[1].name
+			: "") === ""
 	);
 	const [triedToSubmit, setTriedToSubmit] = useState(false);
 

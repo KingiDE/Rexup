@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Dispatch, SetStateAction } from "react";
-import {
-	LocalStateBackupEntry,
-	LocalStateBackupWithId
-} from "../hooks/useCurrentSelectedBackup";
+import { LocalStateBackupWithId } from "../hooks/useCurrentSelectedBackup";
 import { BackupsFile, ConfigFile, HistoryFile } from "../hooks/useStoredValues";
 import useBackupsEntries from "../hooks/useBackupsEntries";
 import { BackupEntry } from "./overview/BackupEntry";
@@ -26,8 +23,8 @@ export default function Overview({
 	storedBackups,
 	setStoredHistory,
 	setStoredBackups,
-	setCurrentPopup,
-	currentPopup
+	currentPopup,
+	setCurrentPopup
 }: {
 	currentSelectedBackup: LocalStateBackupWithId | null;
 	storedHistory: HistoryFile | null;
@@ -35,19 +32,10 @@ export default function Overview({
 	storedBackups: BackupsFile | null;
 	setStoredHistory: Dispatch<SetStateAction<HistoryFile | null>>;
 	setStoredBackups: Dispatch<SetStateAction<BackupsFile | null>>;
-	setCurrentPopup: React.Dispatch<React.SetStateAction<CurrentPopup>>;
 	currentPopup: CurrentPopup;
+	setCurrentPopup: React.Dispatch<React.SetStateAction<CurrentPopup>>;
 }) {
 	if (currentSelectedBackup === null) return <NoBackupSelectedScreen />;
-
-	// Handles showing the add-backup-entry popup
-	const [showAddBackupEntryPopup, setShowAddBackupEntryPopup] = useState(false);
-
-	useEffect(() => {
-		if (currentPopup !== null) {
-			setShowAddBackupEntryPopup(false);
-		}
-	}, [currentPopup]);
 
 	// Handles adding new, modifying new or existing folderEntries and deleting them
 	const {
@@ -64,7 +52,7 @@ export default function Overview({
 		currentSelectedBackup,
 		storedBackups,
 		setStoredBackups,
-		setShowAddBackupEntryPopup
+		setCurrentPopup
 	);
 
 	// Handles the logic when executing the backup
@@ -76,11 +64,6 @@ export default function Overview({
 		storedHistory,
 		setStoredHistory
 	);
-
-	// Deletion of backup-entry is placed here due to fact that fade-out wouldn't work after the parent-html is already deleted
-	const [backupToDelete, setBackupToDelete] = useState<
-		[string, LocalStateBackupEntry] | null
-	>(null);
 
 	return (
 		<div className="bg-gray-900 rounded-md p-4 min-h-full">
@@ -112,8 +95,8 @@ export default function Overview({
 			<SpacingLarge />
 			{/* Backup-Entry delete popup */}
 			<DeleteBackupEntryPoup
-				backupToDelete={backupToDelete}
-				setBackupToDelete={setBackupToDelete}
+				currentPopup={currentPopup}
+				setCurrentPopup={setCurrentPopup}
 				deleteBackupEntry={deleteBackupEntry}
 			/>
 			{/* Contents */}
@@ -143,7 +126,12 @@ export default function Overview({
 							<BackupEntry
 								key={folder[0]}
 								folderEntry={folder}
-								removeEntry={backup => setBackupToDelete(backup)}
+								removeEntry={backupEntry => {
+									setCurrentPopup({
+										variant: "removebackupentry",
+										value: backupEntry
+									});
+								}}
 								updateOriginOrTarget={updateOriginOrTarget}
 								updateEntryVariant={updateEntryVariant}
 								updateMaxSizeFilter={updateMaxSizeFilter}
@@ -156,13 +144,13 @@ export default function Overview({
 				</div>
 			) : null}
 			<SpacingSmall />
-			{/* Add entry form */}
+			{/* Add entry form + button */}
 			<AddBackupEntryForm
 				inputs={inputs}
 				setInputs={setInputs}
 				addNewEntry={addNewEntry}
-				showAddBackupEntryPopup={showAddBackupEntryPopup}
-				setShowAddBackupEntryPopup={setShowAddBackupEntryPopup}
+				currentPopup={currentPopup}
+				setCurrentPopup={setCurrentPopup}
 			/>
 		</div>
 	);

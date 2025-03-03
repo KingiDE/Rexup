@@ -3,6 +3,7 @@ import "./App.css";
 import useBackupActions from "./hooks/useBackupActions";
 import useStoredValues from "./hooks/useStoredValues";
 import useCurrentSelectedBackup, {
+	LocalStateBackupEntry,
 	LocalStateBackupWithId
 } from "./hooks/useCurrentSelectedBackup";
 import Sidebar from "./components/Sidebar";
@@ -28,6 +29,14 @@ export type CurrentPopup =
 	| {
 			variant: "editbackupentry";
 			value: LocalStateBackupWithId;
+	  }
+	| {
+			variant: "removebackupentry";
+			value: [string, LocalStateBackupEntry];
+	  }
+	| {
+			variant: "addbackupentry";
+			value: null;
 	  }
 	| {
 			variant: "settings";

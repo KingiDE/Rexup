@@ -1,34 +1,37 @@
 import { Dispatch, SetStateAction } from "react";
 import useFadeIn from "../../hooks/popups/useFadeInOut";
-import { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
 import Popup from "../ui-lib/Popup";
 import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 import { SpacingSmall } from "../ui-lib/Spacing";
 import Button from "../ui-lib/Buttons";
+import { CurrentPopup } from "../../App";
 
 export default function DeleteBackupEntryPoup({
-	backupToDelete,
-	setBackupToDelete,
+	currentPopup,
+	setCurrentPopup,
 	deleteBackupEntry
 }: {
-	backupToDelete: [string, LocalStateBackupEntry] | null;
-	setBackupToDelete: Dispatch<
-		SetStateAction<[string, LocalStateBackupEntry] | null>
-	>;
+	currentPopup: CurrentPopup;
+	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
 	deleteBackupEntry: (id: string) => void;
 }) {
-	const { wrapper, fadeOut } = useFadeIn(backupToDelete !== null);
+	const { wrapper, fadeOut } = useFadeIn(
+		currentPopup !== null && currentPopup.variant === "removebackupentry"
+	);
 
+	// Cancel deletion
 	function executeCancelDeletion() {
-		setBackupToDelete(null);
+		setCurrentPopup(null);
 		fadeOut();
 	}
 
+	// Confirm deletion
 	function localDeleteBackupEntry() {
-		if (!backupToDelete) return;
+		if (currentPopup === null || currentPopup.variant !== "removebackupentry")
+			return;
 
-		deleteBackupEntry(backupToDelete[0]);
-		setBackupToDelete(null);
+		deleteBackupEntry(currentPopup.value[0]);
+		setCurrentPopup(null);
 	}
 
 	return (
