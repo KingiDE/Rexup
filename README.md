@@ -29,7 +29,7 @@ Simply download either the `rexup_1.0.0_x64_en-US.msi` or the `rexup_1.0.0_x64-s
 ## ⛏️ Workflow
 
 First, you want to create a backup. After that, you need to add all folders and files you want to backup. Finally you're ready to configure the backup to your likings and and execute it. 
-For an easier understanding just watch the video at the top or give the [docs](DOCS.md) a try.
+For an easier understanding just give the [docs](DOCS.md) a try.
 
 ## 🗺️ Roadmap
 
