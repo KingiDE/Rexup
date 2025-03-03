@@ -16,6 +16,8 @@ Before executing the backup, check for yellow borders around backup entires. The
 When it finally comes to executing a backup just click the corresponding blue button at the top of the page. Then everything will handle itself - nothing to worry about.
 After the execution there will appear logs below the button. They highlight all important information like successful copies, failed ones and skipped files. This feature lets you easily check whether all your wanted files/folders were actually correctly backuped.
 
+> Note: Depending on the performance of your computer, running a backup with Rexup may temporarily cause it to freeze. This effect is further intensified when the backup is being zipped
+
 ## View the results
 By default the backup is created on your Desktop. If you modified the location of the backup before, you probably need to look at the backup configuration again or simply open your file explorer at the particular location.  
 
@@ -25,7 +27,8 @@ Here is the result from the presentation video on the landing page:
 
 And this is the entire tutorial video:
 
-https://github.com/user-attachments/assets/ccb74685-b009-4633-af42-7c0ce73249f8
+https://github.com/user-attachments/assets/20650ebc-ee91-4837-9672-d5eff0c1107c
+
 
 
 
