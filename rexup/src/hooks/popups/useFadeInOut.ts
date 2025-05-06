@@ -17,7 +17,7 @@ export default function useFadeIn(onWhat: boolean) {
 		wrapper.current.focus();
 		wrapper.current.animate([{ opacity: "1", display: "grid" }], {
 			duration: 100,
-			fill: "forwards"
+			fill: "forwards",
 		});
 	}
 
@@ -26,12 +26,12 @@ export default function useFadeIn(onWhat: boolean) {
 		wrapper.current.style.display = "none";
 		wrapper.current.animate([{ opacity: "0", display: "none" }], {
 			duration: 100,
-			fill: "forwards"
+			fill: "forwards",
 		});
 	}
 
 	return {
 		wrapper,
-		fadeOut
+		fadeOut,
 	};
 }

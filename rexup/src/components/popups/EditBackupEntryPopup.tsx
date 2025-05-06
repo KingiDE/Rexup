@@ -1,13 +1,13 @@
 import { useState } from "react";
+import useShowDocumentationPopup from "../../hooks/overview/backupEntry/useShowDocumentationPopup";
 import useFadeInOut from "../../hooks/popups/useFadeInOut";
-import { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
+import type { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
+import DocumentationPopup from "../overview/backupEntry/DocumentationPopup";
 import Button from "../ui-lib/Buttons";
-import { HeadingIII, HighlightedTextBlock, TextBlock } from "../ui-lib/Texts";
 import Inputs from "../ui-lib/Inputs";
 import { SpacingMedium, SpacingSmall } from "../ui-lib/Spacing";
+import { HeadingIII, HighlightedTextBlock, TextBlock } from "../ui-lib/Texts";
 import SelectFolderPopup from "./SelectPathPopup";
-import DocumentationPopup from "../overview/backupEntry/DocumentationPopup";
-import useShowDocumentationPopup from "../../hooks/overview/backupEntry/useShowDocumentationPopup";
 import ListFilters from "./edit-backup-entry/ListFilters";
 
 export default function EditBackupEntryPopup({
@@ -18,7 +18,7 @@ export default function EditBackupEntryPopup({
 	updateEntryVariant,
 	updateMaxSizeFilter,
 	updateListFilter,
-	addNewEntry
+	addNewEntry,
 }: {
 	showPopup: boolean;
 	hidePopup: () => void;
@@ -26,17 +26,17 @@ export default function EditBackupEntryPopup({
 	updateOriginOrTarget: (
 		id: string,
 		field: "origin" | "target",
-		value: string
+		value: string,
 	) => void;
 	updateEntryVariant: (
 		folderPairId: string,
-		variant: "file" | "folder"
+		variant: "file" | "folder",
 	) => void;
 	updateMaxSizeFilter: (folderPairId: string, value: string) => void;
 	updateListFilter: (
 		folderPairId: string,
 		filter: "included_file_names" | "included_file_types",
-		value: string[] | null
+		value: string[] | null,
 	) => void;
 	// Only is needed in Create-Entry-Popup
 	addNewEntry?: () => void;
@@ -61,14 +61,13 @@ export default function EditBackupEntryPopup({
 		<div
 			ref={wrapper}
 			className="hidden z-[1] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-gray-900 px-8 py-6 max-w-[550px] outline-2 outline-gray-800 shadow-[0_0_6px_2px_rgba(0,0,0,0.3)]"
-			onKeyDown={async e => {
+			onKeyDown={async (e) => {
 				switch (e.key) {
 					case "Escape":
 						hidePopup();
 						break;
 				}
 			}}
-			tabIndex={0}
 		>
 			<div className="absolute top-4 right-4">
 				<Button
@@ -87,7 +86,7 @@ export default function EditBackupEntryPopup({
 					}
 					onClick={() => hidePopup()}
 					meaning="neutral"
-				></Button>
+				/>
 			</div>
 			<HeadingIII>{addNewEntry ? "Add" : "Edit"} Backup-Entry</HeadingIII>
 			<SpacingMedium />
@@ -135,7 +134,7 @@ export default function EditBackupEntryPopup({
 			<div className="relative flex gap-2">
 				<Inputs
 					value={folderEntry[1].target}
-					onChange={e => updateTargetPath(e.target.value)}
+					onChange={(e) => updateTargetPath(e.target.value)}
 					placeholder="Target path"
 				/>
 				<svg
@@ -174,7 +173,9 @@ export default function EditBackupEntryPopup({
 								? ""
 								: folderEntry[1].filters.max_size_in_mb.toString()
 						}
-						onChange={e => updateMaxSizeFilter(folderEntry[0], e.target.value)}
+						onChange={(e) =>
+							updateMaxSizeFilter(folderEntry[0], e.target.value)
+						}
 						placeholder="Leave empty to disable filter"
 						type="number"
 					/>

@@ -27,6 +27,6 @@ export default function useCurrentSelectedBackup() {
 
 	return {
 		currentSelectedBackup,
-		setCurrentSelectedBackup
+		setCurrentSelectedBackup,
 	};
 }

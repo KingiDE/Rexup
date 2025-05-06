@@ -1,10 +1,10 @@
 import useShowDocumentationPopup from "../../../hooks/overview/backupEntry/useShowDocumentationPopup";
-import { LocalStateBackupEntry } from "../../../hooks/useCurrentSelectedBackup";
+import type { LocalStateBackupEntry } from "../../../hooks/useCurrentSelectedBackup";
 import { HighlightedText, Text } from "../../ui-lib/Texts";
 import DocumentationPopup from "./DocumentationPopup";
 
 export default function TopRow({
-	folderEntry
+	folderEntry,
 }: {
 	folderEntry: [string, LocalStateBackupEntry];
 }) {

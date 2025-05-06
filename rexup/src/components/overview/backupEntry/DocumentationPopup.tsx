@@ -1,11 +1,11 @@
-import { MutableRefObject } from "react";
+import type { MutableRefObject } from "react";
+import type { LocalStateBackupEntry } from "../../../hooks/useCurrentSelectedBackup";
 import { Description, Text, TextBlock } from "../../ui-lib/Texts";
-import { LocalStateBackupEntry } from "../../../hooks/useCurrentSelectedBackup";
 
 export default function DocumentationPopup({
 	documentationPopupRef,
 	inputs,
-	offset
+	offset,
 }: {
 	documentationPopupRef: MutableRefObject<HTMLDivElement | null>;
 	inputs: LocalStateBackupEntry;

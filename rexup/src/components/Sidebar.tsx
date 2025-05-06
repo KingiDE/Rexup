@@ -1,16 +1,20 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../App";
+import type { LocalStateBackupWithId } from "../hooks/useCurrentSelectedBackup";
+import type {
+	BackupsFile,
+	ConfigFile,
+	HistoryFile,
+} from "../hooks/useStoredValues";
 import AddBackupDialog from "./popups/AddBackupPopup";
+import ConfigureBackupPopup from "./popups/ConfigureBackupPopup";
+import DeleteBackupWarning from "./popups/DeleteBackupPopup";
+import RenameBackupPopup from "./popups/RenameBackupPopup";
+import Settings from "./popups/SettingsPopup";
 import { AddBackup, BackupItem } from "./sidebar/BackupItem";
 import ShowSettingsButton from "./sidebar/ShowSettingsButton";
-import Settings from "./popups/SettingsPopup";
-import DeleteBackupWarning from "./popups/DeleteBackupPopup";
-import { LocalStateBackupWithId } from "../hooks/useCurrentSelectedBackup";
-import { BackupsFile, ConfigFile, HistoryFile } from "../hooks/useStoredValues";
-import { HeadingII } from "./ui-lib/Texts";
 import { SpacingMedium } from "./ui-lib/Spacing";
-import RenameBackupPopup from "./popups/RenameBackupPopup";
-import ConfigureBackupPopup from "./popups/ConfigureBackupPopup";
-import { CurrentPopup } from "../App";
+import { HeadingII } from "./ui-lib/Texts";
 
 export default function Sidebar({
 	currentPopup,
@@ -25,7 +29,7 @@ export default function Sidebar({
 	setStoredConfig,
 	setStoredHistory,
 	toggleBackupZipping,
-	updateBackupLocation
+	updateBackupLocation,
 }: {
 	currentPopup: CurrentPopup;
 	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
@@ -74,7 +78,7 @@ export default function Sidebar({
 			<SpacingMedium />
 			<ul className="grid gap-2">
 				{storedBackups &&
-					[...storedBackups].map(backup => (
+					[...storedBackups].map((backup) => (
 						<BackupItem
 							key={backup[0]}
 							backup={backup}

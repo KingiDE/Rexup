@@ -4,7 +4,7 @@ export default function Checkbox({
 	value,
 	onClick,
 	title,
-	description
+	description,
 }: {
 	value: boolean;
 	onClick: () => void;

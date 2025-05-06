@@ -1,19 +1,19 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import type { CurrentPopup } from "../../App";
+import type { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
+import Button from "../ui-lib/Buttons";
+import CheckboxEntry from "../ui-lib/CheckboxEntry";
+import Inputs from "../ui-lib/Inputs";
 import { SpacingMedium, SpacingSmall } from "../ui-lib/Spacing";
 import { Description, HeadingIII, HighlightedTextBlock } from "../ui-lib/Texts";
 import Window from "../ui-lib/Window";
-import CheckboxEntry from "../ui-lib/CheckboxEntry";
-import { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
-import { CurrentPopup } from "../../App";
-import Inputs from "../ui-lib/Inputs";
-import Button from "../ui-lib/Buttons";
 import SelectFolderPopup from "./SelectPathPopup";
 
 export default function ConfigureBackupPopup({
 	setCurrentPopup,
 	currentPopup,
 	toggleBackupZipping,
-	updateBackupLocation
+	updateBackupLocation,
 }: {
 	currentPopup: CurrentPopup;
 	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
@@ -35,14 +35,10 @@ export default function ConfigureBackupPopup({
 				title="Zip folder after execution"
 				description="Enable or disable the zipping of the created backup after the execution of the backup."
 				onClick={() =>
-					toggleBackupZipping(
-						currentPopup && currentPopup.value ? currentPopup.value[0] : ""
-					)
+					toggleBackupZipping(currentPopup?.value ? currentPopup.value[0] : "")
 				}
 				value={
-					currentPopup &&
-					currentPopup.value &&
-					currentPopup.variant === "configurebackup"
+					currentPopup?.value && currentPopup.variant === "configurebackup"
 						? currentPopup.value[1].isZipped
 						: false
 				}
@@ -59,9 +55,7 @@ export default function ConfigureBackupPopup({
 			<div className="flex gap-2">
 				<Inputs
 					value={
-						currentPopup &&
-						currentPopup.value &&
-						currentPopup.variant === "configurebackup"
+						currentPopup?.value && currentPopup.variant === "configurebackup"
 							? currentPopup.value[1].location
 							: ""
 					}
@@ -83,8 +77,8 @@ export default function ConfigureBackupPopup({
 					variant="small"
 					onClick={() =>
 						updateBackupLocation(
-							currentPopup && currentPopup.value ? currentPopup.value[0] : "",
-							""
+							currentPopup?.value ? currentPopup.value[0] : "",
+							"",
 						)
 					}
 				/>
@@ -98,10 +92,10 @@ export default function ConfigureBackupPopup({
 			<SelectFolderPopup
 				isShown={isShown}
 				setIsShown={setIsShown}
-				setFinalPath={path => {
+				setFinalPath={(path) => {
 					updateBackupLocation(
-						currentPopup && currentPopup.value ? currentPopup.value[0] : "",
-						path
+						currentPopup?.value ? currentPopup.value[0] : "",
+						path,
 					);
 				}}
 			/>

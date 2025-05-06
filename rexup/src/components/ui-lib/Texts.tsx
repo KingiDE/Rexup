@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 // Exports components with predefined styles according to important-ness
 
 export function HeadingI({ children }: { children: React.ReactNode }) {
@@ -21,7 +21,7 @@ export function HeadingIII({ children }: { children: React.ReactNode }) {
 
 export function HighlightedTextBlock({
 	children,
-	color
+	color,
 }: {
 	children: React.ReactNode;
 	color?: string;
@@ -37,7 +37,7 @@ export function HighlightedTextBlock({
 
 export function HighlightedText({
 	children,
-	color
+	color,
 }: {
 	children: React.ReactNode;
 	color?: string;
@@ -53,7 +53,7 @@ export function HighlightedText({
 
 export function TextBlock({
 	children,
-	color
+	color,
 }: {
 	children: React.ReactNode;
 	color?: string;
@@ -69,7 +69,7 @@ export function TextBlock({
 
 export function Text({
 	children,
-	color
+	color,
 }: {
 	children: React.ReactNode;
 	color?: string;
@@ -85,7 +85,7 @@ export function Text({
 
 export function DescriptionBlock({
 	children,
-	color
+	color,
 }: {
 	children: React.ReactNode;
 	color?: string;
@@ -101,7 +101,7 @@ export function DescriptionBlock({
 
 export function Description({
 	children,
-	color
+	color,
 }: {
 	children: React.ReactNode;
 	color?: string;

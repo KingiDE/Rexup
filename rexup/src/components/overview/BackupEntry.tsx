@@ -1,8 +1,8 @@
-import { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
-import { SpacingSmall } from "../ui-lib/Spacing";
-import EditBackupEntryPopup from "../popups/EditBackupEntryPopup";
 import { useEffect, useState } from "react";
-import { CurrentPopup } from "../../App";
+import type { CurrentPopup } from "../../App";
+import type { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
+import EditBackupEntryPopup from "../popups/EditBackupEntryPopup";
+import { SpacingSmall } from "../ui-lib/Spacing";
 import BottomRow from "./backupEntry/BottomRow";
 import TopRow from "./backupEntry/TopRow";
 
@@ -14,24 +14,24 @@ export function BackupEntry({
 	updateMaxSizeFilter,
 	updateListFilter,
 	toggleIsEntryActive,
-	currentPopup
+	currentPopup,
 }: {
 	folderEntry: [string, LocalStateBackupEntry];
 	removeEntry: (backup: [string, LocalStateBackupEntry]) => void;
 	updateOriginOrTarget: (
 		id: string,
 		field: "origin" | "target",
-		value: string
+		value: string,
 	) => void;
 	updateEntryVariant: (
 		folderPairId: string,
-		variant: "file" | "folder"
+		variant: "file" | "folder",
 	) => void;
 	updateMaxSizeFilter: (folderPairId: string, value: string) => void;
 	updateListFilter: (
 		folderPairId: string,
 		filter: "included_file_names" | "included_file_types",
-		value: string[] | null
+		value: string[] | null,
 	) => void;
 	toggleIsEntryActive: (id: string) => void;
 	currentPopup: CurrentPopup;

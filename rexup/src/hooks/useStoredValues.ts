@@ -1,8 +1,8 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 import { convertBackupsJSONToJS } from "../utils/app/convertBackupsJSONToJS";
-import { convertHistoryJSONToJS } from "../utils/app/convertHistoryJSONToJS";
 import { convertConfigJSONToJS } from "../utils/app/convertConfigJSONToJS";
+import { convertHistoryJSONToJS } from "../utils/app/convertHistoryJSONToJS";
 
 export type ConfigFile = {
 	show_edit_warning: boolean;
@@ -42,14 +42,14 @@ export default function useStoredValues() {
 	useEffect(() => {
 		if (storedConfig === null) return;
 		invoke("write_config_file", {
-			value: storedConfig
+			value: storedConfig,
 		});
 	}, [storedConfig]);
 
 	useEffect(() => {
 		if (storedHistory === null) return;
 		invoke("write_history_file", {
-			value: [...storedHistory]
+			value: [...storedHistory],
 		});
 	}, [storedHistory]);
 
@@ -63,23 +63,23 @@ export default function useStoredValues() {
 					entries: Array<[string, BackupFolderFile]>;
 					is_zipped: boolean;
 					location: string;
-				}
+				},
 			]
 		> = [];
-		[...storedBackups].map(storedBackup => {
+		[...storedBackups].map((storedBackup) => {
 			newStoredBackups.push([
 				storedBackup[0],
 				{
 					name: storedBackup[1].name,
 					entries: Array.from(storedBackup[1].entries),
 					is_zipped: storedBackup[1].isZipped,
-					location: storedBackup[1].location
-				}
+					location: storedBackup[1].location,
+				},
 			]);
 		});
 
 		invoke("write_backup_file", {
-			value: newStoredBackups
+			value: newStoredBackups,
 		});
 	}, [storedBackups]);
 
@@ -103,6 +103,6 @@ export default function useStoredValues() {
 		storedBackups,
 		setStoredConfig,
 		setStoredHistory,
-		setStoredBackups
+		setStoredBackups,
 	};
 }

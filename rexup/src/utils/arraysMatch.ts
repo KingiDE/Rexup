@@ -1,6 +1,6 @@
 export function arraysMatchRealisticly(
 	arr1: string[] | null,
-	arr2: string[] | null
+	arr2: string[] | null,
 ): boolean {
 	if (arr1 === null) {
 		if (arr2 !== null) {

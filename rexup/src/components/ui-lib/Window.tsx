@@ -1,7 +1,8 @@
-import React, { Dispatch, SetStateAction } from "react";
+import type React from "react";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../../App";
 import useFadeInOut from "../../hooks/popups/useFadeInOut";
 import Button from "./Buttons";
-import { CurrentPopup } from "../../App";
 
 // DOES:
 // Manage fade-in-and-out itself
@@ -12,7 +13,7 @@ export default function Window({
 	children,
 	currentPopup,
 	neededPopup,
-	setCurrentPopup
+	setCurrentPopup,
 }: {
 	neededPopup:
 		| "addbackup"
@@ -26,14 +27,14 @@ export default function Window({
 	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
 }) {
 	const { wrapper } = useFadeInOut(
-		currentPopup !== null && currentPopup.variant === neededPopup
+		currentPopup !== null && currentPopup.variant === neededPopup,
 	);
 
 	return (
 		<div
 			ref={wrapper}
 			className="hidden z-[1] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-gray-900 px-8 py-6 max-w-[550px] outline-2 outline-gray-800 shadow-[0_0_6px_2px_rgba(0,0,0,0.3)]"
-			onKeyDown={async e => {
+			onKeyDown={async (e) => {
 				switch (e.key) {
 					case "Escape":
 						setCurrentPopup(null);

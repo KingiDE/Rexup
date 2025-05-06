@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
-import { BackupsFile } from "./useStoredValues";
+import type { Dispatch, SetStateAction } from "react";
+import type { BackupsFile } from "./useStoredValues";
 
 export default function useBackupActions(
 	storedBackups: BackupsFile | null,
-	setStoredBackups: Dispatch<SetStateAction<BackupsFile | null>>
+	setStoredBackups: Dispatch<SetStateAction<BackupsFile | null>>,
 ) {
 	function createBackup(name: string) {
 		const newBackups = new Map(storedBackups);
@@ -11,7 +11,7 @@ export default function useBackupActions(
 			name: name,
 			entries: new Map(),
 			isZipped: false,
-			location: ""
+			location: "",
 		});
 		setStoredBackups(newBackups);
 	}
@@ -58,6 +58,6 @@ export default function useBackupActions(
 		renameBackup,
 		deleteBackup,
 		toggleBackupZipping,
-		updateBackupLocation
+		updateBackupLocation,
 	};
 }

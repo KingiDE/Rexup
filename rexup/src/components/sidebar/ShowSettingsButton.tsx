@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../../App";
 import Button from "../ui-lib/Buttons";
-import { CurrentPopup } from "../../App";
 
 export default function ShowSettingsButton({
-	setCurrentPopup
+	setCurrentPopup,
 }: {
 	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
 }) {

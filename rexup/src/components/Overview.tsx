@@ -1,20 +1,24 @@
-import React from "react";
-import { Dispatch, SetStateAction } from "react";
-import { LocalStateBackupWithId } from "../hooks/useCurrentSelectedBackup";
-import { BackupsFile, ConfigFile, HistoryFile } from "../hooks/useStoredValues";
-import useBackupsEntries from "../hooks/useBackupsEntries";
-import { BackupEntry } from "./overview/BackupEntry";
-import { AddBackupEntryForm } from "./overview/AddBackupEntryForm";
-import NoBackupSelectedScreen from "./overview/NoBackupSelectedScreen";
-import History from "./overview/HistoryLog";
+import type React from "react";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../App";
 import useExecuteBackup from "../hooks/overview/useExecuteBackup";
 import useLogs from "../hooks/overview/useLogs";
-import { HeadingII, HeadingIII, Text } from "./ui-lib/Texts";
-import { SpacingLarge, SpacingSmall, SpacingXL } from "./ui-lib/Spacing";
-import { CurrentPopup } from "../App";
-import ExecutionLogsSection from "./overview/ExecutionLogsSection";
+import useBackupsEntries from "../hooks/useBackupsEntries";
+import type { LocalStateBackupWithId } from "../hooks/useCurrentSelectedBackup";
+import type {
+	BackupsFile,
+	ConfigFile,
+	HistoryFile,
+} from "../hooks/useStoredValues";
+import { AddBackupEntryForm } from "./overview/AddBackupEntryForm";
+import { BackupEntry } from "./overview/BackupEntry";
 import ExecuteAndConfigureSection from "./overview/ExecuteAndConfigureSection";
+import ExecutionLogsSection from "./overview/ExecutionLogsSection";
+import History from "./overview/HistoryLog";
+import NoBackupSelectedScreen from "./overview/NoBackupSelectedScreen";
 import DeleteBackupEntryPoup from "./popups/DeleteBackupEntryPoup";
+import { SpacingLarge, SpacingSmall, SpacingXL } from "./ui-lib/Spacing";
+import { HeadingII, HeadingIII, Text } from "./ui-lib/Texts";
 
 export default function Overview({
 	currentSelectedBackup,
@@ -24,7 +28,7 @@ export default function Overview({
 	setStoredHistory,
 	setStoredBackups,
 	currentPopup,
-	setCurrentPopup
+	setCurrentPopup,
 }: {
 	currentSelectedBackup: LocalStateBackupWithId | null;
 	storedHistory: HistoryFile | null;
@@ -47,12 +51,12 @@ export default function Overview({
 		updateEntryVariant,
 		updateMaxSizeFilter,
 		updateListFilter,
-		toggleIsEntryActive
+		toggleIsEntryActive,
 	} = useBackupsEntries(
 		currentSelectedBackup,
 		storedBackups,
 		setStoredBackups,
-		setCurrentPopup
+		setCurrentPopup,
 	);
 
 	// Handles the logic when executing the backup
@@ -62,7 +66,7 @@ export default function Overview({
 		addEntryToLogs,
 		clearLogs,
 		storedHistory,
-		setStoredHistory
+		setStoredHistory,
 	);
 
 	return (
@@ -121,15 +125,15 @@ export default function Overview({
 			<SpacingSmall />
 			{currentSelectedBackup[1].entries.size > 0 ? (
 				<div className="inline-grid gap-2">
-					{[...currentSelectedBackup[1].entries].map(folder => {
+					{[...currentSelectedBackup[1].entries].map((folder) => {
 						return (
 							<BackupEntry
 								key={folder[0]}
 								folderEntry={folder}
-								removeEntry={backupEntry => {
+								removeEntry={(backupEntry) => {
 									setCurrentPopup({
 										variant: "removebackupentry",
-										value: backupEntry
+										value: backupEntry,
 									});
 								}}
 								updateOriginOrTarget={updateOriginOrTarget}

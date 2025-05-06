@@ -1,11 +1,11 @@
-import { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
-import { HistoryFile } from "../../hooks/useStoredValues";
+import type { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
+import type { HistoryFile } from "../../hooks/useStoredValues";
 import { SpacingSmall } from "../ui-lib/Spacing";
 import { Description } from "../ui-lib/Texts";
 
 export default function History({
 	storedHistory,
-	currentSelectedBackup
+	currentSelectedBackup,
 }: {
 	storedHistory: HistoryFile | null;
 	currentSelectedBackup: LocalStateBackupWithId | null;
@@ -14,7 +14,7 @@ export default function History({
 		if (storedHistory === null || currentSelectedBackup === null) return [];
 		// Take only the elements which have the right id
 		const relevantEntries = [...storedHistory].filter(
-			el => el[1] === currentSelectedBackup[0]
+			(el) => el[1] === currentSelectedBackup[0],
 		);
 
 		// sort from highest to lowest number (= latest to oldest)

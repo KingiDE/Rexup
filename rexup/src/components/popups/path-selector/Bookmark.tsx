@@ -3,7 +3,7 @@ import Button from "../../ui-lib/Buttons";
 export default function Bookmark({
 	text,
 	onClick,
-	type
+	type,
 }: {
 	text: string;
 	onClick: () => void;

@@ -1,16 +1,16 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../../App";
 import useFadeInOut from "../../hooks/popups/useFadeInOut";
-import { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
-import Popup from "../ui-lib/Popup";
-import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
+import type { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
 import Button from "../ui-lib/Buttons";
+import Popup from "../ui-lib/Popup";
 import { SpacingSmall } from "../ui-lib/Spacing";
-import { CurrentPopup } from "../../App";
+import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 
 export default function DeleteBackupWarning({
 	localDeleteBackup,
 	setCurrentPopup,
-	currentPopup
+	currentPopup,
 }: {
 	currentSelectedBackup: LocalStateBackupWithId | null;
 	localDeleteBackup(backupId: string): void;
@@ -22,7 +22,7 @@ export default function DeleteBackupWarning({
 	}
 
 	const { wrapper } = useFadeInOut(
-		currentPopup !== null && currentPopup.variant === "deletebackup"
+		currentPopup !== null && currentPopup.variant === "deletebackup",
 	);
 
 	return (
@@ -30,7 +30,7 @@ export default function DeleteBackupWarning({
 			wrapperRef={wrapper}
 			onConfirmAction={() =>
 				localDeleteBackup(
-					currentPopup && currentPopup.value ? currentPopup.value[0] : ""
+					currentPopup && currentPopup.value ? currentPopup.value[0] : "",
 				)
 			}
 			onCancelAction={executeCancelDeletion}
@@ -57,7 +57,7 @@ export default function DeleteBackupWarning({
 					text="Delete"
 					onClick={() =>
 						localDeleteBackup(
-							currentPopup && currentPopup.value ? currentPopup.value[0] : ""
+							currentPopup && currentPopup.value ? currentPopup.value[0] : "",
 						)
 					}
 					meaning="negative"

@@ -1,4 +1,4 @@
-import { HistoryFile } from "../../hooks/useStoredValues";
+import type { HistoryFile } from "../../hooks/useStoredValues";
 
 export function convertHistoryJSONToJS(value: string) {
 	let asJS;
@@ -16,7 +16,7 @@ export function convertHistoryJSONToJS(value: string) {
 
 	const newHistory: HistoryFile = new Map<number, string>();
 
-	asJS.map(entry => {
+	asJS.map((entry) => {
 		// Check whether all fields are present
 		if (
 			entry !== null &&

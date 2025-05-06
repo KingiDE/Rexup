@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import useFadeInOut from "../../hooks/popups/useFadeInOut";
 import useSelectFolderPopup from "../../hooks/popups/useSelectPathPopup";
 import Button from "../ui-lib/Buttons";
@@ -11,7 +11,7 @@ import FolderOrFile from "./path-selector/FolderOrFile";
 export default function SelectFolderPopup({
 	isShown,
 	setFinalPath,
-	setIsShown
+	setIsShown,
 }: {
 	isShown: boolean;
 	setFinalPath: (path: string, variant: "file" | "folder") => void;
@@ -26,7 +26,7 @@ export default function SelectFolderPopup({
 		modifyPath,
 		updatePath,
 		setPathElements,
-		sortDirEntries
+		sortDirEntries,
 	} = useSelectFolderPopup(isShown);
 
 	const { wrapper } = useFadeInOut(isShown);
@@ -60,9 +60,9 @@ export default function SelectFolderPopup({
 								!(
 									index === pathElements.length - 1 &&
 									element.variant === "file"
-								)
+								),
 						)
-						.map(entry => (
+						.map((entry) => (
 							<Button
 								key={entry.pathValue}
 								meaning="neutral"
@@ -91,7 +91,7 @@ export default function SelectFolderPopup({
 							onClick={() => updatePath("documents")}
 							type="bookmark"
 						/>
-						{drives.map(drive => (
+						{drives.map((drive) => (
 							<Bookmark
 								key={drive}
 								text={drive}
@@ -100,8 +100,8 @@ export default function SelectFolderPopup({
 										{
 											pathAfterClick: drive,
 											pathValue: drive,
-											variant: "folder"
-										}
+											variant: "folder",
+										},
 									])
 								}
 								type="drive"
@@ -120,7 +120,7 @@ export default function SelectFolderPopup({
 							} overflow-y-scroll pr-1`}
 						>
 							{dirEntries.length !== 0 ? (
-								sortDirEntries(dirEntries).map(entry => (
+								sortDirEntries(dirEntries).map((entry) => (
 									<FolderOrFile
 										key={entry.name}
 										text={entry.name}

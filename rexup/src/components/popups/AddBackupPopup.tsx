@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
+import type { CurrentPopup } from "../../App";
 import useFadeInOut from "../../hooks/popups/useFadeInOut";
-import Popup from "../ui-lib/Popup";
-import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 import Button from "../ui-lib/Buttons";
 import Inputs from "../ui-lib/Inputs";
+import Popup from "../ui-lib/Popup";
 import { SpacingLarge, SpacingSmall } from "../ui-lib/Spacing";
-import { CurrentPopup } from "../../App";
+import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 
 export default function AddBackupDialog({
 	localCreateBackup,
 	onCancel,
-	currentPopup
+	currentPopup,
 }: {
 	localCreateBackup: (name: string) => void;
 	onCancel: () => void;
 	currentPopup: CurrentPopup;
 }) {
 	const { wrapper } = useFadeInOut(
-		currentPopup !== null && currentPopup.variant === "addbackup"
+		currentPopup !== null && currentPopup.variant === "addbackup",
 	);
 
 	const [input, setInput] = useState("");
@@ -54,7 +54,7 @@ export default function AddBackupDialog({
 			</DescriptionBlock>
 			<SpacingSmall />
 			<Inputs
-				onChange={e => setInput(e.target.value)}
+				onChange={(e) => setInput(e.target.value)}
 				value={input}
 				placeholder="Backup Name"
 				invalidInputs={invalidInput && triedToSubmit}

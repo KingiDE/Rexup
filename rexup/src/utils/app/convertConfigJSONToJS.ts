@@ -1,11 +1,11 @@
-import { ConfigFile } from "../../hooks/useStoredValues";
+import type { ConfigFile } from "../../hooks/useStoredValues";
 
 export function convertConfigJSONToJS(value: string) {
 	let asJS;
 
 	const defaultConfig: ConfigFile = {
 		show_edit_warning: true,
-		show_history: true
+		show_history: true,
 	};
 
 	try {

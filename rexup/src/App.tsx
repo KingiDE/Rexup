@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "./App.css";
-import useBackupActions from "./hooks/useBackupActions";
-import useStoredValues from "./hooks/useStoredValues";
-import useCurrentSelectedBackup, {
-	LocalStateBackupEntry,
-	LocalStateBackupWithId
-} from "./hooks/useCurrentSelectedBackup";
-import Sidebar from "./components/Sidebar";
 import Overview from "./components/Overview";
+import Sidebar from "./components/Sidebar";
+import useBackupActions from "./hooks/useBackupActions";
+import useCurrentSelectedBackup, {
+	type LocalStateBackupEntry,
+	type LocalStateBackupWithId,
+} from "./hooks/useCurrentSelectedBackup";
+import useStoredValues from "./hooks/useStoredValues";
 
 export type CurrentPopup =
 	| {
@@ -51,7 +51,7 @@ export default function App() {
 		storedBackups,
 		setStoredConfig,
 		setStoredHistory,
-		setStoredBackups
+		setStoredBackups,
 	} = useStoredValues();
 
 	const [currentPopup, setCurrentPopup] = useState<CurrentPopup>(null);
@@ -61,7 +61,7 @@ export default function App() {
 		renameBackup,
 		deleteBackup,
 		toggleBackupZipping,
-		updateBackupLocation
+		updateBackupLocation,
 	} = useBackupActions(storedBackups, setStoredBackups);
 
 	const { currentSelectedBackup, setCurrentSelectedBackup } =

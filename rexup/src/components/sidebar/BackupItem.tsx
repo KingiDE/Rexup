@@ -1,13 +1,13 @@
-import { Dispatch, SetStateAction } from "react";
-import { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../../App";
+import type { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
 import Button from "../ui-lib/Buttons";
-import { CurrentPopup } from "../../App";
 
 export function BackupItem({
 	backup,
 	initiateDeleteBackup,
 	initiateRenameBackup,
-	setCurrentSelectedBackup
+	setCurrentSelectedBackup,
 }: {
 	backup: LocalStateBackupWithId;
 	initiateDeleteBackup: (id: LocalStateBackupWithId) => void;
@@ -19,7 +19,7 @@ export function BackupItem({
 	return (
 		<li
 			className="rounded-md hover:bg-gray-800 pl-3 pr-2 py-2 transition-[background] flex items-center gap-2 cursor-pointer"
-			onClick={e => {
+			onClick={(e) => {
 				if (e.target === e.currentTarget) setCurrentSelectedBackup(backup);
 			}}
 		>
@@ -63,7 +63,7 @@ export function BackupItem({
 }
 
 export function AddBackup({
-	setCurrentPopup
+	setCurrentPopup,
 }: {
 	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
 }) {

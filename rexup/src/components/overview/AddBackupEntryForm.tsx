@@ -1,18 +1,18 @@
-import React from "react";
-import Button from "../ui-lib/Buttons";
+import type React from "react";
+import type { CurrentPopup } from "../../App";
+import type { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
 import EditBackupEntryPopup from "../popups/EditBackupEntryPopup";
-import { LocalStateBackupEntry } from "../../hooks/useCurrentSelectedBackup";
-import { CurrentPopup } from "../../App";
+import Button from "../ui-lib/Buttons";
 
 export function AddBackupEntryForm({
 	inputs,
-	setInputs,
+	setInputss,
 	addNewEntry,
 	currentPopup,
-	setCurrentPopup
+	setCurrentPopup,
 }: {
 	inputs: LocalStateBackupEntry;
-	setInputs: React.Dispatch<React.SetStateAction<LocalStateBackupEntry>>;
+	setInputss: React.Dispatch<React.SetStateAction<LocalStateBackupEntry>>;
 	addNewEntry: () => void;
 	currentPopup: CurrentPopup;
 	setCurrentPopup: React.Dispatch<React.SetStateAction<CurrentPopup>>;
@@ -39,35 +39,39 @@ export function AddBackupEntryForm({
 				}
 			/>
 			<EditBackupEntryPopup
-				showPopup={
+				showPopupp={
 					currentPopup !== null && currentPopup.variant === "addbackupentry"
 				}
 				hidePopup={() => setCurrentPopup(null)}
 				folderEntry={["not used", inputs]}
 				updateOriginOrTarget={(_id, field, value) => {
-					setInputs(prevInputs => {
+					setInputss((prevInputs) => {
 						return { ...prevInputs, [field]: value };
 					});
 				}}
 				updateEntryVariant={(_id, variant) => {
-					setInputs(prevInputs => {
+					setInputss((prevInputs) => {
 						return { ...prevInputs, variant };
 					});
 				}}
 				updateMaxSizeFilter={(_id, value) => {
-					setInputs({
+					setInputss({
 						...inputs,
 						filters: {
 							...inputs.filters,
 							max_size_in_mb:
-								value === "" ? null : isNaN(Number(value)) ? 0 : Number(value)
-						}
+								value === ""
+									? null
+									: Number.isNaN(Number(value))
+										? 0
+										: Number(value),
+						},
 					});
 				}}
 				updateListFilter={(_id, filter, value) => {
-					setInputs({
+					setInputss({
 						...inputs,
-						filters: { ...inputs.filters, [filter]: value }
+						filters: { ...inputs.filters, [filter]: value },
 					});
 				}}
 				addNewEntry={addNewEntry}

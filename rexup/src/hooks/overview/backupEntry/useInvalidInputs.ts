@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function useInvalidInputs({
 	origin,
-	target
+	target,
 }: {
 	origin: string;
 	target: string;
@@ -14,6 +14,6 @@ export default function useInvalidInputs({
 	}, [origin, target]);
 
 	return {
-		pureInvalidInputs
+		pureInvalidInputs,
 	};
 }

@@ -1,11 +1,11 @@
-import { CurrentPopup } from "../../App";
-import { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
+import type { CurrentPopup } from "../../App";
+import type { LocalStateBackupWithId } from "../../hooks/useCurrentSelectedBackup";
 import Button from "../ui-lib/Buttons";
 
 export default function ExecuteAndConfigureSection({
 	executeBackup,
 	setCurrentPopup,
-	currentSelectedBackup
+	currentSelectedBackup,
 }: {
 	executeBackup: () => Promise<void>;
 	setCurrentPopup: React.Dispatch<React.SetStateAction<CurrentPopup>>;
@@ -47,7 +47,7 @@ export default function ExecuteAndConfigureSection({
 				onClick={() =>
 					setCurrentPopup({
 						variant: "configurebackup",
-						value: currentSelectedBackup
+						value: currentSelectedBackup,
 					})
 				}
 			/>

@@ -1,4 +1,4 @@
-import { LocalStateBackupEntry } from "../../../hooks/useCurrentSelectedBackup";
+import type { LocalStateBackupEntry } from "../../../hooks/useCurrentSelectedBackup";
 import Button from "../../ui-lib/Buttons";
 import { HighlightedTextBlock, Text } from "../../ui-lib/Texts";
 
@@ -6,7 +6,7 @@ export default function BottomRow({
 	folderEntry,
 	toggleIsEntryActive,
 	removeEntry,
-	setShowEditBackupEntryPopup
+	setShowEditBackupEntryPopup,
 }: {
 	folderEntry: [string, LocalStateBackupEntry];
 	toggleIsEntryActive: (id: string) => void;
@@ -14,23 +14,23 @@ export default function BottomRow({
 	setShowEditBackupEntryPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	function calculateTextForFilters() {
-		let parts = [];
+		const parts = [];
 		if (folderEntry[1].variant === "folder") {
-			let max_size_in_mb = folderEntry[1].filters.max_size_in_mb;
-			let included_file_types = folderEntry[1].filters.included_file_types;
-			let included_file_names = folderEntry[1].filters.included_file_names;
+			const max_size_in_mb = folderEntry[1].filters.max_size_in_mb;
+			const included_file_types = folderEntry[1].filters.included_file_types;
+			const included_file_names = folderEntry[1].filters.included_file_names;
 
 			if (max_size_in_mb !== null) {
 				parts.push(`max. ${max_size_in_mb}MB size`);
 			}
 			if (included_file_types !== null) {
 				parts.push(
-					`${included_file_types.length} file-type${included_file_types.length > 1 ? "s" : ""}`
+					`${included_file_types.length} file-type${included_file_types.length > 1 ? "s" : ""}`,
 				);
 			}
 			if (included_file_names !== null) {
 				parts.push(
-					`${included_file_names.length} file-name${included_file_names?.length > 1 ? "s" : ""}`
+					`${included_file_names.length} file-name${included_file_names?.length > 1 ? "s" : ""}`,
 				);
 			}
 		}

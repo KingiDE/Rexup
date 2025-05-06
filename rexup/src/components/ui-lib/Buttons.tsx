@@ -38,7 +38,7 @@ export default function Button(props: Props) {
 			disabled={props.disabled}
 			onClick={props.onClick}
 			className={`cursor-pointer text-gray-50 whitespace-nowrap ${calculatePadding(
-				props
+				props,
 			)} ${calculateBackground(props)} rounded-md transition-[background] ${
 				props.icon !== undefined && props.text !== undefined
 					? "flex gap-2 items-center"

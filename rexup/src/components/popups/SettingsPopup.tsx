@@ -1,24 +1,24 @@
-import { Dispatch, SetStateAction } from "react";
-import { ConfigFile, HistoryFile } from "../../hooks/useStoredValues";
-import Window from "../ui-lib/Window";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../../App";
+import type { ConfigFile, HistoryFile } from "../../hooks/useStoredValues";
+import Button from "../ui-lib/Buttons";
+import CheckboxEntry from "../ui-lib/CheckboxEntry";
+import { SpacingLarge, SpacingMedium, SpacingSmall } from "../ui-lib/Spacing";
 import {
 	Description,
 	DescriptionBlock,
 	HeadingII,
 	HighlightedTextBlock,
-	Text
+	Text,
 } from "../ui-lib/Texts";
-import Button from "../ui-lib/Buttons";
-import { SpacingLarge, SpacingMedium, SpacingSmall } from "../ui-lib/Spacing";
-import CheckboxEntry from "../ui-lib/CheckboxEntry";
-import { CurrentPopup } from "../../App";
+import Window from "../ui-lib/Window";
 
 export default function Settings({
 	setCurrentPopup,
 	storedConfig,
 	setStoredConfig,
 	setStoredHistory,
-	currentPopup
+	currentPopup,
 }: {
 	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
 	storedConfig: ConfigFile | null;

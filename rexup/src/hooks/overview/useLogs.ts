@@ -13,18 +13,18 @@ export default function useLogs() {
 	}
 
 	function addEntryToLogs({ type, value }: LogMessage) {
-		setLogs(logs => [
+		setLogs((logs) => [
 			...logs,
 			{
 				type,
-				value
-			}
+				value,
+			},
 		]);
 	}
 
 	return {
 		addEntryToLogs,
 		clearLogs,
-		logs
+		logs,
 	};
 }

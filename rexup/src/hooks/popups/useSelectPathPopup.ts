@@ -7,9 +7,7 @@ type DirectoryEntry = {
 	is_hidden: boolean;
 };
 
-export default function useSelectFolderPopup(
-	isShown: boolean
-) {
+export default function useSelectFolderPopup(isShown: boolean) {
 	// Path elements on top bar
 	const [pathElements, setPathElements] = useState<
 		Array<{
@@ -21,8 +19,8 @@ export default function useSelectFolderPopup(
 		{
 			pathValue: "C:",
 			pathAfterClick: "C:",
-			variant: "folder"
-		}
+			variant: "folder",
+		},
 	]);
 
 	// All entries the current folder has
@@ -32,7 +30,7 @@ export default function useSelectFolderPopup(
 	const [path, setPath] = useState("");
 	useEffect(() => {
 		const pathValues = pathElements
-			.map(element => element.pathValue)
+			.map((element) => element.pathValue)
 			.join("\\");
 		setPath(pathValues);
 	}, [pathElements]);
@@ -41,17 +39,17 @@ export default function useSelectFolderPopup(
 	useEffect(() => {
 		async function gett() {
 			// Construct path to search from pathElements but leave out last element when its a file
-			let newPath = pathElements
+			const newPath = pathElements
 				.map((element, index) =>
 					!(index === pathElements.length - 1 && element.variant === "file")
 						? element.pathValue
-						: null
+						: null,
 				)
 				.join("\\");
 			setDirEntries(
 				(await invoke("read_contents_of", {
 					path: newPath,
-				})) as Array<DirectoryEntry>
+				})) as Array<DirectoryEntry>,
 			);
 		}
 		gett();
@@ -72,15 +70,15 @@ export default function useSelectFolderPopup(
 
 		let cumulativePath = "";
 		setPathElements(
-			newPath.split("\\").map(singlePathComponent => {
+			newPath.split("\\").map((singlePathComponent) => {
 				cumulativePath += singlePathComponent + "\\";
 				return {
 					pathValue: singlePathComponent,
 					variant: "folder",
 					is_hidden: false,
-					pathAfterClick: rmPossibleLastBackslash(cumulativePath)
+					pathAfterClick: rmPossibleLastBackslash(cumulativePath),
 				};
-			})
+			}),
 		);
 	}
 
@@ -89,15 +87,15 @@ export default function useSelectFolderPopup(
 		// Remove the last element if it's a file
 		const newPathElements = pathElements.filter(
 			(element, index) =>
-				!(index === pathElements.length - 1 && element.variant === "file")
+				!(index === pathElements.length - 1 && element.variant === "file"),
 		);
 		setPathElements([
 			...newPathElements,
 			{
 				...addedPathElement,
 				pathValue: addedPathElement.name,
-				pathAfterClick: path + "\\" + addedPathElement.name
-			}
+				pathAfterClick: path + "\\" + addedPathElement.name,
+			},
 		]);
 	}
 
@@ -105,15 +103,15 @@ export default function useSelectFolderPopup(
 	function modifyPath(newPath: string) {
 		let cumulativePath = "";
 		setPathElements(
-			newPath.split("\\").map(singlePathComponent => {
+			newPath.split("\\").map((singlePathComponent) => {
 				cumulativePath += singlePathComponent + "\\";
 				return {
 					pathValue: singlePathComponent,
 					variant: "folder",
 					is_hidden: false,
-					pathAfterClick: rmPossibleLastBackslash(cumulativePath)
+					pathAfterClick: rmPossibleLastBackslash(cumulativePath),
 				};
-			})
+			}),
 		);
 	}
 
@@ -144,6 +142,6 @@ export default function useSelectFolderPopup(
 		appendToPath,
 		modifyPath,
 		setPathElements,
-		sortDirEntries
+		sortDirEntries,
 	};
 }

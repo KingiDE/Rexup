@@ -1,12 +1,12 @@
+import useListFilter from "../../../hooks/popups/useListFilter";
 import Inputs from "../../ui-lib/Inputs";
 import { HighlightedTextBlock } from "../../ui-lib/Texts";
-import useListFilter from "../../../hooks/popups/useListFilter";
 
 export default function ListFilters({
 	text,
 	folderEntryId,
 	folderEntryFilterList,
-	updateListFilter
+	updateListFilter,
 }: {
 	text: string;
 	folderEntryId: string;
@@ -16,7 +16,7 @@ export default function ListFilters({
 	const { listOfValues, setListOfValues } = useListFilter(
 		folderEntryId,
 		folderEntryFilterList,
-		updateListFilter
+		updateListFilter,
 	);
 
 	return (
@@ -29,7 +29,7 @@ export default function ListFilters({
 							<Inputs
 								key={index}
 								value={element}
-								onChange={e => {
+								onChange={(e) => {
 									const newFileFilterName = [...listOfValues];
 									newFileFilterName[index] = e.target.value;
 									setListOfValues(newFileFilterName);

@@ -1,4 +1,7 @@
-import { BackupFolderFile, BackupsFile } from "../../hooks/useStoredValues";
+import type {
+	BackupFolderFile,
+	BackupsFile,
+} from "../../hooks/useStoredValues";
 
 export function convertBackupsJSONToJS(value: string) {
 	let asJS;
@@ -93,7 +96,7 @@ export function convertBackupsJSONToJS(value: string) {
 							((typeof folder[1].filters.included_file_types === "object" &&
 								Array.isArray(folder[1].filters.included_file_types) &&
 								folder[1].filters.included_file_types.every(
-									item => typeof item === "string"
+									(item) => typeof item === "string",
 								)) ||
 								folder[1].filters.included_file_types === null) &&
 							// Filter for correct "included_file_names"
@@ -101,7 +104,7 @@ export function convertBackupsJSONToJS(value: string) {
 							((typeof folder[1].filters.included_file_names === "object" &&
 								Array.isArray(folder[1].filters.included_file_names) &&
 								folder[1].filters.included_file_names.every(
-									item => typeof item === "string"
+									(item) => typeof item === "string",
 								)) ||
 								folder[1].filters.included_file_names === null)
 						) {
@@ -113,8 +116,8 @@ export function convertBackupsJSONToJS(value: string) {
 								filters: {
 									max_size_in_mb: folder[1].filters.max_size_in_mb,
 									included_file_types: folder[1].filters.included_file_types,
-									included_file_names: folder[1].filters.included_file_names
-								}
+									included_file_names: folder[1].filters.included_file_names,
+								},
 							});
 						}
 					}
@@ -124,10 +127,10 @@ export function convertBackupsJSONToJS(value: string) {
 					name: entry.backup.name,
 					isZipped: entry.backup.is_zipped,
 					location: entry.backup.location,
-					entries: newEntries
+					entries: newEntries,
 				});
 			}
-		}
+		},
 	);
 
 	return newBackups;

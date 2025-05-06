@@ -1,21 +1,21 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { LocalStateBackupWithId } from "../useCurrentSelectedBackup";
-import { HistoryFile } from "../useStoredValues";
-import { LogMessage } from "./useLogs";
-import { convertMilisIntoReadable } from "../../utils/overview/convertMilisIntoReadable";
 import { invoke } from "@tauri-apps/api/core";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
+import { convertMilisIntoReadable } from "../../utils/overview/convertMilisIntoReadable";
+import type { LocalStateBackupWithId } from "../useCurrentSelectedBackup";
+import type { HistoryFile } from "../useStoredValues";
+import type { LogMessage } from "./useLogs";
 
 export default function useExecutebackups(
 	backup: LocalStateBackupWithId,
 	addEntryToLogs: ({ type, value }: LogMessage) => void,
 	clearLogs: () => void,
 	storedHistory: HistoryFile | null,
-	setStoredHistory: Dispatch<SetStateAction<HistoryFile | null>>
+	setStoredHistory: Dispatch<SetStateAction<HistoryFile | null>>,
 ) {
 	// Clear logs as soon as the selectedBackup changes
 	useEffect(() => {
 		clearLogs();
-	}, [backup])
+	}, [backup]);
 
 	async function executeBackup() {
 		// Clear the logs on start
@@ -30,20 +30,20 @@ export default function useExecutebackups(
 			{
 				backupName: backup[1].name,
 				isZipped: backup[1].isZipped,
-				inputBackupLocation: backup[1].location
-			}
+				inputBackupLocation: backup[1].location,
+			},
 		)) as { ParentFolderPath: string } | { Error: boolean };
 
 		if ("Error" in backup_parent_folder_path) {
 			addEntryToLogs({
 				type: "error",
-				value: `Failed to create the backup-parent folder.`
+				value: `Failed to create the backup-parent folder.`,
 			});
 			return;
 		} else {
 			addEntryToLogs({
 				type: "success",
-				value: `Successfully created the backup-parent folder.`
+				value: `Successfully created the backup-parent folder.`,
 			});
 		}
 
@@ -67,12 +67,12 @@ export default function useExecutebackups(
 				included_file_names: Array<string> | null;
 			};
 		}> = [];
-		[...backup[1].entries].map(entry => {
+		[...backup[1].entries].map((entry) => {
 			if (entry[1].is_active) {
 				activeFolders.push({
 					origin: entry[1].origin,
 					target: entry[1].target,
-					filters: entry[1].filters
+					filters: entry[1].filters,
 				});
 			}
 		});
@@ -84,7 +84,7 @@ export default function useExecutebackups(
 		const executionResult = (await invoke("copy_origin_to_target", {
 			allBackupEntries: activeFolders,
 			backupParentFolderPath: backup_parent_folder_path.ParentFolderPath,
-			isZipped: backup[1].isZipped
+			isZipped: backup[1].isZipped,
 		})) as null | {
 			skipped_files: string[];
 			successful_copies: {
@@ -101,27 +101,27 @@ export default function useExecutebackups(
 		if (executionResult === null) {
 			addEntryToLogs({
 				type: "error",
-				value: `Failed backup execution.`
+				value: `Failed backup execution.`,
 			});
 		} else {
 			for (const skippedFile of executionResult.skipped_files) {
 				addEntryToLogs({
 					type: "skip",
-					value: `Skipped file ${skippedFile}'.`
+					value: `Skipped file ${skippedFile}'.`,
 				});
 			}
 
 			for (const failedCopy of executionResult.failed_copies) {
 				addEntryToLogs({
 					type: "error",
-					value: `Failed to copy '${failedCopy.origin}' to '${failedCopy.target}'.`
+					value: `Failed to copy '${failedCopy.origin}' to '${failedCopy.target}'.`,
 				});
 			}
 
 			for (const successfulCopy of executionResult.successful_copies) {
 				addEntryToLogs({
 					type: "success",
-					value: `Successfully copied '${successfulCopy.origin}' to '${successfulCopy.target}'.`
+					value: `Successfully copied '${successfulCopy.origin}' to '${successfulCopy.target}'.`,
 				});
 			}
 		}
@@ -135,12 +135,12 @@ export default function useExecutebackups(
 		addEntryToLogs({
 			type: "finish",
 			value: `Finished the backup-execution in ${convertMilisIntoReadable(
-				Date.now() - startTime
-			)}.`
+				Date.now() - startTime,
+			)}.`,
 		});
 	}
 
 	return {
-		executeBackup
+		executeBackup,
 	};
 }

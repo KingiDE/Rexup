@@ -5,7 +5,7 @@ export default function FolderOrFile({
 	onClick,
 	variant,
 	isHidden,
-	isHighlighted
+	isHighlighted,
 }: {
 	text: string;
 	onClick: () => void;

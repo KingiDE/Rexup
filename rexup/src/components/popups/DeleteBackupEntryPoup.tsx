@@ -1,22 +1,22 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import type { CurrentPopup } from "../../App";
 import useFadeIn from "../../hooks/popups/useFadeInOut";
-import Popup from "../ui-lib/Popup";
-import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
-import { SpacingSmall } from "../ui-lib/Spacing";
 import Button from "../ui-lib/Buttons";
-import { CurrentPopup } from "../../App";
+import Popup from "../ui-lib/Popup";
+import { SpacingSmall } from "../ui-lib/Spacing";
+import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 
 export default function DeleteBackupEntryPoup({
 	currentPopup,
 	setCurrentPopup,
-	deleteBackupEntry
+	deleteBackupEntry,
 }: {
 	currentPopup: CurrentPopup;
 	setCurrentPopup: Dispatch<SetStateAction<CurrentPopup>>;
 	deleteBackupEntry: (id: string) => void;
 }) {
 	const { wrapper, fadeOut } = useFadeIn(
-		currentPopup !== null && currentPopup.variant === "removebackupentry"
+		currentPopup !== null && currentPopup.variant === "removebackupentry",
 	);
 
 	// Cancel deletion

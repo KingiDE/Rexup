@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import type { CurrentPopup } from "../../App";
 import useFadeInOut from "../../hooks/popups/useFadeInOut";
-import Popup from "../ui-lib/Popup";
-import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 import Button from "../ui-lib/Buttons";
 import Inputs from "../ui-lib/Inputs";
+import Popup from "../ui-lib/Popup";
 import { SpacingLarge, SpacingSmall } from "../ui-lib/Spacing";
-import { CurrentPopup } from "../../App";
+import { DescriptionBlock, HeadingIII } from "../ui-lib/Texts";
 
 export default function RenameBackupPopup({
 	localRenameBackup,
 	onCancel,
-	currentPopup
+	currentPopup,
 }: {
 	localRenameBackup: (backupId: string, value: string) => void;
 	onCancel: () => void;
@@ -28,7 +28,7 @@ export default function RenameBackupPopup({
 	}, [currentPopup]);
 
 	const { wrapper } = useFadeInOut(
-		currentPopup !== null && currentPopup.variant === "renamebackup"
+		currentPopup !== null && currentPopup.variant === "renamebackup",
 	);
 
 	const [input, setInput] = useState(
@@ -36,7 +36,7 @@ export default function RenameBackupPopup({
 			currentPopup.value &&
 			currentPopup.variant === "renamebackup"
 			? currentPopup.value[1].name
-			: ""
+			: "",
 	);
 
 	const [invalidInput, setInvalidInput] = useState(
@@ -44,7 +44,7 @@ export default function RenameBackupPopup({
 		currentPopup.value &&
 		currentPopup.variant === "renamebackup"
 			? currentPopup.value[1].name
-			: "") === ""
+			: "") === "",
 	);
 	const [triedToSubmit, setTriedToSubmit] = useState(false);
 
@@ -81,7 +81,7 @@ export default function RenameBackupPopup({
 			</DescriptionBlock>
 			<SpacingSmall />
 			<Inputs
-				onChange={e => setInput(e.target.value)}
+				onChange={(e) => setInput(e.target.value)}
 				value={input}
 				placeholder="New Backup Name"
 				invalidInputs={invalidInput && triedToSubmit}

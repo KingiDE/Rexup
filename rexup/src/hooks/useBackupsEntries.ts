@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useState } from "react";
-import {
+import { type Dispatch, type SetStateAction, useState } from "react";
+import type { CurrentPopup } from "../App";
+import type {
 	LocalStateBackupEntry,
-	LocalStateBackupWithId
+	LocalStateBackupWithId,
 } from "./useCurrentSelectedBackup";
-import { BackupsFile } from "./useStoredValues";
-import { CurrentPopup } from "../App";
+import type { BackupsFile } from "./useStoredValues";
 
 export default function useBackupsEntries(
 	currentSelectedBackup: LocalStateBackupWithId,
@@ -19,9 +19,9 @@ export default function useBackupsEntries(
 		filters: {
 			included_file_names: null,
 			included_file_types: null,
-			max_size_in_mb: null
+			max_size_in_mb: null,
 		},
-		is_active: true
+		is_active: true,
 	});
 
 	function addNewEntry() {
@@ -45,8 +45,8 @@ export default function useBackupsEntries(
 			filters: {
 				included_file_names: inputs.filters.included_file_names,
 				included_file_types: inputs.filters.included_file_types,
-				max_size_in_mb: inputs.filters.max_size_in_mb
-			}
+				max_size_in_mb: inputs.filters.max_size_in_mb,
+			},
 		});
 
 		// Apply states
@@ -60,9 +60,9 @@ export default function useBackupsEntries(
 			filters: {
 				included_file_names: null,
 				included_file_types: null,
-				max_size_in_mb: null
+				max_size_in_mb: null,
 			},
-			is_active: true
+			is_active: true,
 		});
 
 		setCurrentPopup(null);
@@ -93,14 +93,14 @@ export default function useBackupsEntries(
 
 		return {
 			newStoredBackups,
-			neededBackup
+			neededBackup,
 		};
 	}
 
 	function updateOriginOrTarget(
 		folderPairId: string,
 		field: "origin" | "target",
-		value: string
+		value: string,
 	) {
 		const possibleNeededbackup = searchForNeededBackup(folderPairId);
 
@@ -124,18 +124,22 @@ export default function useBackupsEntries(
 
 	function updateEntryVariant(
 		folderPairId: string,
-		variant: "file" | "folder"
+		variant: "file" | "folder",
 	) {
 		const possibleNeededbackup = searchForNeededBackup(folderPairId);
 
 		if (possibleNeededbackup !== null) {
-			// Reset target if variant changed 
-			if(possibleNeededbackup.neededBackup.entries.get(folderPairId)!.variant !== variant) {
-				possibleNeededbackup.neededBackup.entries.get(folderPairId)!.target = "";
+			// Reset target if variant changed
+			if (
+				possibleNeededbackup.neededBackup.entries.get(folderPairId)!.variant !==
+				variant
+			) {
+				possibleNeededbackup.neededBackup.entries.get(folderPairId)!.target =
+					"";
 			}
 
 			possibleNeededbackup.neededBackup.entries.get(folderPairId)!.variant =
-			variant;
+				variant;
 
 			setStoredBackups(possibleNeededbackup.newStoredBackups);
 		}
@@ -147,14 +151,14 @@ export default function useBackupsEntries(
 		if (possibleNeededbackup !== null) {
 			if (value === "") {
 				possibleNeededbackup.neededBackup.entries.get(
-					folderPairId
+					folderPairId,
 				)!.filters.max_size_in_mb = null;
 			} else {
 				const valueAsNumber = Number(value);
 
 				if (!isNaN(valueAsNumber)) {
 					possibleNeededbackup.neededBackup.entries.get(
-						folderPairId
+						folderPairId,
 					)!.filters.max_size_in_mb = valueAsNumber;
 				}
 			}
@@ -166,7 +170,7 @@ export default function useBackupsEntries(
 	function updateListFilter(
 		folderPairId: string,
 		filter: "included_file_names" | "included_file_types",
-		value: string[] | null
+		value: string[] | null,
 	) {
 		const possibleNeededbackup = searchForNeededBackup(folderPairId);
 
@@ -187,6 +191,6 @@ export default function useBackupsEntries(
 		updateEntryVariant,
 		updateMaxSizeFilter,
 		updateListFilter,
-		toggleIsEntryActive
+		toggleIsEntryActive,
 	};
 }
