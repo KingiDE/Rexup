@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+	--font-inter: Inter;
+	--font-poppins: Poppins;
+}
+
+/* Inter font initialization */
+@font-face {
+	font-family: "Inter";
+	src: url("/fonts/Inter.ttf");
+}
+
+/* Poppins font initialization */
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-Black.ttf");
+	font-weight: 900;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-ExtraBold.ttf");
+	font-weight: 800;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-Bold.ttf");
+	font-weight: 700;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-SemiBold.ttf");
+	font-weight: 600;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-Medium.ttf");
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-Regular.ttf");
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-Light.ttf");
+	font-weight: 300;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-ExtraLight.ttf");
+	font-weight: 200;
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("/fonts/Poppins-Thin.ttf");
+	font-weight: 100;
+}
+
+/* Style the scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+/* Style the thumb (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+	background-color: rgba(249, 250, 251, 0.4);
+	border-radius: 4px;
+	border: 3px solid transparent;
+}
+
+/* Style the track (the part the thumb slides in) */
+::-webkit-scrollbar-track {
+	background-color: transparent;
+}
