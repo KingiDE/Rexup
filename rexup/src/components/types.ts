@@ -28,8 +28,8 @@ export type CurrentPopup =
 export type LocalStateBackup = {
 	id: string;
 	name: string;
-	entries: Map<string, LocalStateBackupEntry>;
-	isZipped: boolean;
+	entries: Array<LocalStateBackupEntry>;
+	is_zipped: boolean;
 	location: string;
 };
 

@@ -1,19 +1,27 @@
 <script lang="ts">
+import { onMount } from "svelte";
 import { fade } from "svelte/transition";
+import {
+	deleteAllData,
+	loadAndSetData,
+	showBackupExecutionHistory,
+	toggleShowBackupExecutionHistory,
+} from "../../hooks/useSettingsPopup.svelte";
 import type { CurrentPopup } from "../types";
 import Button from "../ui/Button.svelte";
-import Icon from "../ui/Icon.svelte";
 import Checkbox from "../ui/Checkbox.svelte";
+import Icon from "../ui/Icon.svelte";
 
-// biome-ignore lint/style/useConst: Const-Props will throw an Svelte error.
+// biome-ignore lint/style/useConst: Const-Props will throw an Svelte error
 let {
 	popup = $bindable(),
 }: {
 	popup: CurrentPopup;
 } = $props();
 
-// TODO: Implement this function and probably pass this form the parent to here.
-function deleteAllData() {}
+onMount(() => {
+	loadAndSetData();
+});
 </script>
 
 {#if popup !== null && popup.variant === "settings"}
@@ -34,8 +42,7 @@ function deleteAllData() {}
     </Button>
     <h2 class="font-poppins text-2xl font-bold">Settings</h2>
     <div class="mt-4">
-      <!-- TODO: Actually load this value and be able to toggle it. -->
-      <Checkbox value={true} onClick={() => { /* isTrue = !isTrue; */ }} label="Show backup execution history"/>
+      <Checkbox value={showBackupExecutionHistory.value} onClick={toggleShowBackupExecutionHistory} label="Show backup execution history"/>
       <div class="opacity-75">
         Enable or disable the appearence of the execution-history at the top of an backup overview.
       </div>

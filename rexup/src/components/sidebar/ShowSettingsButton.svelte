@@ -2,7 +2,7 @@
 import Button from "../ui/Button.svelte";
 import Icon from "../ui/Icon.svelte";
 
-// biome-ignore lint/style/useConst: Const-Props will throw an Svelte error.
+// biome-ignore lint/style/useConst: Const-Props will throw an Svelte error
 let {
 	setPopupToSettings,
 }: {

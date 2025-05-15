@@ -8,10 +8,12 @@ let {
 	backups,
 	popup = $bindable(),
 	selectBackup,
+	currentBackup,
 }: {
 	backups: Array<LocalStateBackup>;
 	popup: CurrentPopup;
 	selectBackup: (backup: LocalStateBackup) => void;
+	currentBackup: LocalStateBackup | null;
 } = $props();
 
 function setPopupToAddBackup() {
@@ -27,7 +29,7 @@ function setPopupToSettings() {
   <h2 class="font-poppins text-2xl font-bold">Backups</h2>
   <div class="grid gap-2 my-4">
     {#each backups as backup}
-      <ExistingBackup {backup} {selectBackup}/>
+      <ExistingBackup {backup} {selectBackup} {currentBackup}/>
     {/each}
   </div>
   <AddBackupButton {setPopupToAddBackup}/>
