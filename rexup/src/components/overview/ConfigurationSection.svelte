@@ -1,20 +1,20 @@
 <script lang="ts">
-import type { LocalStateBackup } from "../types";
-import Button from "../ui/Button.svelte";
-import Icon from "../ui/Icon.svelte";
-import Input from "../ui/Input.svelte";
+  import type { LocalStateBackup } from "../types";
+  import Button from "../ui/Button.svelte";
+  import Icon from "../ui/Icon.svelte";
+  import Input from "../ui/Input.svelte";
 
-let {
-	currentBackup = $bindable(),
-	isConfigureSectionExpanded,
-}: {
-	currentBackup: LocalStateBackup;
-	isConfigureSectionExpanded: boolean;
-} = $props();
+  let {
+    currentBackup = $bindable(),
+    isConfigureSectionExpanded,
+  }: {
+    currentBackup: LocalStateBackup;
+    isConfigureSectionExpanded: boolean;
+  } = $props();
 
-function toggleIsConfigureSectionExpanded() {
-	isConfigureSectionExpanded = !isConfigureSectionExpanded;
-}
+  function toggleIsConfigureSectionExpanded() {
+    isConfigureSectionExpanded = !isConfigureSectionExpanded;
+  }
 </script>
 
 <div class="mt-4 flex gap-4">

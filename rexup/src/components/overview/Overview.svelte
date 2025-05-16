@@ -1,21 +1,20 @@
 <script lang="ts">
-import type { CurrentPopup, LocalStateBackup } from "../types";
-import ConfigurationSection from "./ConfigurationSection.svelte";
+  import type { CurrentPopup, LocalStateBackup } from "../types";
+  import ConfigurationSection from "./ConfigurationSection.svelte";
 
-// biome-ignore lint/style/useConst: Const-Props will throw an Svelte error
-let {
-	currentBackup = $bindable(),
-	popup = $bindable(),
-}: {
-	currentBackup: LocalStateBackup | null;
-	popup: CurrentPopup;
-} = $props();
+  let {
+    currentBackup = $bindable(),
+    popup = $bindable(),
+  }: {
+    currentBackup: LocalStateBackup | null;
+    popup: CurrentPopup;
+  } = $props();
 
-const expandedSections = $state({
-	configuration: false,
-	history: false,
-	entries: false,
-});
+  const expandedSections = $state({
+    configuration: false,
+    history: false,
+    entries: false,
+  });
 </script>
 
 <div
@@ -32,10 +31,15 @@ const expandedSections = $state({
     <h2 class="font-poppins text-2xl font-bold mb-2">
       Overview of Backup: "{currentBackup.name}"
     </h2>
-    <ConfigurationSection bind:currentBackup isConfigureSectionExpanded={expandedSections.configuration}/>
+    <ConfigurationSection
+      bind:currentBackup
+      isConfigureSectionExpanded={expandedSections.configuration}
+    />
 
     <!-- Execution-History -->
     <h3 class="mt-4 font-poppins text-xl font-bold">Execution-History</h3>
+
+    <!-- Execution-Log-Section -->
 
     <!-- Entries -->
     <h3 class="mt-4 font-poppins text-xl font-bold">Entries</h3>
