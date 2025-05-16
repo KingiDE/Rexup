@@ -25,6 +25,8 @@ export type CurrentPopup =
 	  }
 	| null;
 
+export type CurrentOverviewTab = "entries" | "logs" | "configuration";
+
 export type LocalStateBackup = {
 	id: string;
 	name: string;

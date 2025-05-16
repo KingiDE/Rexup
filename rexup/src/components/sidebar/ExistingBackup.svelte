@@ -18,7 +18,7 @@
   onClick={() => selectBackup(backup)}
   meaning="neutral"
   extraRules={["no-bg"]}
-  extraCSS={`pl-4 h-10 text-start ${backup.id === currentBackup?.id ? "bg-gray-500" : ""}`}
+  extraCSS={`pl-4 h-10 text-start hover:bg-gray-500 ${backup.id === currentBackup?.id ? "bg-gray-500" : ""}`}
 >
   {#snippet text()}
     {backup.name}

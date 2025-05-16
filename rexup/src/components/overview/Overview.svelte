@@ -1,6 +1,11 @@
 <script lang="ts">
-  import type { CurrentPopup, LocalStateBackup } from "../types";
+  import type {
+    CurrentOverviewTab,
+    CurrentPopup,
+    LocalStateBackup,
+  } from "../types";
   import ConfigurationSection from "./ConfigurationSection.svelte";
+  import TabSwitcher from "./TabSwitcher.svelte";
 
   let {
     currentBackup = $bindable(),
@@ -10,11 +15,10 @@
     popup: CurrentPopup;
   } = $props();
 
-  const expandedSections = $state({
-    configuration: false,
-    history: false,
-    entries: false,
-  });
+  let currentTab = $state<CurrentOverviewTab>("entries");
+
+  // TODO: Implement the function that deletes a backup
+  function deleteBackup() {}
 </script>
 
 <div
@@ -31,20 +35,15 @@
     <h2 class="font-poppins text-2xl font-bold mb-2">
       Overview of Backup: "{currentBackup.name}"
     </h2>
-    <ConfigurationSection
-      bind:currentBackup
-      isConfigureSectionExpanded={expandedSections.configuration}
-    />
-
-    <!-- Execution-History -->
-    <h3 class="mt-4 font-poppins text-xl font-bold">Execution-History</h3>
-
-    <!-- Execution-Log-Section -->
-
-    <!-- Entries -->
-    <h3 class="mt-4 font-poppins text-xl font-bold">Entries</h3>
-
-    <!-- Destructive Actions -->
-    <h3 class="mt-4 font-poppins text-xl font-bold">Destructive Actions</h3>
+    <TabSwitcher bind:currentTab />
+    {#if currentTab === "entries"}
+      <h3 class="mt-4 font-poppins text-xl font-bold">Entries</h3>
+    {:else if currentTab === "logs"}
+      <h3 class="mt-4 font-poppins text-xl font-bold">
+        Execution-History + Execution-Logs
+      </h3>
+    {:else}
+      <ConfigurationSection bind:currentBackup {deleteBackup} />
+    {/if}
   {/if}
 </div>
