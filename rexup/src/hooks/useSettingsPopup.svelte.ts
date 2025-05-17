@@ -31,6 +31,3 @@ export async function toggleShowBackupExecutionHistory() {
 	});
 	showBackupExecutionHistory.value = !showBackupExecutionHistory.value;
 }
-
-// TODO: Call the Rust backend to delete all contents of the ".rexup"-directory or its equivalents on other operating systems
-export function deleteAllData() {}

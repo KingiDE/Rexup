@@ -77,7 +77,7 @@ mod copy_folder_procedure;
 use copy_folder_procedure::copy_folder_procedure;
 use zip::ZipWriter;
 
-use crate::storage::BackupsFileFilters;
+use crate::storage::BackupEntryFilters;
 
 mod filter_utils;
 
@@ -85,7 +85,7 @@ mod filter_utils;
 pub struct FolderPair {
 	origin: String,
 	target: String,
-	filters: BackupsFileFilters,
+	filters: BackupEntryFilters,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -7,10 +7,10 @@
 
   let {
     currentBackup = $bindable(),
-    deleteBackup,
+    deleteCurrentBackup,
   }: {
     currentBackup: LocalStateBackup;
-    deleteBackup: () => void;
+    deleteCurrentBackup: (backupToDelete: LocalStateBackup) => void;
   } = $props();
 
   let hasTriedToDeleteBackup = $state(false);
@@ -100,7 +100,11 @@
     </Button>
     {#if hasTriedToDeleteBackup}
       <div transition:fade={{ duration: 100 }}>
-        <Button onClick={deleteBackup} meaning="negative" extraCSS="mt-2">
+        <Button
+          onClick={() => deleteCurrentBackup(currentBackup)}
+          meaning="negative"
+          extraCSS="mt-2"
+        >
           {#snippet text()}
             REALLY delete?
           {/snippet}

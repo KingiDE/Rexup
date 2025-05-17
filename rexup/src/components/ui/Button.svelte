@@ -3,9 +3,7 @@ The button-component has consistent styles over all three variants and can be fu
 
 <script lang="ts">
   type Props = {
-    // biome-ignore lint/suspicious/noExplicitAny: Should be renderable elements
     text?: () => any;
-    // biome-ignore lint/suspicious/noExplicitAny: Should be renderable elements
     icon?: () => any;
     meaning: "negative" | "neutral" | "positive" | "discrete-neutral";
     onClick: (e: MouseEvent) => void;

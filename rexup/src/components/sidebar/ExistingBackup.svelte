@@ -2,7 +2,6 @@
   import type { LocalStateBackup } from "../types";
   import Button from "../ui/Button.svelte";
 
-  // biome-ignore lint/style/useConst: Const-Props will throw an Svelte error
   let {
     backup,
     selectBackup,

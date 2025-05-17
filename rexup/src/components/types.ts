@@ -33,7 +33,31 @@ export type LocalStateBackup = {
 	entries: Array<LocalStateBackupEntry>;
 	is_zipped: boolean;
 	location: string;
+	// Stores the execution times in miliseconds after 1. January 1970 by calling "date.getTime()"
+	executions: Array<number>;
+	logs_of_last_execution: Array<BackupExecutionLog>;
 };
+
+export type BackupExecutionLog =
+	| {
+			variant: "information";
+			message: string;
+	  }
+	| {
+			variant: "success_copying";
+			// Here, the "directory" or "file" is stored in the field "type" because the field "variant" is already used
+			type: "file" | "directory";
+			fromPath: string;
+			toPath: string;
+	  }
+	| {
+			variant: "error_copying" | "ignore_copying";
+			// Here, the "directory" or "file" is stored in the field "type" because the field "variant" is already used
+			type: "file" | "directory";
+			fromPath: string;
+			toPath: string;
+			reason: string;
+	  };
 
 export type LocalStateBackupEntry = {
 	id: string;

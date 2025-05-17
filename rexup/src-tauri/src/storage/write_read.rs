@@ -4,47 +4,63 @@ use std::{ fs::{ self, File }, path::PathBuf };
 
 // Expected argument from the frontend when saving the config-file
 #[derive(Deserialize, Serialize, Debug)]
-pub struct ConfigFile {
+pub struct Config {
 	show_backup_execution_history: bool,
-}
-
-// Expected argument from the frontend when saving a backup-history-entry
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupHistoryEntry {
-	time: u128,
-	id: String,
-}
-
-// Expected argument from the frontend when saving a backup with id
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupWithId {
-	id: String,
-	backup: BackupsFileEntry,
 }
 
 // Expected argument from the frontend when saving a backup
 #[derive(Debug, Serialize, Deserialize)]
-pub struct BackupsFileEntry {
+pub struct Backup {
 	id: String,
 	name: String,
-	entries: Vec<(String, BackupsFileFolder)>,
+	entries: Vec<BackupEntry>,
 	is_zipped: bool,
 	location: String,
+	executions: Vec<String>,
+	logs_of_last_execution: Vec<BackupExecutionLog>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum BackupExecutionLog {
+	Information(String),
+	SuccessCopying {
+		variant: FileOrDirectory,
+		from_path: String,
+		to_path: String,
+	},
+	ErrorCopying {
+		variant: FileOrDirectory,
+		from_path: String,
+		to_path: String,
+		reason: String,
+	},
+	IgnoreCopying {
+		variant: FileOrDirectory,
+		from_path: String,
+		to_path: String,
+		reason: String,
+	},
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum FileOrDirectory {
+	File,
+	Directory,
 }
 
 // Expected argument from the frontend when saving a folderPair
 #[derive(Debug, Serialize, Deserialize)]
-pub struct BackupsFileFolder {
+pub struct BackupEntry {
 	variant: String,
 	origin: String,
 	target: String,
 	is_active: bool,
-	filters: BackupsFileFilters,
+	filters: BackupEntryFilters,
 }
 
-// Stores filters that every BackupsFileFolder has
+// Stores filters that every BackupEntry has
 #[derive(Debug, Serialize, Deserialize)]
-pub struct BackupsFileFilters {
+pub struct BackupEntryFilters {
 	pub max_size_in_mb: Option<u32>,
 	pub included_file_types: Option<Vec<String>>,
 	pub included_file_names: Option<Vec<String>>,
@@ -126,7 +142,6 @@ pub fn safely_write_file(path: FileVariants, data: String) {
 //
 pub enum FileVariants {
 	Config,
-	History,
 	Backups,
 }
 
@@ -135,10 +150,6 @@ fn convert_enum_to_path(path_enum: FileVariants) -> PathBuf {
 		FileVariants::Config =>
 			PathBuf::from(
 				format!("C:\\Users\\{}\\AppData\\Roaming\\.rexup\\config.json", whoami::username())
-			),
-		FileVariants::History =>
-			PathBuf::from(
-				format!("C:\\Users\\{}\\AppData\\Roaming\\.rexup\\history.json", whoami::username())
 			),
 		FileVariants::Backups =>
 			PathBuf::from(

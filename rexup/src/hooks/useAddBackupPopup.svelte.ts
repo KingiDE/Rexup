@@ -1,17 +1,17 @@
-export const addBackupInputs = $state({
+export const addBackupInput = $state({
 	value: {
 		name: "",
 	},
 });
 
 const validInputs = $derived({
-	value: addBackupInputs.value.name !== "",
+	value: addBackupInput.value.name !== "",
 });
 
-export function getValidInputs() {
+export function getValidInput() {
 	return validInputs;
 }
 
 export function resetAddBackupInputs() {
-	addBackupInputs.value.name = "";
+	addBackupInput.value.name = "";
 }

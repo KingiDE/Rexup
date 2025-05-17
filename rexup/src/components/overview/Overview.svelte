@@ -4,21 +4,21 @@
     CurrentPopup,
     LocalStateBackup,
   } from "../types";
-  import ConfigurationSection from "./ConfigurationSection.svelte";
+  import ConfigurationTab from "./ConfigurationTab.svelte";
+  import LogsTab from "./LogsTab.svelte";
   import TabSwitcher from "./TabSwitcher.svelte";
 
   let {
     currentBackup = $bindable(),
     popup = $bindable(),
+    deleteCurrentBackup,
   }: {
     currentBackup: LocalStateBackup | null;
     popup: CurrentPopup;
+    deleteCurrentBackup: (backupToDelete: LocalStateBackup) => void;
   } = $props();
 
   let currentTab = $state<CurrentOverviewTab>("entries");
-
-  // TODO: Implement the function that deletes a backup
-  function deleteBackup() {}
 </script>
 
 <div
@@ -39,11 +39,9 @@
     {#if currentTab === "entries"}
       <h3 class="mt-4 font-poppins text-xl font-bold">Entries</h3>
     {:else if currentTab === "logs"}
-      <h3 class="mt-4 font-poppins text-xl font-bold">
-        Execution-History + Execution-Logs
-      </h3>
+      <LogsTab {currentBackup} />
     {:else}
-      <ConfigurationSection bind:currentBackup {deleteBackup} />
+      <ConfigurationTab bind:currentBackup {deleteCurrentBackup} />
     {/if}
   {/if}
 </div>

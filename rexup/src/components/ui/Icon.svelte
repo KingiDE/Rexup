@@ -1,7 +1,6 @@
 <!-- The component to create consistent icons all over the app. -->
 
 <script lang="ts">
-  // biome-ignore lint/style/useImportType: "icons.ts" is also used as a value
   import { icons } from "./icons";
 
   const {

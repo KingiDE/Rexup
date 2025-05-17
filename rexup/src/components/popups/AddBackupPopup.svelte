@@ -1,8 +1,8 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import {
-    addBackupInputs,
-    getValidInputs,
+    addBackupInput,
+    getValidInput,
     resetAddBackupInputs,
   } from "../../hooks/useAddBackupPopup.svelte";
   import type { CurrentPopup } from "../types";
@@ -10,7 +10,6 @@
   import Icon from "../ui/Icon.svelte";
   import Input from "../ui/Input.svelte";
 
-  // biome-ignore lint/style/useConst: Const-Props will throw an Svelte error
   let {
     popup = $bindable(),
     addBackup,
@@ -18,12 +17,19 @@
     popup: CurrentPopup;
     addBackup: (name: string) => void;
   } = $props();
+
+  window.addEventListener("keypress", (e) => {
+    if (e.key === "Enter" && getValidInput().value) {
+      addBackup(addBackupInput.value.name);
+      resetAddBackupInputs();
+    }
+  });
 </script>
 
 {#if popup !== null && popup.variant === "add_backup"}
   <div
     transition:fade={{ duration: 100 }}
-    class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4 overflow-y-scroll`}
+    class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
   >
     <Button
       meaning="neutral"
@@ -43,20 +49,20 @@
     </p>
     <Input
       inputExtraCSS="mt-2"
-      getter={() => addBackupInputs.value.name}
+      getter={() => addBackupInput.value.name}
       setter={(newValue: string) => {
-        addBackupInputs.value.name = newValue;
+        addBackupInput.value.name = newValue;
       }}
       placeholder="A fantastic name"
     />
     <Button
       meaning="positive"
       onClick={() => {
-        addBackup(addBackupInputs.value.name);
+        addBackup(addBackupInput.value.name);
         resetAddBackupInputs();
       }}
       extraCSS="mt-4 px-8 justify-self-end"
-      disabled={!getValidInputs().value}
+      disabled={!getValidInput().value}
     >
       {#snippet text()}
         Create

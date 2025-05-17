@@ -2,7 +2,6 @@
 The getter function returns the actual value while the setter function updates the state. -->
 
 <script lang="ts">
-  // biome-ignore lint/style/useConst: These are props and work like this
   let {
     getter,
     setter,

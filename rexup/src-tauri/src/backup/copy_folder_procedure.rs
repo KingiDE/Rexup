@@ -2,7 +2,7 @@ use std::{ fs::{ self, File }, path::PathBuf };
 
 use zip::ZipWriter;
 
-use crate::storage::BackupsFileFilters;
+use crate::storage::BackupEntryFilters;
 
 use super::{
 	copy_utils::{ copy_file_safely, zip_file_safely },
@@ -19,7 +19,7 @@ pub fn copy_folder_procedure(
 	input_target: &PathBuf,
 	backup_parent_folder_path: &PathBuf,
 	zip_writer: &mut Option<ZipWriter<File>>,
-	filters: &BackupsFileFilters
+	filters: &BackupEntryFilters
 ) -> Option<Vec<String>> {
 	// Creates an instance of the target path without any filenames appended (at this line it's only the backup parent path)
 	// and append the old target-path to the new one
@@ -51,7 +51,7 @@ fn loop_over_all_files_and_copy(
 	target_path_without_filename: &PathBuf,
 	zip_writer: &mut Option<ZipWriter<File>>,
 	backup_parent_folder_path: &PathBuf,
-	filters: &BackupsFileFilters,
+	filters: &BackupEntryFilters,
 	list_of_skipped_files: &mut Vec<String>
 ) -> bool {
 	// Store all entries of the current directory

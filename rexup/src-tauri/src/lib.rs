@@ -6,10 +6,8 @@ pub fn run() {
 		.invoke_handler(
 			tauri::generate_handler![
 				storage::read_config_file,
-				storage::read_history_file,
 				storage::read_backup_file,
 				storage::write_config_file,
-				storage::write_history_file,
 				storage::write_backup_file,
 				backup::copy_origin_to_target,
 				backup::create_backup_parent_folder,

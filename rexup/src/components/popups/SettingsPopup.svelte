@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import {
-    deleteAllData,
     loadAndSetData,
     showBackupExecutionHistory,
     toggleShowBackupExecutionHistory,
@@ -12,11 +11,12 @@
   import Checkbox from "../ui/Checkbox.svelte";
   import Icon from "../ui/Icon.svelte";
 
-  // biome-ignore lint/style/useConst: Const-Props will throw an Svelte error
   let {
     popup = $bindable(),
+    deleteAllData,
   }: {
     popup: CurrentPopup;
+    deleteAllData: () => void;
   } = $props();
 
   onMount(() => {
@@ -27,7 +27,7 @@
 {#if popup !== null && popup.variant === "settings"}
   <div
     transition:fade={{ duration: 100 }}
-    class={`w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4 overflow-y-scroll`}
+    class={`w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
   >
     <Button
       meaning="neutral"

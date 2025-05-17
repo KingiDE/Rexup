@@ -10,14 +10,16 @@
   let backups = $state<Array<LocalStateBackup>>([]);
   let currentBackup = $state<LocalStateBackup | null>(null);
 
+  $inspect(backups);
+
   let popup = $state<CurrentPopup>(null);
 
   function selectBackup(backup: LocalStateBackup) {
     currentBackup = backup;
   }
 
-  // Adds backup to local state and write it in the backups-file
-  async function addBackup(name: string) {
+  // Adds backup width the passed name to local state
+  function addBackup(name: string) {
     backups.push({
       id: Date.now().toString(),
       name: name,
@@ -25,21 +27,37 @@
       is_zipped: false,
       // TODO: This probably needs to be some other safe value
       location: "",
+      executions: [],
+      logs_of_last_execution: [],
     });
 
     popup = null;
   }
 
+  // Deletes the passed backup fron the local state
+  function deleteCurrentBackup(backupToDelete: LocalStateBackup) {
+    backups = backups.filter((el) => el.id !== backupToDelete.id);
+    currentBackup = null;
+  }
+
+  // Resets all local states to empy values and calls the Rust backend to delete the entire ".rexup"-directory recursively
+  async function deleteAllData() {
+    backups = [];
+    currentBackup = null;
+    popup = null;
+
+    // TODO: Is await really necessary?
+    await invoke("delete_all_data");
+  }
+
   onMount(async () => {
     const readData = (await invoke("read_backup_file")) as string;
-    console.log(readData);
     // TODO: Validate read data
     backups = JSON.parse(readData);
   });
 
   $effect(() => {
     async function sett() {
-      if (backups.length === 0) return;
       await invoke("write_backup_file", { value: backups });
     }
     sett();
@@ -50,8 +68,8 @@
   class="p-2 font-inter bg-gray-900 text-gray-50 grid grid-cols-[300px_auto] h-[100vh] gap-2"
 >
   <Sidebar bind:popup {backups} {selectBackup} {currentBackup} />
-  <Overview bind:popup bind:currentBackup />
-  <!-- All popups (they are placed "absolute") -->
+  <Overview bind:popup bind:currentBackup {deleteCurrentBackup} />
+  <!-- All popups (they are placed "fixed") -->
   <AddBackupPopup bind:popup {addBackup} />
-  <SettingsPopup bind:popup />
+  <SettingsPopup bind:popup {deleteAllData} />
 </div>
