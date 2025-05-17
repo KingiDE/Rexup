@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { LocalStateBackup } from "../types";
   import { prettifyDate } from "../../utils/prettifyDate";
+  import { prettifyExecutionLog } from "../../utils/prettifyExecutionLog";
 
   let {
     currentBackup,
@@ -37,12 +38,12 @@
     The list below show details of the last backup-execution like errors while
     copying or ignore files.
   </div>
-  {#if currentBackup.executions.length > 0}
+  {#if currentBackup.logs_of_last_execution.length > 0}
     <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">
       <!-- TODO: Display the execution-logs pretty -->
-      <!-- {#each currentBackup.executions as executionTime}
-        <li>&bull; {prettifyDate(executionTime)}</li>
-      {/each} -->
+      {#each currentBackup.logs_of_last_execution as executionLog}
+        <li>{prettifyExecutionLog(executionLog)}</li>
+      {/each}
     </ol>
   {:else}
     <div

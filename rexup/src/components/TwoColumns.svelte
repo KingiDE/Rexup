@@ -46,7 +46,7 @@
     currentBackup = null;
     popup = null;
 
-    // TODO: Is await really necessary?
+    // TODO: Check if "await" is really necessary
     await invoke("delete_all_data");
   }
 
