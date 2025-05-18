@@ -4,7 +4,7 @@
     CurrentPopup,
     LocalStateBackup,
   } from "../types";
-  import ConfigurationTab from "./ConfigurationTab.svelte";
+  import ConfigurationTab from "./configurationTab/ConfigurationTab.svelte";
   import LogsTab from "./LogsTab.svelte";
   import TabSwitcher from "./TabSwitcher.svelte";
 
@@ -41,7 +41,7 @@
     {:else if currentTab === "logs"}
       <LogsTab {currentBackup} />
     {:else}
-      <ConfigurationTab bind:currentBackup {deleteCurrentBackup} />
+      <ConfigurationTab bind:currentBackup bind:popup {deleteCurrentBackup} />
     {/if}
   {/if}
 </div>

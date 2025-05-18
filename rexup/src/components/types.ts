@@ -20,6 +20,10 @@ export type CurrentPopup =
 			value: LocalStateBackupEntry;
 	  }
 	| {
+			variant: "select_backup_location";
+			value: null;
+	  }
+	| {
 			variant: "settings";
 			value: null;
 	  }
@@ -70,4 +74,15 @@ export type LocalStateBackupEntry = {
 		included_file_types: Array<string> | null;
 		included_file_names: Array<string> | null;
 	};
+};
+
+export type PathElement = {
+	name: string;
+	variant: "file" | "directory";
+};
+
+export type DirecoryResult = {
+	name: string;
+	is_hidden: boolean;
+	variant: "file" | "directory";
 };

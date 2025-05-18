@@ -8,11 +8,11 @@
   import Overview from "./overview/Overview.svelte";
 
   let backups = $state<Array<LocalStateBackup>>([]);
+  $inspect(backups);
   let currentBackup = $state<LocalStateBackup | null>(null);
 
-  $inspect(backups);
-
   let popup = $state<CurrentPopup>(null);
+  $inspect(popup);
 
   function selectBackup(backup: LocalStateBackup) {
     currentBackup = backup;

@@ -1,3 +1,11 @@
+use std::fs;
+use serde::Deserialize;
+use serde::Serialize;
+
+#[cfg(windows)]
+use std::os::windows::prelude::*;
+use std::path::Path;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
 	tauri::Builder
@@ -11,9 +19,11 @@ pub fn run() {
 				storage::write_backup_file,
 				backup::copy_origin_to_target,
 				backup::create_backup_parent_folder,
-				path_selector_ui::get_user_path_to,
 				path_selector_ui::read_contents_of,
-				path_selector_ui::get_remaining_drives
+				path_selector_ui::get_remaining_drives,
+				// TODO: Remove this; just info: New functions that will slowly replace the others
+				list_contents_of,
+				get_user_path_to
 			]
 		)
 		.run(tauri::generate_context!())
@@ -34,3 +44,78 @@ pub mod backup;
 // SECTION: Path-Selector-UI
 //
 pub mod path_selector_ui;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum FileOrDirectory {
+	File,
+	Directory,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct DirectoryResult {
+	name: String,
+	is_hidden: bool,
+	variant: FileOrDirectory,
+}
+
+#[tauri::command]
+fn list_contents_of(path: String) -> Vec<DirectoryResult> {
+	let mut directories: Vec<DirectoryResult> = Vec::new();
+
+	match fs::read_dir(path) {
+		Ok(readable_dir) => {
+			for entry in readable_dir {
+				match entry {
+					Ok(readable_entry) => {
+						let path = readable_entry.path();
+
+						if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+							let variant = if path.is_file() {
+								FileOrDirectory::File
+							} else {
+								FileOrDirectory::Directory
+							};
+
+							#[cfg(windows)]
+							fn is_hidden(path: &Path) -> bool {
+								match path.metadata() {
+									Ok(metadata) => {
+										return (metadata.file_attributes() & 2) != 0;
+									}
+									Err(_err) => {
+										return false;
+									}
+								}
+							}
+
+							#[cfg(unix)]
+							fn is_hidden(path: &Path) -> bool {
+								path.starts_with('.')
+							}
+
+							directories.push(DirectoryResult {
+								name: name.to_string(),
+								is_hidden: is_hidden(&path),
+								variant,
+							});
+						}
+					}
+					Err(_err) => {}
+				}
+			}
+		}
+		Err(_err) => {}
+	}
+
+	directories
+}
+
+#[tauri::command]
+// TODO: Make OS-independent; get correct username
+fn get_user_path_to(location: String) -> String {
+	match location.as_str() {
+		"downloads" => "C:/Users/Kingi/Downloads".to_string(),
+		"documents" => "C:/Users/Kingi/Documents".to_string(),
+		"desktop" | _ => "C:/Users/Kingi/Desktop".to_string(),
+	}
+}

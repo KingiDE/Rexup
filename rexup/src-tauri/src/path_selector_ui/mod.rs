@@ -8,20 +8,6 @@ use serde::{ Deserialize, Serialize };
 
 // Returns the correct path to the location on the user's os by giving the
 // fitting keyword
-#[tauri::command]
-pub fn get_user_path_to(value: String) -> String {
-	match value.as_str() {
-		"downloads" => {
-			return format!("C:\\Users\\{}\\Downloads", whoami::username());
-		}
-		"documents" => {
-			return format!("C:\\Users\\{}\\Documents", whoami::username());
-		}
-		"desktop" | _ => {
-			return format!("C:\\Users\\{}\\Desktop", whoami::username());
-		}
-	}
-}
 
 #[derive(Serialize, Deserialize)]
 pub struct DirectoryContent {
