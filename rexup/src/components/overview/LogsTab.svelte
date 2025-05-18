@@ -2,6 +2,7 @@
   import type { LocalStateBackup } from "../types";
   import { prettifyDate } from "../../utils/prettifyDate";
   import { prettifyExecutionLog } from "../../utils/prettifyExecutionLog";
+  import { showBackupExecutionHistory } from "../../hooks/useSettingsPopup.svelte";
 
   let {
     currentBackup,
@@ -12,25 +13,27 @@
 
 <h3 class="mt-4 font-poppins text-xl font-bold">Logs</h3>
 <!-- Execution-History -->
-<div class="mt-2">
-  <div class="font-semibold">Execution-History</div>
-  <div class="opacity-75 max-w-[600px]">
-    These logs keep track of when this backup was executed the last times.
-  </div>
-  {#if currentBackup.executions.length > 0}
-    <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">
-      {#each currentBackup.executions as executionTime}
-        <li>&bull; {prettifyDate(executionTime)}</li>
-      {/each}
-    </ol>
-  {:else}
-    <div
-      class="mt-2 p-2 rounded-md bg-gray-900 w-[400px] h-10 grid items-center text-center"
-    >
-      Currently, this list is empty.
+{#if showBackupExecutionHistory.value}
+  <div class="mt-2">
+    <div class="font-semibold">Execution-History</div>
+    <div class="opacity-75 max-w-[600px]">
+      These logs keep track of when this backup was executed the last times.
     </div>
-  {/if}
-</div>
+    {#if currentBackup.executions.length > 0}
+      <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">
+        {#each currentBackup.executions as executionTime}
+          <li>&bull; {prettifyDate(executionTime)}</li>
+        {/each}
+      </ol>
+    {:else}
+      <div
+        class="mt-2 p-2 rounded-md bg-gray-900 w-[400px] h-10 grid items-center text-center"
+      >
+        Currently, this list is empty.
+      </div>
+    {/if}
+  </div>
+{/if}
 <!-- Execution-Logs -->
 <div class="mt-4">
   <div class="font-semibold">Execution-Logs</div>
