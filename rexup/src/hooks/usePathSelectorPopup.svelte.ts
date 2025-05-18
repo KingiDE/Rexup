@@ -13,13 +13,12 @@ export function getPathString(pathElements: Array<PathElement>) {
 }
 
 // Removes all elements from pathElements that come after the directory with the specified name
-// TODO: Use some safer way to identify direcotries because names are not unique
 export function slicePathElements(
 	pathElements: Array<PathElement>,
-	name: string,
+	id: string,
 ) {
 	// The "filter" for "directory" is accepable becaue files are never listed in the top bar, so they cannot be clicked up there
-	const indexOfDir = pathElements.findIndex((el) => el.name === name);
+	const indexOfDir = pathElements.findIndex((el) => el.id === id);
 
 	if (indexOfDir !== -1 /* -1 means not found */) {
 		return pathElements.slice(0, indexOfDir + 1);
@@ -32,8 +31,9 @@ export function slicePathElements(
 export function pushDirectoryToPathElements(
 	pathElements: Array<PathElement>,
 	name: string,
+	id: string,
 ) {
-	pathElements.push({ name, variant: "directory" });
+	pathElements.push({ name, variant: "directory", id });
 }
 
 // Sets the path elements to the path to the users specific location
@@ -42,10 +42,10 @@ export async function updatePathElementsFromUserLocationTo(
 ) {
 	const path = (await invoke("get_user_path_to", {
 		location,
-	})) as string;
+	})) as Array<Omit<PathElement, "variant">>;
 
-	return path.split("/").map((el) => {
-		return { name: el, variant: "directory" } as PathElement;
+	return path.map((el) => {
+		return { id: el.id, name: el.name, variant: "directory" } as PathElement;
 	});
 }
 

@@ -45,7 +45,8 @@
     <Input
       inputExtraCSS="min-w-[400px]"
       placeholder="Your desktop"
-      getter={() => currentBackup.location}
+      getter={() =>
+        currentBackup.location === null ? "" : currentBackup.location}
       setter={(newValue) => {
         currentBackup.location = newValue;
       }}
@@ -63,8 +64,9 @@
     </Button>
     <Button
       meaning="neutral"
-      onClick={() => (currentBackup.location = "")}
+      onClick={() => (currentBackup.location = null)}
       extraCSS="py-1 w-20"
+      disabled={currentBackup.location === null}
     >
       {#snippet text()}
         Reset

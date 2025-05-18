@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { slicePathElements } from "../../../hooks/usePathSlectorPopup.svelte";
+  import { slicePathElements } from "../../../hooks/usePathSelectorPopup.svelte";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
 
@@ -19,7 +19,7 @@
     {#if pathElements.length - 1 === index && element.variant === "file"}{:else}
       <Button
         onClick={() =>
-          (pathElements = slicePathElements(pathElements, element.name))}
+          (pathElements = slicePathElements(pathElements, element.id))}
         meaning="neutral"
         extraCSS="py-1 whitespace-nowrap shrink-0"
       >

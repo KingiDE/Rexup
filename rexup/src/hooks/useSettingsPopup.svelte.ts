@@ -11,9 +11,15 @@ export async function loadAndSetData() {
 		return;
 	}
 
-	const convertedData = JSON.parse(readData);
+	let convertedData: unknown;
+
+	try {
+		convertedData = JSON.parse(readData);
+	} catch (error) {}
 
 	if (
+		convertedData &&
+		typeof convertedData === "object" &&
 		"show_backup_execution_history" in convertedData &&
 		typeof convertedData.show_backup_execution_history === "boolean"
 	) {
@@ -24,7 +30,7 @@ export async function loadAndSetData() {
 
 // Toggle the state of showBackupExecutionHistory in the local state as well as in the config-file
 export async function toggleShowBackupExecutionHistory() {
-	await invoke("write_config_file", {
+	invoke("write_config_file", {
 		value: {
 			show_backup_execution_history: !showBackupExecutionHistory.value,
 		},

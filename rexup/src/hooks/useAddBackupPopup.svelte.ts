@@ -12,6 +12,6 @@ export function getValidInput() {
 	return validInputs;
 }
 
-export function resetAddBackupInputs() {
+export function resetAddBackupInput() {
 	addBackupInput.value.name = "";
 }

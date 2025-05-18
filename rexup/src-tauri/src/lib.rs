@@ -27,7 +27,8 @@ pub fn run() {
 				list_contents_of,
 				get_user_path_to,
 				path_selector_ui::get_remaining_drives,
-				has_write_access_to
+				has_write_access_to,
+				delete_all_data
 			]
 		)
 		.run(tauri::generate_context!())
@@ -57,6 +58,7 @@ pub enum FileOrDirectory {
 
 #[derive(Debug, Serialize, Deserialize)]
 struct DirectoryResult {
+	id: String,
 	name: String,
 	is_hidden: bool,
 	variant: FileOrDirectory,
@@ -98,6 +100,7 @@ fn list_contents_of(path: String) -> Vec<DirectoryResult> {
 							}
 
 							directories.push(DirectoryResult {
+								id: path.to_string_lossy().to_string(),
 								name: name.to_string(),
 								is_hidden: is_hidden(&path),
 								variant,
@@ -114,28 +117,66 @@ fn list_contents_of(path: String) -> Vec<DirectoryResult> {
 	directories
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct PathElement {
+	id: String,
+	name: String,
+}
+
 #[tauri::command]
 // TODO: Make OS-independent and get correct username
-fn get_user_path_to(location: String) -> String {
-	match location.as_str() {
-		"downloads" => "C:/Users/Kingi/Downloads".to_string(),
-		"documents" => "C:/Users/Kingi/Documents".to_string(),
-		"desktop" => "C:/Users/Kingi/Desktop".to_string(),
-		"home" | _ => "C:/Users/Kingi".to_string(),
+fn get_user_path_to(location: String) -> Vec<PathElement> {
+	let mut base_path = vec![
+		PathElement { id: "C:/".to_string(), name: "C:".to_string() },
+		PathElement { id: "C:/Users/".to_string(), name: "Users".to_string() },
+		PathElement { id: "C:/Users/Kingi/".to_string(), name: "Kingi".to_string() }
+	];
+
+	if location == "downloads" {
+		base_path.push(PathElement {
+			id: "C:/Users/Kingi/Downloads/".to_string(),
+			name: "Downloads".to_string(),
+		});
+	} else if location == "documents" {
+		base_path.push(PathElement {
+			id: "C:/Users/Kingi/Documents/".to_string(),
+			name: "Documents".to_string(),
+		});
+	} else if location == "desktop" {
+		base_path.push(PathElement {
+			id: "C:/Users/Kingi/Desktop/".to_string(),
+			name: "Desktop".to_string(),
+		});
+	}
+
+	// Append nothing is the value is "home"
+
+	base_path
+}
+
+#[tauri::command]
+fn has_write_access_to(path: Option<String>) -> bool {
+	match path {
+		Some(existing_path) => {
+			let path = Path::new(&existing_path);
+			let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+			let test_file = path.join(format!(".perm_test_{}", timestamp));
+
+			match OpenOptions::new().write(true).create_new(true).open(&test_file) {
+				Ok(_) => {
+					let _ = fs::remove_file(&test_file);
+					true
+				}
+				Err(_) => false,
+			}
+		}
+		None => { true }
 	}
 }
 
 #[tauri::command]
-fn has_write_access_to(path: String) -> bool {
-	let path = Path::new(&path);
-	let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
-	let test_file = path.join(format!(".perm_test_{}", timestamp));
-
-	match OpenOptions::new().write(true).create_new(true).open(&test_file) {
-		Ok(_) => {
-			let _ = fs::remove_file(&test_file);
-			true
-		}
-		Err(_) => false,
-	}
+// TODO: Make OS-independent and get correct username
+fn delete_all_data() {
+	let dir_path = Path::new("C:/Users/Kingi/AppData/Roaming/.rexup");
+	fs::remove_dir_all(&dir_path);
 }

@@ -15,7 +15,7 @@ pub struct Backup {
 	name: String,
 	entries: Vec<BackupEntry>,
 	is_zipped: bool,
-	location: String,
+	location: Option<String>,
 	executions: Vec<String>,
 	logs_of_last_execution: Vec<BackupExecutionLog>,
 }
@@ -51,9 +51,11 @@ pub enum FileOrDirectory {
 // Expected argument from the frontend when saving a folderPair
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BackupEntry {
-	variant: String,
-	origin: String,
-	target: String,
+	id: String,
+	name: String,
+	variant: Option<FileOrDirectory>,
+	origin: Option<String>,
+	target: Option<String>,
 	is_active: bool,
 	filters: BackupEntryFilters,
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { pushDirectoryToPathElements } from "../../../hooks/usePathSlectorPopup.svelte";
+  import { pushDirectoryToPathElements } from "../../../hooks/usePathSelectorPopup.svelte";
   import type { DirecoryResult, PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
@@ -33,7 +33,7 @@
         {#if result.variant === "file" && showFiles}
           <Button
             onClick={() =>
-              pushDirectoryToPathElements(pathElements, result.name)}
+              pushDirectoryToPathElements(pathElements, result.name, result.id)}
             meaning="neutral"
             extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""}`}
           >
@@ -52,7 +52,7 @@
         {:else if result.variant === "directory"}
           <Button
             onClick={() =>
-              pushDirectoryToPathElements(pathElements, result.name)}
+              pushDirectoryToPathElements(pathElements, result.name, result.id)}
             meaning="neutral"
             extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""}`}
           >

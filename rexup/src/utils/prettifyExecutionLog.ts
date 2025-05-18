@@ -3,8 +3,7 @@ import type { BackupExecutionLog } from "../components/types";
 export function prettifyExecutionLog(log: BackupExecutionLog) {
 	switch (log.variant) {
 		case "information":
-			// TODO: Use unicode value for emojis
-			return `ℹ️ ${log.message}`;
+			return `&#x2139;&#xFE0F; ${log.message}`;
 		case "success_copying":
 			return `✅ Copied the ${log.type} from ${log.fromPath} to ${log.toPath} successfully`;
 		case "error_copying":

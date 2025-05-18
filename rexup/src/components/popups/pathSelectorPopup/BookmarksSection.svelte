@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { updatePathElementsFromUserLocationTo } from "../../../hooks/usePathSlectorPopup.svelte";
+  import { updatePathElementsFromUserLocationTo } from "../../../hooks/usePathSelectorPopup.svelte";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
@@ -79,7 +79,7 @@
   {#each drives as drive}
     <Button
       onClick={async () =>
-        (pathElements = [{ name: drive, variant: "directory" }])}
+        (pathElements = [{ id: drive, name: drive, variant: "directory" }])}
       meaning="neutral"
       extraCSS="py-1"
     >

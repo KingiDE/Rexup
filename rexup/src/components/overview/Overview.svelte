@@ -5,6 +5,7 @@
     LocalStateBackup,
   } from "../types";
   import ConfigurationTab from "./configurationTab/ConfigurationTab.svelte";
+  import EntriesTab from "./entriesTab/EntriesTab.svelte";
   import LogsTab from "./LogsTab.svelte";
   import TabSwitcher from "./TabSwitcher.svelte";
 
@@ -37,7 +38,7 @@
     </h2>
     <TabSwitcher bind:currentTab />
     {#if currentTab === "entries"}
-      <h3 class="mt-4 font-poppins text-xl font-bold">Entries</h3>
+      <EntriesTab bind:popup bind:currentBackup />
     {:else if currentTab === "logs"}
       <LogsTab {currentBackup} />
     {:else}

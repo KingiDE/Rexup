@@ -8,7 +8,7 @@
     getPathString,
     read_contents_of_path,
     updatePathElementsFromUserLocationTo,
-  } from "../../hooks/usePathSlectorPopup.svelte";
+  } from "../../hooks/usePathSelectorPopup.svelte";
   import PathElementsSection from "./pathSelectorPopup/PathElementsSection.svelte";
   import BookmarksSection from "./pathSelectorPopup/BookmarksSection.svelte";
   import ResultsSection from "./pathSelectorPopup/ResultsSection.svelte";

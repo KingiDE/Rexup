@@ -43,7 +43,6 @@
   </div>
   {#if currentBackup.logs_of_last_execution.length > 0}
     <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">
-      <!-- TODO: Display the execution-logs pretty -->
       {#each currentBackup.logs_of_last_execution as executionLog}
         <li>{prettifyExecutionLog(executionLog)}</li>
       {/each}
