@@ -7,7 +7,6 @@
   import { validateBackupFile } from "../utils/validateBackupFile";
 
   let backups = $state<Array<LocalStateBackup>>([]);
-  $inspect(backups);
   let currentBackup = $state<LocalStateBackup | null>(null);
 
   let popup = $state<CurrentPopup>(null);
