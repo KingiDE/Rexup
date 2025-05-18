@@ -89,6 +89,7 @@ pub fn get_remaining_drives() -> Vec<String> {
 		"Y:",
 		"Z:",
 	];
+
 	let mut existing_drive_letters = Vec::new();
 
 	for letter in DRIVE_LETTERS_TO_CHECK {

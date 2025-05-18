@@ -21,16 +21,16 @@ This will compile the entire project, create a `.msi`-installer-file and print i
 
 **Extensions:** <br/>
 It might be useful to install extensions for the tools that are used in this project. Here's a short list:
+- Tauri
 - Astro
 - Svelte
 - Biome (Linter and Code-Formatter)
 - TailwindCSS Intellisense
 
-Also, to correctly format on save, you can modify your Code editor's settings to use Biome as the default formatter for `.ts`, `.js` and `.svelte` files. 
+Also, to correctly format on save, you can modify your Code editor's settings to use Biome as the default formatter for `.ts`, `.js`-files and "Svelte for VSCode for `.svelte` files. 
 
 **Scripts:** <br/>
-There are two important scripts in the `package.json` file: `ts-check` checks for any TypeScript errors, `biome-check` lints the code, formats it (even without the extension installed) and points out possible errors. 
-Additionally, you can run `npx sv check` (or your preferred package manager) to check for any Svelte errors.
+There are three important scripts in the `package.json` file: `tsc-check` checks for any TypeScript errors, `format` lints the code, formats it (even without the extension installed) and points out possible errors. Additionally, you can run `svelte-check` to get notified about any Svelte errors.
 
 ## 📜 Installation
 

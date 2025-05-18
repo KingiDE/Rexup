@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { invoke } from "@tauri-apps/api/core";
   import PathSelectorPopup from "../../popups/PathSelectorPopup.svelte";
   import type { CurrentPopup, LocalStateBackup } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Input from "../../ui/Input.svelte";
+  import Icon from "../../ui/Icon.svelte";
 
   let {
     currentBackup = $bindable(),
@@ -17,6 +19,19 @@
     currentBackup.location = location;
     popup = null;
   }
+
+  // Checks whether the user has write access to this location
+  let hasWriteAccess = $state(true);
+
+  // Cannot use dervied.by() because of await issues
+  $effect(() => {
+    async function sett() {
+      hasWriteAccess = await invoke("has_write_access_to", {
+        path: currentBackup.location,
+      });
+    }
+    sett();
+  });
 </script>
 
 <div class="mt-4">
@@ -57,4 +72,30 @@
     </Button>
   </div>
   <PathSelectorPopup bind:popup {setCurrentBackupLocation} />
+  <div
+    class={`mt-2 p-2 transition-[background] rounded-md w-[576px] ${hasWriteAccess ? "bg-green-700" : "bg-red-700"}`}
+  >
+    {#if hasWriteAccess}
+      <div class="flex gap-2">
+        <Icon
+          width={24}
+          height={24}
+          name="checked"
+          extraCSS="fill-gray-50 shrink-0"
+        />
+        Everything is fine! You have access to this location on your filesystem.
+      </div>
+    {:else}
+      <div class="flex gap-2">
+        <Icon
+          width={24}
+          height={24}
+          name="close"
+          extraCSS="fill-gray-50 shrink-0"
+        />
+        Something is not working! You don't seem to have access to this location
+        on your filesystem. Please choose a different directory.
+      </div>
+    {/if}
+  </div>
 </div>

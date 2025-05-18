@@ -9,7 +9,7 @@ export function getPathString(pathElements: Array<PathElement>) {
 		path += `${pathElement.name}/`;
 	}
 
-	return path.slice(0, path.length - 1);
+	return path;
 }
 
 // Removes all elements from pathElements that come after the directory with the specified name
@@ -38,7 +38,7 @@ export function pushDirectoryToPathElements(
 
 // Sets the path elements to the path to the users specific location
 export async function updatePathElementsFromUserLocationTo(
-	location: "desktop" | "downloads" | "documents",
+	location: "desktop" | "downloads" | "documents" | "home",
 ) {
 	const path = (await invoke("get_user_path_to", {
 		location,
