@@ -16,7 +16,7 @@
   <div class="mr-1">Path</div>
   {#each pathElements as element, index}
     <!-- Don't render the last element when its a file -->
-    {#if pathElements.length - 1 === index && element.variant === "file"}{:else}
+    {#if pathElements.length - 1 === index && element.variant === "File"}{:else}
       <Button
         onClick={() =>
           (pathElements = slicePathElements(pathElements, element.id))}

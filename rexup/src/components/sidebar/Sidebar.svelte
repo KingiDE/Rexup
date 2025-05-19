@@ -20,11 +20,11 @@
   } = $props();
 
   function setPopupToAddBackup() {
-    popup = { variant: "add_backup", value: null };
+    popup = "add_backup";
   }
 
   function setPopupToSettings() {
-    popup = { variant: "settings", value: null };
+    popup = "settings";
   }
 
   // Adds backup width the passed name to local state

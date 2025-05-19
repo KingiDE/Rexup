@@ -33,7 +33,7 @@ export function pushDirectoryToPathElements(
 	name: string,
 	id: string,
 ) {
-	pathElements.push({ name, variant: "directory", id });
+	pathElements.push({ name, variant: "Directory", id });
 }
 
 // Sets the path elements to the path to the users specific location
@@ -45,7 +45,7 @@ export async function updatePathElementsFromUserLocationTo(
 	})) as Array<Omit<PathElement, "variant">>;
 
 	return path.map((el) => {
-		return { id: el.id, name: el.name, variant: "directory" } as PathElement;
+		return { id: el.id, name: el.name, variant: "Directory" } as PathElement;
 	});
 }
 
@@ -61,7 +61,7 @@ export async function read_contents_of_path(
 
 	blankResults = blankResults.map((el) => ({
 		...el,
-		variant: el.variant.toLowerCase(),
+		variant: el.variant,
 	})) as Array<DirecoryResult>;
 
 	// Sort hidden results to the end

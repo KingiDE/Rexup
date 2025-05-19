@@ -5,10 +5,10 @@ export function prettifyExecutionLog(log: BackupExecutionLog) {
 		case "information":
 			return `&#x2139;&#xFE0F; ${log.message}`;
 		case "success_copying":
-			return `✅ Copied the ${log.type} from ${log.fromPath} to ${log.toPath} successfully`;
+			return `✅ Copied the ${log.type} from ${log.from_path} to ${log.to_path} successfully`;
 		case "error_copying":
-			return `🚨 Failed to copy the ${log.type} from ${log.fromPath} to ${log.toPath}`;
+			return `🚨 Failed to copy the ${log.type} from ${log.from_path} to ${log.to_path}`;
 		case "ignore_copying":
-			return `🚫 Ignored copying the ${log.type} from ${log.fromPath} to ${log.toPath}`;
+			return `🚫 Ignored copying the ${log.type} from ${log.from_path} to ${log.to_path}`;
 	}
 }

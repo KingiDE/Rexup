@@ -1,6 +1,6 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
-  import PathSelectorPopup from "../../popups/PathSelectorPopup.svelte";
+  import PathSelectorPopup from "../../popups/pathSelectorPopup/PathSelectorPopup.svelte";
   import type { CurrentPopup, LocalStateBackup } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Input from "../../ui/Input.svelte";
@@ -25,12 +25,12 @@
 
   // Cannot use dervied.by() because of await issues
   $effect(() => {
-    async function sett() {
+    async function doAsyncThing() {
       hasWriteAccess = await invoke("has_write_access_to", {
         path: currentBackup.location,
       });
     }
-    sett();
+    doAsyncThing();
   });
 </script>
 
@@ -47,15 +47,12 @@
       placeholder="Your desktop"
       getter={() =>
         currentBackup.location === null ? "" : currentBackup.location}
-      setter={(newValue) => {
-        currentBackup.location = newValue;
-      }}
+      setter={() => {}}
       disabled
     />
     <Button
       meaning="positive"
-      onClick={() =>
-        (popup = { variant: "select_backup_location", value: null })}
+      onClick={() => (popup = "select_backup_location")}
       extraCSS="py-1 w-20"
     >
       {#snippet text()}

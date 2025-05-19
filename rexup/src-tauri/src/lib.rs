@@ -28,7 +28,8 @@ pub fn run() {
 				get_user_path_to,
 				path_selector_ui::get_remaining_drives,
 				has_write_access_to,
-				delete_all_data
+				delete_all_data,
+				get_variant_of_path
 			]
 		)
 		.run(tauri::generate_context!())
@@ -179,4 +180,21 @@ fn has_write_access_to(path: Option<String>) -> bool {
 fn delete_all_data() {
 	let dir_path = Path::new("C:/Users/Kingi/AppData/Roaming/.rexup");
 	fs::remove_dir_all(&dir_path);
+}
+
+#[tauri::command]
+fn get_variant_of_path(path: Option<String>) -> Option<FileOrDirectory> {
+	match path {
+		Some(real_path) => {
+			let converted_path = Path::new(&real_path);
+			if converted_path.is_file() {
+				Some(FileOrDirectory::File)
+			} else if converted_path.is_dir() {
+				Some(FileOrDirectory::Directory)
+			} else {
+				None
+			}
+		}
+		None => { None }
+	}
 }

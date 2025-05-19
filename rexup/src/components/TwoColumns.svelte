@@ -6,7 +6,7 @@
   import Overview from "./overview/Overview.svelte";
   import { validateBackupFile } from "../utils/validateBackupFile";
 
-  let backups = $state<Array<LocalStateBackup>>([]);
+  let backups = $state<Array<LocalStateBackup> | null>(null);
   let currentBackup = $state<LocalStateBackup | null>(null);
 
   let popup = $state<CurrentPopup>(null);
@@ -17,8 +17,10 @@
 
   // Deletes the passed backup fron the local state
   function deleteCurrentBackup(backupToDelete: LocalStateBackup) {
-    backups = backups.filter((el) => el.id !== backupToDelete.id);
-    currentBackup = null;
+    if (backups !== null) {
+      backups = backups.filter((el) => el.id !== backupToDelete.id);
+      currentBackup = null;
+    }
   }
 
   onMount(async () => {
@@ -27,16 +29,18 @@
   });
 
   $effect(() => {
-    async function sett() {
-      invoke("write_backup_file", { value: backups });
+    async function doAsyncThing() {
+      if (backups !== null) invoke("write_backup_file", { value: backups });
     }
-    sett();
+    doAsyncThing();
   });
 </script>
 
-<div
-  class="p-2 font-inter bg-gray-900 text-gray-50 grid grid-cols-[300px_auto] h-[100vh] gap-2"
->
-  <Sidebar bind:popup bind:backups {selectBackup} bind:currentBackup />
-  <Overview bind:popup bind:currentBackup {deleteCurrentBackup} />
-</div>
+{#if backups !== null}
+  <div
+    class="p-2 font-inter bg-gray-900 text-gray-50 grid grid-cols-[300px_auto] h-[100vh] gap-2"
+  >
+    <Sidebar bind:popup bind:backups {selectBackup} bind:currentBackup />
+    <Overview bind:popup bind:currentBackup {deleteCurrentBackup} />
+  </div>
+{/if}

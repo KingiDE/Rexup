@@ -30,7 +30,7 @@
     {:else}
       {#each directoryResults as result}
         <!-- The height of the Button is set because otherwise they are squished vertically -->
-        {#if result.variant === "file" && showFiles}
+        {#if result.variant === "File" && showFiles}
           <Button
             onClick={() =>
               pushDirectoryToPathElements(pathElements, result.name, result.id)}
@@ -49,7 +49,7 @@
               />
             {/snippet}
           </Button>
-        {:else if result.variant === "directory"}
+        {:else if result.variant === "Directory"}
           <Button
             onClick={() =>
               pushDirectoryToPathElements(pathElements, result.name, result.id)}

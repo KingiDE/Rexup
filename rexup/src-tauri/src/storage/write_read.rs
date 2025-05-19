@@ -82,56 +82,46 @@ pub enum ReadFileError {
 pub fn safely_read_file(path: FileVariants) -> Result<String, ReadFileError> {
 	let path = convert_enum_to_path(path);
 
-	let data;
-
 	if path.exists() {
 		match fs::read(&path) {
 			Ok(file_data) => {
-				data = file_data;
+				match str::from_utf8(&file_data) {
+					Ok(converted_bytes) => {
+						return Ok(converted_bytes.to_owned());
+					}
+					Err(_err) => {
+						return Err(ReadFileError::UnableToConvertIntoUTF8);
+					}
+				}
 			}
 			Err(_err) => {
 				println!("Error: The backend was unable to read the existing file: {:#?}", &path);
 				return Err(ReadFileError::UnableToReadExistingFile);
 			}
 		}
-	} else {
-		let mut path_without_file = path.clone();
-		path_without_file.pop();
-
-		match fs::create_dir_all(path_without_file) {
-			Ok(_nothing) => {}
-			Err(_err) => {
-				println!(
-					"Error: The backend was unable to create the path to the not existing file: {:#?}",
-					&path
-				);
-				return Err(ReadFileError::UnableToCreatePath);
-			}
-		}
-
-		match File::create(&path) {
-			Ok(_file) => {
-				println!("Error: The backend was unable to find the file: {:#?}", &path);
-				return Err(ReadFileError::UnableToFindFile);
-			}
-			Err(_err) => {
-				println!("Error: The backend was unable to create the file: {:#?}", &path);
-				return Err(ReadFileError::UnableToCreateFile);
-			}
-		};
 	}
 
-	match str::from_utf8(&data) {
-		Ok(converted_bytes) => { Ok(converted_bytes.to_owned()) }
-		Err(_err) => { Err(ReadFileError::UnableToConvertIntoUTF8) }
-	}
+	Ok("[]".to_owned())
 }
 
 // Write to a file and log a message to the console when erroring
 pub fn safely_write_file(path: FileVariants, data: String) {
 	let path = convert_enum_to_path(path);
 
-	match fs::write(&path, data) {
+	let mut path_without_file = path.clone();
+	path_without_file.pop();
+
+	match fs::create_dir_all(path_without_file) {
+		Ok(_nothing) => {}
+		Err(_err) => {
+			println!(
+				"Error: The backend was unable to create the path to the not existing file: {:#?}",
+				&path
+			);
+		}
+	}
+
+	match fs::write(&path, &data) {
 		Ok(_nothing) => {}
 		Err(_err) => {
 			println!("Error: Could not write new data to file: {:#?}", &path);

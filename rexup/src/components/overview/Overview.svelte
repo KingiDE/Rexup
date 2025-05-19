@@ -20,6 +20,12 @@
   } = $props();
 
   let currentTab = $state<CurrentOverviewTab>("entries");
+
+  // Closes all popups when the currentTab changes
+  // TODO: Is there a better solution?
+  $effect(() => {
+    if (currentTab) popup = null;
+  });
 </script>
 
 <div

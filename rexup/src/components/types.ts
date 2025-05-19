@@ -1,24 +1,9 @@
 export type CurrentPopup =
-	| {
-			variant: "add_backup";
-			value: null;
-	  }
-	| {
-			variant: "add_backup_entry";
-			value: null;
-	  }
-	| {
-			variant: "edit_backup_entry";
-			value: LocalStateBackup;
-	  }
-	| {
-			variant: "select_backup_location";
-			value: null;
-	  }
-	| {
-			variant: "settings";
-			value: null;
-	  }
+	| "add_backup"
+	| "add_backup_entry"
+	| "edit_backup_entry"
+	| "select_backup_location"
+	| "settings"
 	| null;
 
 export type CurrentOverviewTab = "entries" | "logs" | "configuration";
@@ -34,21 +19,6 @@ export type LocalStateBackup = {
 	logs_of_last_execution: Array<BackupExecutionLog>;
 };
 
-export type BackupExecutionLog =
-	| {
-			variant: "information";
-			message: string;
-	  }
-	| ({
-			// Here, the "directory" or "file" is stored in the field "type" because the field "variant" is already used
-			type: "file" | "directory";
-			fromPath: string;
-			toPath: string;
-	  } & (
-			| { variant: "success_copying" }
-			| { variant: "error_copying" | "ignore_copying"; reason: string }
-	  ));
-
 export type LocalStateBackupEntry = {
 	id: string;
 	name: string;
@@ -56,7 +26,7 @@ export type LocalStateBackupEntry = {
 	target: string | null;
 	is_active: boolean;
 	// Used for visual indication as both directories and files can contain a "."
-	variant: "file" | "directory" | null;
+	variant: FileOrDirectory | null;
 	filters: {
 		max_size_in_mb: number | null;
 		included_file_types: Array<string> | null;
@@ -64,11 +34,31 @@ export type LocalStateBackupEntry = {
 	};
 };
 
+export type BackupExecutionLog =
+	| {
+			variant: "information";
+			message: string;
+	  }
+	| ({
+			// Here, the "Directory" or "File" is stored in the field "type" because the field "variant" is already used
+			type: FileOrDirectory;
+			from_path: string;
+			to_path: string;
+	  } & (
+			| { variant: "success_copying" }
+			| { variant: "error_copying" | "ignore_copying"; reason: string }
+	  ));
+
+// The blocks at the top bar in the PathSelector
 export type PathElement = {
-	// The id id the entire path so the id becomes unique
+	// The id is the entire path so the id becomes unique
 	id: string;
 	name: string;
-	variant: "file" | "directory";
+	variant: FileOrDirectory;
 };
 
+// The results that show up in the PathSelector
 export type DirecoryResult = PathElement & { is_hidden: boolean };
+
+// A utility type; the values start with a captial letter because they returned by a Rust enum
+type FileOrDirectory = "File" | "Directory";

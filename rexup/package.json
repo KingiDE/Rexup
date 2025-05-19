@@ -12,7 +12,7 @@
 		"tauri": "tauri",
 		"tsc-check": "tsc --noEmit --skipLibCheck",
 		"svelte-check": "svelte-check",
-		"format": "biome check --write ./src astro.config.mjs index.html package.json svelte.config.js tsconfig.json"
+		"format": "biome check --write ./src astro.config.mjs package.json svelte.config.js tsconfig.json"
 	},
 	"dependencies": {
 		"@astrojs/svelte": "^7.0.13",

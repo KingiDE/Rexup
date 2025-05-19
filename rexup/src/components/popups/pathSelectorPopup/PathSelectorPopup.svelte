@@ -1,17 +1,17 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import type { CurrentPopup, DirecoryResult, PathElement } from "../types";
-  import Button from "../ui/Button.svelte";
-  import Icon from "../ui/Icon.svelte";
+  import type { CurrentPopup, DirecoryResult, PathElement } from "../../types";
+  import Button from "../../ui/Button.svelte";
+  import Icon from "../../ui/Icon.svelte";
   import { onMount } from "svelte";
   import {
     getPathString,
     read_contents_of_path,
     updatePathElementsFromUserLocationTo,
-  } from "../../hooks/usePathSelectorPopup.svelte";
-  import PathElementsSection from "./pathSelectorPopup/PathElementsSection.svelte";
-  import BookmarksSection from "./pathSelectorPopup/BookmarksSection.svelte";
-  import ResultsSection from "./pathSelectorPopup/ResultsSection.svelte";
+  } from "../../../hooks/usePathSelectorPopup.svelte";
+  import PathElementsSection from "./PathElementsSection.svelte";
+  import BookmarksSection from "./BookmarksSection.svelte";
+  import ResultsSection from "./ResultsSection.svelte";
 
   let {
     popup = $bindable(),
@@ -41,14 +41,14 @@
 
   // Updates the directory-results when the pathElement changes
   $effect(() => {
-    async function sett() {
+    async function doAsyncThing() {
       directoryResults = await read_contents_of_path(pathElements, showFiles);
     }
-    sett();
+    doAsyncThing();
   });
 </script>
 
-{#if popup !== null && popup.variant === "select_backup_location"}
+{#if popup !== null && popup === "select_backup_location"}
   <div
     transition:fade={{ duration: 100 }}
     class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}

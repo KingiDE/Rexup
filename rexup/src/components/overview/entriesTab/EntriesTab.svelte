@@ -3,7 +3,7 @@
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
   import AddBackupEntryPopup from "../../popups/AddBackupEntryPopup.svelte";
-  import BackupEntryPreview from "./BackupEntryPreview.svelte";
+  import BackupEntryPreview from "./backupEntryPreview/BackupEntryPreview.svelte";
 
   let {
     popup = $bindable(),
@@ -14,7 +14,7 @@
   } = $props();
 
   function setPopupToAddBackupEntry() {
-    popup = { variant: "add_backup_entry", value: null };
+    popup = "add_backup_entry";
   }
 
   function addBackupEntry(name: string) {
@@ -38,7 +38,7 @@
 
 <h3 class="mt-4 font-poppins text-xl font-bold">Entries</h3>
 <!-- Same width as AddBackupButton on the sidebar -->
-<div class="grid gap-2-mt-2">
+<div class="grid gap-4 mt-2 justify-items-start">
   {#each currentBackup.entries as _entry, index}
     <BackupEntryPreview bind:entry={currentBackup.entries[index]} bind:popup />
   {/each}

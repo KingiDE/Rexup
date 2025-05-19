@@ -79,7 +79,7 @@
   {#each drives as drive}
     <Button
       onClick={async () =>
-        (pathElements = [{ id: drive, name: drive, variant: "directory" }])}
+        (pathElements = [{ id: drive, name: drive, variant: "Directory" }])}
       meaning="neutral"
       extraCSS="py-1"
     >
