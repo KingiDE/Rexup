@@ -15,12 +15,16 @@
 
   let {
     popup = $bindable(),
-    setCurrentBackupLocation,
+    setOuterPath,
     showFiles,
+    popupToShowUp,
   }: {
     popup: CurrentPopup;
-    setCurrentBackupLocation: (location: string) => void;
+    setOuterPath: (location: string) => void;
     showFiles?: boolean;
+    popupToShowUp:
+      | "select_backup_location"
+      | "select_backup_entry_origin_location";
   } = $props();
 
   // Keeps track of the current path that is selected at the top bar
@@ -31,7 +35,7 @@
 
   // When the user clicks "Select path", this function combines all path elements and call the function passed through props with it
   function selectPath() {
-    setCurrentBackupLocation(getPathString(pathElements));
+    setOuterPath(getPathString(pathElements));
   }
 
   // Loads the user's desktop-path into local state
@@ -48,7 +52,7 @@
   });
 </script>
 
-{#if popup !== null && popup === "select_backup_location"}
+{#if popup !== null && popup === popupToShowUp}
   <div
     transition:fade={{ duration: 100 }}
     class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}

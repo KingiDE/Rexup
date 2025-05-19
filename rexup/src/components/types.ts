@@ -2,6 +2,7 @@ export type CurrentPopup =
 	| "add_backup"
 	| "add_backup_entry"
 	| "edit_backup_entry"
+	| "select_backup_entry_origin_location"
 	| "select_backup_location"
 	| "settings"
 	| null;

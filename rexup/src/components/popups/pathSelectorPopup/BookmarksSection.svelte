@@ -13,7 +13,6 @@
   } = $props();
 
   let drives = $state([]);
-  $inspect(drives);
 
   onMount(async () => {
     drives = await invoke("get_remaining_drives");

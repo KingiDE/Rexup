@@ -59,11 +59,14 @@
 
 <nav class="bg-gray-800 rounded-md p-4 flex flex-col">
   <h2 class="font-poppins text-2xl font-bold">Backups</h2>
-  <div class="grid gap-2 my-4">
-    {#each backups as backup}
-      <ExistingBackup {backup} {selectBackup} {currentBackup} />
-    {/each}
-  </div>
+  <div class="mt-4"></div>
+  {#if backups.length > 0}
+    <div class="mb-4 grid gap-2">
+      {#each backups as backup}
+        <ExistingBackup {backup} {selectBackup} {currentBackup} />
+      {/each}
+    </div>
+  {/if}
   <AddBackupButton {setPopupToAddBackup} />
   <ShowSettingsButton {setPopupToSettings} />
 </nav>
