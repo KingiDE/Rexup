@@ -65,10 +65,10 @@ pub fn does_possible_file_name_filter_apply(
 
 // If the file type/extension of the file at src can be retrieved and is not in the passed list of file types/extension, the function will return false - otherwiese true
 pub fn does_possible_file_type_filter_apply(
-	included_file_types: &Option<Vec<String>>,
+	included_file_extensions: &Option<Vec<String>>,
 	src: &PathBuf
 ) -> bool {
-	match included_file_types {
+	match included_file_extensions {
 		Some(file_extension_list) => {
 			match src.extension() {
 				Some(file_extension) => {

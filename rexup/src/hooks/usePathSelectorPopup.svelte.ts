@@ -54,14 +54,9 @@ export async function read_contents_of_path(
 	showFiles?: boolean,
 ) {
 	// The "as" operator actually claims something wrong because in reality the variant field is "File" or "Directory" and will be changed later
-	let blankResults = (await invoke("list_contents_of", {
+	const blankResults = (await invoke("list_contents_of", {
 		path: getPathString(pathElements),
 		showFiles,
-	})) as Array<DirecoryResult>;
-
-	blankResults = blankResults.map((el) => ({
-		...el,
-		variant: el.variant,
 	})) as Array<DirecoryResult>;
 
 	// Sort hidden results to the end

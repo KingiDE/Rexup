@@ -9,6 +9,8 @@ export type CurrentPopup =
 
 export type CurrentOverviewTab = "entries" | "logs" | "configuration";
 
+export type EditBackupEntryTab = "overview" | "filters";
+
 export type LocalStateBackup = {
 	id: string;
 	name: string;
@@ -30,7 +32,7 @@ export type LocalStateBackupEntry = {
 	variant: FileOrDirectory | null;
 	filters: {
 		max_size_in_mb: number | null;
-		included_file_types: Array<string> | null;
+		included_file_extensions: Array<string> | null;
 		included_file_names: Array<string> | null;
 	};
 };

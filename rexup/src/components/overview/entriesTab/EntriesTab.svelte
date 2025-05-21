@@ -27,7 +27,7 @@
       is_active: true,
       filters: {
         included_file_names: null,
-        included_file_types: null,
+        included_file_extensions: null,
         max_size_in_mb: null,
       },
     });

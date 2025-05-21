@@ -12,6 +12,13 @@
   } = $props();
 </script>
 
+<div class="mt-2 font-semibold">Name:</div>
+<Input
+  getter={() => entry.name}
+  setter={(newValue) => {
+    entry.name = newValue;
+  }}
+/>
 <div class="mt-2">
   <div class="font-semibold">Origin:</div>
   <div class="flex gap-2">

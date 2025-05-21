@@ -64,7 +64,7 @@ pub struct BackupEntry {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BackupEntryFilters {
 	pub max_size_in_mb: Option<u32>,
-	pub included_file_types: Option<Vec<String>>,
+	pub included_file_extensions: Option<Vec<String>>,
 	pub included_file_names: Option<Vec<String>>,
 }
 

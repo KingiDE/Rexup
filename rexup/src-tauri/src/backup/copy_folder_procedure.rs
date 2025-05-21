@@ -102,7 +102,7 @@ fn loop_over_all_files_and_copy(
 
 					if
 						!does_possible_file_type_filter_apply(
-							&filters.included_file_types,
+							&filters.included_file_extensions,
 							&origin_with_filename
 						)
 					{

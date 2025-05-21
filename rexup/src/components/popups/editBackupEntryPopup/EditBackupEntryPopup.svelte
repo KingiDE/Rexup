@@ -1,10 +1,15 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import type { CurrentPopup, LocalStateBackupEntry } from "../../types";
+  import type {
+    CurrentPopup,
+    EditBackupEntryTab,
+    LocalStateBackupEntry,
+  } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
-  import EditBackupEntryPathSection from "./EditBackupEntryPathSection.svelte";
-  import Input from "../../ui/Input.svelte";
+  import EditBackupEntryTabSwitcher from "./EditBackupEntryTabSwitcher.svelte";
+  import EditBackupEntryOverviewSection from "./EditBackupEntryOverviewSection.svelte";
+  import EditBackupEntryFiltersSection from "./EditBackupEntryFiltersSection.svelte";
 
   let {
     entry = $bindable(),
@@ -19,6 +24,8 @@
       popup = null;
     }
   });
+
+  let tab = $state<EditBackupEntryTab>("overview");
 </script>
 
 {#if popup !== null && popup === "edit_backup_entry"}
@@ -43,18 +50,11 @@
       which is the relative path inside the created backup-directory.
       Additionally, you can enable filters.
     </p>
-    <div class="mt-2 font-semibold">Name:</div>
-    <Input
-      getter={() => entry.name}
-      setter={(newValue) => {
-        entry.name = newValue;
-      }}
-    />
-    <EditBackupEntryPathSection bind:popup bind:entry />
-    <div class="mt-2 font-semibold">Filters:</div>
-    <p class="opacity-75">
-      Note that these filters will only work if the origin-path points to a
-      directory and not a file.
-    </p>
+    <EditBackupEntryTabSwitcher bind:tab />
+    {#if tab === "overview"}
+      <EditBackupEntryOverviewSection bind:popup bind:entry />
+    {:else}
+      <EditBackupEntryFiltersSection bind:entry />
+    {/if}
   </div>
 {/if}

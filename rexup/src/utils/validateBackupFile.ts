@@ -60,10 +60,10 @@ function isLocalStateBackupEntry(obj: unknown): obj is LocalStateBackupEntry {
 		"max_size_in_mb" in obj.filters &&
 		(typeof obj.filters.max_size_in_mb === "number" ||
 			obj.filters.max_size_in_mb === null) &&
-		"included_file_types" in obj.filters &&
-		(obj.filters.included_file_types === null ||
-			(Array.isArray(obj.filters.included_file_types) &&
-				obj.filters.included_file_types.every(
+		"included_file_extensions" in obj.filters &&
+		(obj.filters.included_file_extensions === null ||
+			(Array.isArray(obj.filters.included_file_extensions) &&
+				obj.filters.included_file_extensions.every(
 					(t: unknown) => typeof t === "string",
 				))) &&
 		"included_file_names" in obj.filters &&
