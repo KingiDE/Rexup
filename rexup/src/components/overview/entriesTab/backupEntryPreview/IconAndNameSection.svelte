@@ -12,6 +12,8 @@
   // Check the variant ("File" or "Directory") of the entry.origin everytime it changes
   $effect(() => {
     async function doAsyncThing() {
+      if (entry.origin === null) return;
+
       entry.variant = await invoke("get_variant_of_path", {
         path: entry.origin,
       });
@@ -22,14 +24,16 @@
 
 <div class="flex gap-4">
   <div class="w-6 h-6">
-    {#if entry.variant !== null}
-      <Icon
-        width={24}
-        height={24}
-        name={entry.variant === "File" ? "file" : "directory"}
-        extraCSS="fill-gray-50"
-      />
-    {/if}
+    <Icon
+      width={24}
+      height={24}
+      name={entry.variant === "File"
+        ? "file"
+        : entry.variant === "Directory"
+          ? "directory"
+          : "missing"}
+      extraCSS="fill-gray-50"
+    />
   </div>
   {entry.name}
 </div>

@@ -10,13 +10,16 @@
   import EditBackupEntryTabSwitcher from "./EditBackupEntryTabSwitcher.svelte";
   import EditBackupEntryOverviewSection from "./EditBackupEntryOverviewSection.svelte";
   import EditBackupEntryFiltersSection from "./EditBackupEntryFiltersSection.svelte";
+  import EditBackupEntryDestructiveSection from "./EditBackupEntryDestructiveSection.svelte";
 
   let {
     entry = $bindable(),
     popup = $bindable(),
+    deleteBackupEntry,
   }: {
     entry: LocalStateBackupEntry;
     popup: CurrentPopup;
+    deleteBackupEntry: (backupToDelete: LocalStateBackupEntry) => void;
   } = $props();
 
   window.addEventListener("keydown", (e) => {
@@ -28,7 +31,7 @@
   let tab = $state<EditBackupEntryTab>("overview");
 </script>
 
-{#if popup !== null && popup === "edit_backup_entry"}
+{#if popup === "edit_backup_entry"}
   <div
     transition:fade={{ duration: 100 }}
     class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
@@ -53,8 +56,10 @@
     <EditBackupEntryTabSwitcher bind:tab />
     {#if tab === "overview"}
       <EditBackupEntryOverviewSection bind:popup bind:entry />
-    {:else}
+    {:else if tab === "filters"}
       <EditBackupEntryFiltersSection bind:entry />
+    {:else}
+      <EditBackupEntryDestructiveSection {entry} {deleteBackupEntry} />
     {/if}
   </div>
 {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { updatePathElementsFromUserLocationTo } from "../../../hooks/usePathSelectorPopup.svelte";
+  import { updatePathElementsFromUserLocationTo } from "../../../hooks/usePathSelectorPopup";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";

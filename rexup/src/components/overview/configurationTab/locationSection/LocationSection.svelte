@@ -25,6 +25,8 @@
   // Cannot use dervied.by() because of await issues
   $effect(() => {
     async function doAsyncThing() {
+      if (currentBackup.location === null) return;
+
       hasWriteAccess = await invoke("has_write_access_to", {
         path: currentBackup.location,
       });
@@ -42,6 +44,7 @@
   </div>
   <BackupLocationInput bind:popup bind:currentBackup />
   <PathSelectorPopup
+    heading="Select backup location"
     bind:popup
     popupToShowUp="select_backup_location"
     setOuterPath={setCurrentBackupPath}

@@ -29,7 +29,7 @@
   });
 </script>
 
-{#if popup !== null && popup === "add_backup"}
+{#if popup === "add_backup"}
   <div
     transition:fade={{ duration: 100 }}
     class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}

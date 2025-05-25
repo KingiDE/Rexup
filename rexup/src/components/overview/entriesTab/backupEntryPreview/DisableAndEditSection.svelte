@@ -15,7 +15,7 @@
   <Button
     meaning="neutral"
     onClick={() => (entry.is_active = !entry.is_active)}
-    extraCSS={`py-1 w-[100px] justify-self-end ${entry.is_active ? "" : "opacity-50"} transition-[opacity]`}
+    extraCSS={`py-1 w-[100px] justify-self-end`}
   >
     {#snippet text()}
       {entry.is_active ? "Enabled" : "Disabled"}

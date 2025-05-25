@@ -39,7 +39,7 @@ The button-component has consistent styles over all three variants and can be fu
       case "positive":
         return `${extraRules?.includes("no-bg") ? "" : `bg-sky-500 ${disabled ? "" : "hover:bg-sky-400"}`}`;
       case "neutral":
-        return `${extraRules?.includes("no-bg") ? "" : `bg-gray-800 ${disabled ? "" : "hover:bg-gray-500"}`} ${extraRules?.includes("no-outline") ? "" : "-outline-offset-1 outline-1 outline-gray-500"}`;
+        return `${extraRules?.includes("no-bg") ? "" : `bg-gray-800 ${disabled ? "" : "hover:bg-gray-500"}`} ${extraRules?.includes("no-outline") ? "-outline-offset-1 outline-1" : "-outline-offset-1 outline-1 outline-gray-500"}`;
       case "discrete-neutral":
         return "";
     }

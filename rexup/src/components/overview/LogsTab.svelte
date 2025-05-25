@@ -11,7 +11,7 @@
   } = $props();
 </script>
 
-<h3 class="mt-4 font-poppins text-xl font-bold">Logs</h3>
+<h3 class="mt-2 font-poppins text-xl font-bold">Logs</h3>
 <!-- Execution-History -->
 {#if showBackupExecutionHistory.value}
   <div class="mt-2">
@@ -44,7 +44,7 @@
   {#if currentBackup.logs_of_last_execution.length > 0}
     <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">
       {#each currentBackup.logs_of_last_execution as executionLog}
-        <li>{prettifyExecutionLog(executionLog)}</li>
+        <li>{@html prettifyExecutionLog(executionLog)}</li>
       {/each}
     </ol>
   {:else}

@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { CurrentPopup, LocalStateBackup } from "../../types";
+  import type {
+    CurrentPopup,
+    LocalStateBackup,
+    LocalStateBackupEntry,
+  } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
   import AddBackupEntryPopup from "../../popups/AddBackupEntryPopup.svelte";
@@ -34,13 +38,25 @@
 
     popup = null;
   }
+
+  function deleteBackupEntry(backupEntry: LocalStateBackupEntry) {
+    currentBackup.entries = currentBackup.entries.filter(
+      (el) => el.id !== backupEntry.id,
+    );
+
+    popup = null;
+  }
 </script>
 
-<h3 class="mt-4 font-poppins text-xl font-bold">Entries</h3>
+<h3 class="mt-2 font-poppins text-xl font-bold">Entries</h3>
 <!-- Same width as AddBackupButton on the sidebar -->
 <div class="grid gap-4 mt-2 justify-items-start">
   {#each currentBackup.entries as _entry, index}
-    <BackupEntryPreview bind:entry={currentBackup.entries[index]} bind:popup />
+    <BackupEntryPreview
+      bind:entry={currentBackup.entries[index]}
+      bind:popup
+      {deleteBackupEntry}
+    />
   {/each}
 </div>
 <Button

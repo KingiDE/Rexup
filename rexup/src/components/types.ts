@@ -9,19 +9,24 @@ export type CurrentPopup =
 
 export type CurrentOverviewTab = "entries" | "logs" | "configuration";
 
-export type EditBackupEntryTab = "overview" | "filters";
+export type EditBackupEntryTab = "overview" | "filters" | "destructive";
 
+// The values that return the path to the user's specific location on his file-system
+export type UserLocation = "desktop" | "downloads" | "documents" | "home";
+
+// The structure a loaded backup has
 export type LocalStateBackup = {
 	id: string;
 	name: string;
 	entries: Array<LocalStateBackupEntry>;
 	is_zipped: boolean;
 	location: string | null;
-	// Stores the execution times in miliseconds after 1. January 1970 by calling "date.getTime()"
-	executions: Array<number>;
+	// Stores the execution times in miliseconds after 1. January 1970 by calling "Date.getTime()"
+	executions: Array<string>;
 	logs_of_last_execution: Array<BackupExecutionLog>;
 };
 
+// The structure a loaded backup entry has
 export type LocalStateBackupEntry = {
 	id: string;
 	name: string;
@@ -37,24 +42,37 @@ export type LocalStateBackupEntry = {
 	};
 };
 
+// The structure a backup-execution log has, that is shown in its specific tab inside the overview
 export type BackupExecutionLog =
 	| {
-			variant: "information";
+			variant: "information" | "finished";
 			message: string;
 	  }
 	| ({
-			// Here, the "Directory" or "File" is stored in the field "type" because the field "variant" is already used
-			type: FileOrDirectory;
 			from_path: string;
 			to_path: string;
+			entryName: string;
 	  } & (
-			| { variant: "success_copying" }
-			| { variant: "error_copying" | "ignore_copying"; reason: string }
+			| {
+					variant: "success_copying";
+					// Here, the "Directory" or "File" is stored in the field "type" because the field "variant" is already used
+					type: FileOrDirectory;
+			  }
+			| {
+					variant: "error_copying";
+					reason: string;
+			  }
+			| {
+					variant: "ignore_copying";
+					// Here, the "Directory" or "File" is stored in the field "type" because the field "variant" is already used
+					type: FileOrDirectory;
+					reason: string;
+			  }
 	  ));
 
-// The blocks at the top bar in the PathSelector
+// The blocks at the top bar in the PathSelector that indicate directories
 export type PathElement = {
-	// The id is the entire path so the id becomes unique
+	// The id is the entire path of the directory or file so the id becomes unique
 	id: string;
 	name: string;
 	variant: FileOrDirectory;
@@ -63,5 +81,7 @@ export type PathElement = {
 // The results that show up in the PathSelector
 export type DirecoryResult = PathElement & { is_hidden: boolean };
 
-// A utility type; the values start with a captial letter because they returned by a Rust enum
-type FileOrDirectory = "File" | "Directory";
+// A utility type; the values start with a captial letter because they are returned by a Rust enum
+export type FileOrDirectory = "File" | "Directory";
+
+//

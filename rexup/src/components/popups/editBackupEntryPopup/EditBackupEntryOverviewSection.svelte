@@ -19,6 +19,25 @@
     entry.name = newValue;
   }}
 />
+<div class="mt-2 font-semibold">Explanation:</div>
+<p>
+  The target-path is the relative location of the backup resource (file or
+  directory) inside the backup-directory.
+</p>
+{#if entry.variant !== null && entry.origin !== null && entry.target !== null && entry.target !== ""}
+  <p>
+    In this case, the {entry.variant === "File" ? "file" : "directory"} located at
+    <span class="px-1 py-0.5 bg-gray-900 rounded-md">{entry.origin}</span>
+    will be copied to
+    <span class="px-1 py-0.5 bg-gray-900 rounded-md">{entry.target}</span>
+    {entry.target === "/" ? "(= root)" : ""} inside the backup-directory.
+  </p>
+{:else}
+  <p>
+    Because the entry has no origin and target at the moment, an explanation is
+    currently not possible.
+  </p>
+{/if}
 <div class="mt-2">
   <div class="font-semibold">Origin:</div>
   <div class="flex gap-2">

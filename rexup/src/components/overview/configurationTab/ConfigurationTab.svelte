@@ -16,7 +16,7 @@
   } = $props();
 </script>
 
-<h3 class="mt-4 font-poppins text-xl font-bold">Configuration</h3>
+<h3 class="mt-2 font-poppins text-xl font-bold">Configuration</h3>
 <NameSection bind:currentBackup />
 <IsZippedSection bind:currentBackup />
 <LocationSection bind:currentBackup bind:popup />

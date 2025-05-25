@@ -14,7 +14,7 @@
     <div class="font-semibold">Origin:</div>
     <Input
       inputExtraCSS="mt-1 min-w-[400px]"
-      placeholder="Unset (Click 'Edit' below to edit the path)"
+      placeholder="Unset (Click 'Edit' below to open the popup)"
       getter={() => (entry.origin === null ? "" : entry.origin)}
       setter={() => {}}
       disabled
@@ -24,7 +24,7 @@
     <div class="font-semibold">Target:</div>
     <Input
       inputExtraCSS="mt-1 min-w-[400px]"
-      placeholder="Unset (Click 'Edit' below to edit the path)"
+      placeholder="Unset (Click 'Edit' below to open the popup)"
       getter={() => (entry.target === null ? "" : entry.target)}
       setter={() => {}}
       disabled

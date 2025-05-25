@@ -1,13 +1,17 @@
 <script lang="ts">
-  import type {
-    CurrentOverviewTab,
-    CurrentPopup,
-    LocalStateBackup,
-  } from "../types";
+  import type { CurrentPopup, LocalStateBackup } from "../types";
+  import Button from "../ui/Button.svelte";
+  import Icon from "../ui/Icon.svelte";
   import ConfigurationTab from "./configurationTab/ConfigurationTab.svelte";
   import EntriesTab from "./entriesTab/EntriesTab.svelte";
   import LogsTab from "./LogsTab.svelte";
   import TabSwitcher from "./TabSwitcher.svelte";
+  import {
+    closePopupsOnCurrentTabChange,
+    currentTab,
+    executeBackup,
+    isBackupExecuting,
+  } from "../../hooks/useExecuteBackup.svelte";
 
   let {
     currentBackup = $bindable(),
@@ -19,12 +23,13 @@
     deleteCurrentBackup: (backupToDelete: LocalStateBackup) => void;
   } = $props();
 
-  let currentTab = $state<CurrentOverviewTab>("entries");
-
   // Closes all popups when the currentTab changes
-  // TODO: Is there a better solution?
   $effect(() => {
-    if (currentTab) popup = null;
+    const newPopupvalue = closePopupsOnCurrentTabChange();
+
+    if (newPopupvalue === null) {
+      popup = newPopupvalue;
+    }
   });
 </script>
 
@@ -42,10 +47,32 @@
     <h2 class="font-poppins text-2xl font-bold mb-2">
       Overview of Backup: "{currentBackup.name}"
     </h2>
-    <TabSwitcher bind:currentTab />
-    {#if currentTab === "entries"}
+    <TabSwitcher bind:currentTab={currentTab.value} />
+    <Button
+      meaning="positive"
+      onClick={() => executeBackup(currentBackup)}
+      extraCSS="mt-4 justify-self-start px-8"
+      disabled={isBackupExecuting.value}
+    >
+      {#snippet text()}
+        Execute backup
+      {/snippet}
+      {#snippet icon()}
+        <Icon
+          width={24}
+          height={24}
+          name="triangle"
+          extraCSS="fill-gray-50 rotate-90"
+        />
+      {/snippet}
+    </Button>
+    <div class="mt-2 opacity-75">
+      Switch to the logs tab (if you haven't already) to see the progress of the
+      backup-execution after you clicked the button above.
+    </div>
+    {#if currentTab.value === "entries"}
       <EntriesTab bind:popup bind:currentBackup />
-    {:else if currentTab === "logs"}
+    {:else if currentTab.value === "logs"}
       <LogsTab {currentBackup} />
     {:else}
       <ConfigurationTab bind:currentBackup bind:popup {deleteCurrentBackup} />

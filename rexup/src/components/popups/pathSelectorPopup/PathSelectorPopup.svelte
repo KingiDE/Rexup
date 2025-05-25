@@ -8,7 +8,7 @@
     getPathString,
     read_contents_of_path,
     updatePathElementsFromUserLocationTo,
-  } from "../../../hooks/usePathSelectorPopup.svelte";
+  } from "../../../hooks/usePathSelectorPopup";
   import PathElementsSection from "./PathElementsSection.svelte";
   import BookmarksSection from "./BookmarksSection.svelte";
   import ResultsSection from "./ResultsSection.svelte";
@@ -18,6 +18,7 @@
     setOuterPath,
     showFiles,
     popupToShowUp,
+    heading,
   }: {
     popup: CurrentPopup;
     setOuterPath: (location: string) => void;
@@ -25,10 +26,12 @@
     popupToShowUp:
       | "select_backup_location"
       | "select_backup_entry_origin_location";
+    heading: string;
   } = $props();
 
   // Keeps track of the current path that is selected at the top bar
   let pathElements = $state<Array<PathElement>>([]);
+  $inspect(pathElements);
 
   // Holds the results of files and direcotires in the current path
   let directoryResults = $state<Array<DirecoryResult>>([]);
@@ -46,13 +49,19 @@
   // Updates the directory-results when the pathElement changes
   $effect(() => {
     async function doAsyncThing() {
-      directoryResults = await read_contents_of_path(pathElements, showFiles);
+      // It the last element of pathElements is a file, remove it
+      const pathToSearch = pathElements.filter((el, index) => {
+        return el.variant === "File" && pathElements.length - 1 === index
+          ? false
+          : true;
+      });
+      directoryResults = await read_contents_of_path(pathToSearch, showFiles);
     }
     doAsyncThing();
   });
 </script>
 
-{#if popup !== null && popup === popupToShowUp}
+{#if popup === popupToShowUp}
   <div
     transition:fade={{ duration: 100 }}
     class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
@@ -69,7 +78,7 @@
       {/snippet}
     </Button>
     <!-- Display the current path in form of block at the top bar -->
-    <PathElementsSection bind:pathElements />
+    <PathElementsSection bind:pathElements {heading} />
     <!-- Display the bookmars, all drives and the directories in the current one -->
     <div class="mt-2 grid grid-cols-[150px_auto] grid-flow-row gap-x-8">
       <BookmarksSection bind:pathElements />

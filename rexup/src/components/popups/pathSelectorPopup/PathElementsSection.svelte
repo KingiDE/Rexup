@@ -1,16 +1,18 @@
 <script lang="ts">
-  import { slicePathElements } from "../../../hooks/usePathSelectorPopup.svelte";
+  import { slicePathElements } from "../../../hooks/usePathSelectorPopup";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
 
   let {
     pathElements = $bindable(),
+    heading,
   }: {
     pathElements: Array<PathElement>;
+    heading: string;
   } = $props();
 </script>
 
-<h2 class="font-poppins text-2xl font-bold">Select backup location</h2>
+<h2 class="font-poppins text-2xl font-bold">{heading}</h2>
 <!-- Display the current path in form of blocks -->
 <div class="mt-4 flex gap-1 items-center overflow-x-scroll pb-0.5">
   <div class="mr-1">Path</div>
