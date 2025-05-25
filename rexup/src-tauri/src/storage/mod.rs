@@ -88,21 +88,15 @@ pub struct BackupEntryFilters {
 /// Tries to write the given value in the user's config-file. Even if the file cannot be written to, the function returns nothing.
 #[tauri::command]
 pub fn write_config_file(value: Config) {
-	match serde_json::to_string(&value) {
-		Ok(data) => {
-			safely_write_file(&convert_location_to_path(FileLocation::Config), data);
-		}
-		Err(_err) => {}
+	if let Ok(data) = serde_json::to_string(&value) {
+		safely_write_file(&convert_location_to_path(FileLocation::Config), data);
 	}
 }
 
 /// Tries to write the given value in the user's backups-file. Even if the file cannot be written to, the function returns nothing.
 #[tauri::command]
 pub fn write_backup_file(value: Vec<Backup>) {
-	match serde_json::to_string(&value) {
-		Ok(data) => {
-			safely_write_file(&convert_location_to_path(FileLocation::Backups), data);
-		}
-		Err(_err) => {}
+	if let Ok(data) = serde_json::to_string(&value) {
+		safely_write_file(&convert_location_to_path(FileLocation::Backups), data);
 	}
 }

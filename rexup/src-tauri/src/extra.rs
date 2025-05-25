@@ -14,8 +14,10 @@ pub fn has_write_access_to(path: String) -> bool {
 
 	match OpenOptions::new().write(true).create_new(true).open(&test_file) {
 		Ok(_) => {
-			let _ = fs::remove_file(&test_file);
-			true
+			match fs::remove_file(&test_file) {
+				Ok(_nothing) => true,
+				Err(_err) => false,
+			}
 		}
 		Err(_) => false,
 	}
@@ -24,10 +26,7 @@ pub fn has_write_access_to(path: String) -> bool {
 /// Deletes all stored data of Rexup by deleting the parent-directory.
 #[tauri::command]
 pub fn delete_all_data() {
-	match fs::remove_dir_all(&get_parent_directory()) {
-		Ok(_nothing) => {}
-		Err(_err) => {}
-	}
+	let _ = fs::remove_dir_all(&get_parent_directory());
 }
 
 /// Helper function that returns the correct parent-directory on Windows.

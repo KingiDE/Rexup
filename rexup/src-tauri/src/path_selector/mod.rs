@@ -18,55 +18,51 @@ pub struct DirectoryContent {
 pub fn list_contents_of(path: String) -> Vec<DirectoryContent> {
 	let mut directories: Vec<DirectoryContent> = Vec::new();
 
-	match fs::read_dir(path) {
-		Ok(readable_dir) => {
-			for entry in readable_dir {
-				match entry {
-					Ok(readable_entry) => {
-						let path = readable_entry.path();
+	if let Ok(readable_dir) = fs::read_dir(path) {
+		for entry in readable_dir {
+			if let Ok(readable_entry) = entry {
+				let path = readable_entry.path();
 
-						if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
-							let variant = if path.is_file() {
-								FileOrDirectory::File
-							} else {
-								FileOrDirectory::Directory
-							};
+				if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+					let variant = if path.is_file() {
+						FileOrDirectory::File
+					} else {
+						FileOrDirectory::Directory
+					};
 
-							#[cfg(target_family = "windows")]
-							fn is_hidden(path: &Path) -> bool {
-								use std::os::windows::fs::MetadataExt;
-
-								match path.metadata() {
-									Ok(metadata) => {
-										return (metadata.file_attributes() & 2) != 0;
-									}
-									Err(_err) => {
-										return false;
-									}
-								}
-							}
-
-							#[cfg(target_family = "unix")]
-							fn is_hidden(path: &Path) -> bool {
-								path.starts_with('.')
-							}
-
-							directories.push(DirectoryContent {
-								id: path.to_string_lossy().to_string(),
-								name: name.to_string(),
-								is_hidden: is_hidden(&path),
-								variant,
-							});
-						}
-					}
-					Err(_err) => {}
+					directories.push(DirectoryContent {
+						id: path.to_string_lossy().to_string(),
+						name: name.to_string(),
+						is_hidden: is_thing_at_path_hidden(&path),
+						variant,
+					});
 				}
 			}
 		}
-		Err(_err) => {}
 	}
 
 	directories
+}
+
+/// Helper function to deterimine if the "thing" (file or direcotry) at the given path is hidden on Windows.
+#[cfg(target_family = "windows")]
+fn is_thing_at_path_hidden(path: &Path) -> bool {
+	use std::os::windows::fs::MetadataExt;
+
+	match path.metadata() {
+		Ok(metadata) => {
+			return (metadata.file_attributes() & 2) != 0;
+		}
+		Err(_err) => {
+			return false;
+		}
+	}
+}
+
+/// Helper function to deterimine if the "thing" (file or direcotry) at the given path is hidden on Linux.
+#[cfg(target_family = "unix")]
+fn is_thing_at_path_hidden(path: &Path) -> bool {
+	path.starts_with('.')
 }
 
 /// Is a block in the top bar in the PathSelector on the frontend.

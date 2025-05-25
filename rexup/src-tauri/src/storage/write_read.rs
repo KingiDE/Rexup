@@ -4,17 +4,9 @@ use std::{ fs, path::{ Path, PathBuf } };
 /// Tries to read from a file a the given path and returns the file contents as a String.
 /// In case of an error, the function will return nothing.
 pub fn safely_read_file(path: &Path) -> Option<String> {
-	if path.exists() {
-		match fs::read(&path) {
-			Ok(file_data) => {
-				match str::from_utf8(&file_data) {
-					Ok(converted_bytes) => {
-						return Some(converted_bytes.to_owned());
-					}
-					Err(_err) => {}
-				}
-			}
-			Err(_err) => {}
+	if let Ok(file_data) = fs::read(&path) {
+		if let Ok(converted_bytes) = str::from_utf8(&file_data) {
+			Some(converted_bytes.to_owned());
 		}
 	}
 
@@ -28,14 +20,11 @@ pub fn safely_write_file(path: &Path, data: String) -> bool {
 	let mut path_without_file = PathBuf::from(path);
 	path_without_file.pop();
 
-	match fs::create_dir_all(path_without_file) {
-		Ok(_nothing) => {}
-		Err(_err) => {}
-	}
+	let _ = fs::create_dir_all(path_without_file);
 
 	match fs::write(&path, &data) {
-		Ok(_nothing) => { true }
-		Err(_err) => { false }
+		Ok(_nothing) => true,
+		Err(_err) => false,
 	}
 }
 
