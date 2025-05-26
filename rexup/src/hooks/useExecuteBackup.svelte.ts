@@ -2,10 +2,12 @@ import { invoke } from "@tauri-apps/api/core";
 import type { CurrentOverviewTab, LocalStateBackup } from "../components/types";
 import type { FileOrDirectory } from "../components/types";
 
+// @ts-ignore: TypeScript doesn't recognize the $state rune
 export const currentTab = $state<{ value: CurrentOverviewTab }>({
 	value: "entries",
 });
 
+// @ts-ignore: TypeScript doesn't recognize the $state rune
 export const isBackupExecuting = $state({
 	value: false,
 });

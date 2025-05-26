@@ -43,7 +43,7 @@
 
   // Loads the user's desktop-path into local state
   onMount(async () => {
-    pathElements = await updatePathElementsFromUserLocationTo("desktop");
+    pathElements = await updatePathElementsFromUserLocationTo("Desktop");
   });
 
   // Updates the directory-results when the pathElement changes

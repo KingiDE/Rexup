@@ -12,11 +12,11 @@ export function loadFileNamesToDisplay(
 
 export function getEntryStateAndFileNamesToDisplay() {
 	const amountOfEmptyElements = fileNamesToDisplay.value.filter(
-		(el) => el === "",
+		(el: string) => el === "",
 	).length;
 
 	const filterWithoutEmptyElements = fileNamesToDisplay.value.filter(
-		(el) => el !== "",
+		(el: string) => el !== "",
 	);
 
 	if (amountOfEmptyElements > 1) {
@@ -42,11 +42,11 @@ export function loadFileExtensionsToDisplay(
 
 export function getEntryStateAndFileExtensionsToDisplay() {
 	const amountOfEmptyElements = fileExtensionsToDisplay.value.filter(
-		(el) => el === "",
+		(el: string) => el === "",
 	).length;
 
 	const filterWithoutEmptyElements = fileExtensionsToDisplay.value.filter(
-		(el) => el !== "",
+		(el: string) => el !== "",
 	);
 
 	if (amountOfEmptyElements > 1) {

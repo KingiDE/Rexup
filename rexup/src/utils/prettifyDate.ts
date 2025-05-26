@@ -1,5 +1,5 @@
 // Takes in miliseconds and returns the date created from it as a pretty string
-export function prettifyDate(miliseconds: number) {
+export function prettifyDate(miliseconds: string) {
 	const date = new Date(miliseconds);
 
 	let weekday: string;

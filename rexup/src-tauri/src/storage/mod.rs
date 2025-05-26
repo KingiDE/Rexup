@@ -6,7 +6,11 @@ use serde::{ Deserialize, Serialize };
 use write_read::{ safely_read_file, safely_write_file, convert_location_to_path, FileLocation };
 use crate::FileOrDirectory;
 
-/// Tries to return the value of the user's config-file. If the file cannot be read, the function returns an empty JSON-object "{}".
+/// Tries to return the content of the user's config-file as a `String`.
+///
+/// ## Returns:
+/// Returns the content of the user's config-file as a `String`.
+/// If the `safely_read_file`-function returns `None`, this function returns an empty JSON-object like this: `{}`.
 #[tauri::command]
 pub fn read_config_file() -> String {
 	match safely_read_file(&convert_location_to_path(FileLocation::Config)) {
@@ -15,7 +19,11 @@ pub fn read_config_file() -> String {
 	}
 }
 
-/// Tries to return the value of the user's backups-file. If the file cannot be read, the function returns an empty JSON-array "[]".
+/// Tries to return the content of the user's backups-file as a `String`.
+///
+/// ## Returns:
+/// Returns the content of the user's backups-file as a `String`.
+/// If the `safely_read_file`-function returns `None`, this function returns an empty JSON-array like this: `[]`.
 #[tauri::command]
 pub fn read_backup_file() -> String {
 	match safely_read_file(&convert_location_to_path(FileLocation::Backups)) {
@@ -24,13 +32,13 @@ pub fn read_backup_file() -> String {
 	}
 }
 
-/// Expected argument from the frontend when saving the config-file.
+/// Expected shape from the frontend when saving the config-file.
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
 	show_backup_execution_history: bool,
 }
 
-/// Expected argument from the frontend when saving a backup.
+/// Expected shape from the frontend when saving a backup.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Backup {
 	id: String,
@@ -42,7 +50,7 @@ pub struct Backup {
 	logs_of_last_execution: Vec<BackupExecutionLog>,
 }
 
-/// The shape of an BackupExecutionLog that is stored in a backup.
+/// The shape of an `BackupExecutionLog` that is stored in a backup.
 #[derive(Debug, Serialize, Deserialize)]
 pub enum BackupExecutionLog {
 	Information(String),
@@ -65,7 +73,7 @@ pub enum BackupExecutionLog {
 	},
 }
 
-/// The shape of an BackupEntry that is stored in a backup.
+/// The shape of an `BackupEntry` that is stored in a backup.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BackupEntry {
 	id: String,
@@ -77,7 +85,7 @@ pub struct BackupEntry {
 	filters: BackupEntryFilters,
 }
 
-/// The shape of the filters every backup-entry has.
+/// The shape of the filters every `BackupEntry` has.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BackupEntryFilters {
 	pub max_size_in_mb: Option<u32>,
@@ -85,7 +93,10 @@ pub struct BackupEntryFilters {
 	pub included_file_names: Option<Vec<String>>,
 }
 
-/// Tries to write the given value in the user's config-file. Even if the file cannot be written to, the function returns nothing.
+/// Tries to write the given value to the user's config-file.
+///
+/// ## Returns:
+/// Always returns nothing, even if the conversion to JSON fails or the `safely_write_file`-function returns false.
 #[tauri::command]
 pub fn write_config_file(value: Config) {
 	if let Ok(data) = serde_json::to_string(&value) {
@@ -93,7 +104,10 @@ pub fn write_config_file(value: Config) {
 	}
 }
 
-/// Tries to write the given value in the user's backups-file. Even if the file cannot be written to, the function returns nothing.
+/// Tries to write the given value to the user's backups-file.
+///
+/// ## Returns:
+/// Always returns nothing, even if the conversion to JSON fails or the `safely_write_file`-function returns false.
 #[tauri::command]
 pub fn write_backup_file(value: Vec<Backup>) {
 	if let Ok(data) = serde_json::to_string(&value) {

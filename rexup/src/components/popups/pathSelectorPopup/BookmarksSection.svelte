@@ -23,7 +23,7 @@
   <div>Bookmarks:</div>
   <Button
     onClick={async () =>
-      (pathElements = await updatePathElementsFromUserLocationTo("home"))}
+      (pathElements = await updatePathElementsFromUserLocationTo("Home"))}
     meaning="neutral"
     extraCSS="py-1"
   >
@@ -37,7 +37,7 @@
   <!-- List bookmarks -->
   <Button
     onClick={async () =>
-      (pathElements = await updatePathElementsFromUserLocationTo("desktop"))}
+      (pathElements = await updatePathElementsFromUserLocationTo("Desktop"))}
     meaning="neutral"
     extraCSS="py-1"
   >
@@ -50,7 +50,7 @@
   </Button>
   <Button
     onClick={async () =>
-      (pathElements = await updatePathElementsFromUserLocationTo("downloads"))}
+      (pathElements = await updatePathElementsFromUserLocationTo("Downloads"))}
     meaning="neutral"
     extraCSS="py-1"
   >
@@ -63,7 +63,7 @@
   </Button>
   <Button
     onClick={async () =>
-      (pathElements = await updatePathElementsFromUserLocationTo("documents"))}
+      (pathElements = await updatePathElementsFromUserLocationTo("Documents"))}
     meaning="neutral"
     extraCSS="py-1"
   >

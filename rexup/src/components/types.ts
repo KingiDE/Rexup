@@ -12,7 +12,7 @@ export type CurrentOverviewTab = "entries" | "logs" | "configuration";
 export type EditBackupEntryTab = "overview" | "filters" | "destructive";
 
 // The values that return the path to the user's specific location on his file-system
-export type UserLocation = "desktop" | "downloads" | "documents" | "home";
+export type UserLocation = "Desktop" | "Downloads" | "Documents" | "Home";
 
 // The structure a loaded backup has
 export type LocalStateBackup = {
