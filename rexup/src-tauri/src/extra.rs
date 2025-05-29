@@ -3,7 +3,7 @@
 use std::{ fs::{ self, OpenOptions }, time::{ UNIX_EPOCH, SystemTime }, path::{ Path, PathBuf } };
 use crate::FileOrDirectory;
 
-/// Checks if the user can write to the given path by creating uniquely named file at that path and deleting it right after.
+/// Checks if the user can write to the given `path` by creating uniquely named file at that `path` and deleting it right after.
 ///
 /// ## Returns:
 /// If the file can be created and deleted the function returns `true`, otherwise it returns `false`.
@@ -46,10 +46,10 @@ fn get_parent_directory() -> PathBuf {
 	PathBuf::from(format!("/home/{}/.rexup", whoami::username()))
 }
 
-/// Checks the variant of the "thing" at the given path.
+/// Checks the variant of the "thing" at the given `path`.
 ///
 /// ## Returns:
-/// If the path is a file, the function returns `Some(FileOrDirectory::File)`, if the path is a directory, the function returns `Some(FileOrDirectory::Directory)`.
+/// If the `path` is a file, the function returns `Some(FileOrDirectory::File)`, if the `path` is a directory, the function returns `Some(FileOrDirectory::Directory)`.
 /// Otherwise the function returns `None`.
 #[tauri::command]
 pub fn get_variant_of_path(path: String) -> Option<FileOrDirectory> {

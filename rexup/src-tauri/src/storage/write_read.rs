@@ -1,10 +1,10 @@
 use core::str;
 use std::{ fs, path::{ Path, PathBuf } };
 
-/// Tries to read from a file a the given path and returns the file contents as a `String`.
+/// Tries to read from a file a the given `path` and returns the file contents as a `String`.
 ///
 /// ## Returns:
-/// This function returns the contents of a file at the given path if it can be read. If the file cannot be read or the conversion to `String` fails, the
+/// This function returns the contents of a file at the given `path` if it can be read. If the file cannot be read or the conversion to a `String` fails, the
 /// function will return `None`.
 pub fn safely_read_file(path: &Path) -> Option<String> {
 	if let Ok(file_data) = fs::read(&path) {
@@ -16,7 +16,7 @@ pub fn safely_read_file(path: &Path) -> Option<String> {
 	None
 }
 
-/// Tries to write the given data to a file at the given path.
+/// Tries to write the given data to a file at the given `path`.
 ///
 /// ## Note:
 /// The function will try to create the file and its parent-directories if they don't exist already.
@@ -45,7 +45,7 @@ pub enum FileLocation {
 	Backups,
 }
 
-/// Converts the `FileLocation` to an usable path on different operating systems.
+/// Converts the `file_location` to an usable path on different operating systems.
 pub fn convert_location_to_path(file_location: FileLocation) -> PathBuf {
 	match file_location {
 		FileLocation::Config => get_config_file_location(),

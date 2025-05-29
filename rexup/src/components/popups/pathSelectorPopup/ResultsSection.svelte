@@ -28,7 +28,7 @@
 <div>
   <div>Directories in this directory:</div>
   <div
-    class={`mt-1 h-[200px] grid gap-1 overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
+    class={`mt-1 grid gap-1 h-[300px] overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
   >
     {#if shownResults.length === 0}
       <div class="text-center self-center">

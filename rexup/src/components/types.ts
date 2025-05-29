@@ -14,6 +14,13 @@ export type EditBackupEntryTab = "overview" | "filters" | "destructive";
 // The values that return the path to the user's specific location on his file-system
 export type UserLocation = "Desktop" | "Downloads" | "Documents" | "Home";
 
+//
+// Types, the backend also has:
+//
+
+// A utility type; the values start with a captial letter because they are returned by a Rust enum
+export type FileOrDirectory = "File" | "Directory";
+
 // The structure a loaded backup has
 export type LocalStateBackup = {
 	id: string;
@@ -35,11 +42,13 @@ export type LocalStateBackupEntry = {
 	is_active: boolean;
 	// Used for visual indication as both directories and files can contain a "."
 	variant: FileOrDirectory | null;
-	filters: {
-		max_size_in_mb: number | null;
-		included_file_extensions: Array<string> | null;
-		included_file_names: Array<string> | null;
-	};
+	filters: LocalStateBackupFilters;
+};
+
+type LocalStateBackupFilters = {
+	max_size_in_mb: number | null;
+	included_file_extensions: Array<string> | null;
+	included_file_names: Array<string> | null;
 };
 
 // The structure a backup-execution log has, that is shown in its specific tab inside the overview
@@ -79,9 +88,4 @@ export type PathElement = {
 };
 
 // The results that show up in the PathSelector
-export type DirecoryResult = PathElement & { is_hidden: boolean };
-
-// A utility type; the values start with a captial letter because they are returned by a Rust enum
-export type FileOrDirectory = "File" | "Directory";
-
-//
+export type DirectoryContent = PathElement & { is_hidden: boolean };

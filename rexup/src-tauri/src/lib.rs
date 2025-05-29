@@ -22,9 +22,8 @@ pub fn run() {
 				path_selector::list_contents_of,
 				path_selector::get_user_path_to,
 				path_selector::get_remaining_drives,
-				// TODO: Make useable; Backup execution
-				// backup_execution::create_backup_parent_directory,
-				// backup_execution::copy_backup_entry,
+				// Backup execution
+				backup_execution::execute_backup,
 				// Extra functionality
 				extra::has_write_access_to,
 				extra::delete_all_data,
@@ -36,10 +35,67 @@ pub fn run() {
 }
 
 /// A global enum that is used when some "thing" is a file or a directory.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
 pub enum FileOrDirectory {
 	// The "thing" in a directory is a file.
 	File,
 	// The "thing" in a directory is another directory.
 	Directory,
+}
+
+/// Expected shape from the frontend when saving a backup.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Backup {
+	id: String,
+	name: String,
+	entries: Vec<BackupEntry>,
+	is_zipped: bool,
+	location: Option<String>,
+	executions: Vec<String>,
+	logs_of_last_execution: Vec<BackupExecutionLog>,
+}
+
+/// The shape of an `BackupEntry` that is stored in a `Backup`.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BackupEntry {
+	id: String,
+	name: String,
+	origin: String,
+	target: String,
+	is_active: bool,
+	variant: Option<FileOrDirectory>,
+	filters: BackupEntryFilters,
+}
+
+/// The shape of the filters every `BackupEntry` has.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BackupEntryFilters {
+	max_size_in_mb: Option<u32>,
+	included_file_extensions: Option<Vec<String>>,
+	included_file_names: Option<Vec<String>>,
+}
+
+/// The shape of an `BackupExecutionLog` that is stored in a `Backup`.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum BackupExecutionLog {
+	Information(String),
+	ErrorCopying(String),
+	SuccessCopying {
+		variant: FileOrDirectory,
+		from_path: String,
+		to_path: String,
+	},
+	IgnoreCopying {
+		from_path: String,
+		to_path: String,
+		reason: IgnoreFileReason,
+	},
+}
+
+/// The possible reasons why a file is ignored when it's copied.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum IgnoreFileReason {
+	WrongName,
+	WrongExtension,
+	TooLargeSize,
 }

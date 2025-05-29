@@ -4,7 +4,8 @@ mod write_read;
 
 use serde::{ Deserialize, Serialize };
 use write_read::{ safely_read_file, safely_write_file, convert_location_to_path, FileLocation };
-use crate::FileOrDirectory;
+
+use crate::Backup;
 
 /// Tries to return the content of the user's config-file as a `String`.
 ///
@@ -36,61 +37,6 @@ pub fn read_backup_file() -> String {
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
 	show_backup_execution_history: bool,
-}
-
-/// Expected shape from the frontend when saving a backup.
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Backup {
-	id: String,
-	name: String,
-	entries: Vec<BackupEntry>,
-	is_zipped: bool,
-	location: Option<String>,
-	executions: Vec<String>,
-	logs_of_last_execution: Vec<BackupExecutionLog>,
-}
-
-/// The shape of an `BackupExecutionLog` that is stored in a backup.
-#[derive(Debug, Serialize, Deserialize)]
-pub enum BackupExecutionLog {
-	Information(String),
-	SuccessCopying {
-		variant: FileOrDirectory,
-		from_path: String,
-		to_path: String,
-	},
-	ErrorCopying {
-		variant: FileOrDirectory,
-		from_path: String,
-		to_path: String,
-		reason: String,
-	},
-	IgnoreCopying {
-		variant: FileOrDirectory,
-		from_path: String,
-		to_path: String,
-		reason: String,
-	},
-}
-
-/// The shape of an `BackupEntry` that is stored in a backup.
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupEntry {
-	id: String,
-	name: String,
-	variant: Option<FileOrDirectory>,
-	origin: Option<String>,
-	target: Option<String>,
-	is_active: bool,
-	filters: BackupEntryFilters,
-}
-
-/// The shape of the filters every `BackupEntry` has.
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupEntryFilters {
-	pub max_size_in_mb: Option<u32>,
-	pub included_file_extensions: Option<Vec<String>>,
-	pub included_file_names: Option<Vec<String>>,
 }
 
 /// Tries to write the given value to the user's config-file.

@@ -19,7 +19,9 @@
   });
 </script>
 
-<div class="row-start-1 row-end-3 col-start-1 grid gap-1 self-start">
+<div
+  class="row-start-1 row-end-3 col-start-1 grid gap-1 content-start self-start h-[300px] overflow-y-scroll"
+>
   <div>Bookmarks:</div>
   <Button
     onClick={async () =>
