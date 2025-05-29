@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import type {
-	DirecoryResult,
+	DirectoryContent,
 	FileOrDirectory,
 	PathElement,
 	UserLocation,
@@ -74,15 +74,11 @@ export async function updatePathElementsFromUserLocationTo(
 	});
 }
 
-export async function read_contents_of_path(
-	pathElements: Array<PathElement>,
-	showFiles?: boolean,
-) {
+export async function read_contents_of_path(pathElements: Array<PathElement>) {
 	// The "as" operator actually claims something wrong because in reality the variant field is "File" or "Directory" and will be changed later
 	const blankResults = (await invoke("list_contents_of", {
 		path: getPathString(pathElements),
-		showFiles,
-	})) as Array<DirecoryResult>;
+	})) as Array<DirectoryContent>;
 
 	// Sort hidden results to the end
 	return blankResults.sort((a, b) => {

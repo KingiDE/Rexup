@@ -44,7 +44,7 @@
     <Input
       labelExtraCSS="grow"
       placeholder="Unset"
-      getter={() => (entry.origin === null ? "" : entry.origin)}
+      getter={() => entry.origin}
       setter={() => {}}
       disabled
     />
@@ -59,7 +59,7 @@
     </Button>
     <Button
       meaning="neutral"
-      onClick={() => (entry.origin = null)}
+      onClick={() => (entry.origin = "")}
       extraCSS="py-1 w-20"
       disabled={entry.origin === null}
     >
@@ -75,14 +75,14 @@
     <Input
       labelExtraCSS="grow"
       placeholder="Unset"
-      getter={() => (entry.target === null ? "" : entry.target)}
+      getter={() => entry.target}
       setter={(newValue) => {
         entry.target = newValue;
       }}
     />
     <Button
       meaning="neutral"
-      onClick={() => (entry.target = null)}
+      onClick={() => (entry.target = "")}
       extraCSS="py-1 w-20"
       disabled={entry.target === null}
     >

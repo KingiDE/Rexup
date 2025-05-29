@@ -11,9 +11,6 @@ export type CurrentOverviewTab = "entries" | "logs" | "configuration";
 
 export type EditBackupEntryTab = "overview" | "filters" | "destructive";
 
-// The values that return the path to the user's specific location on his file-system
-export type UserLocation = "Desktop" | "Downloads" | "Documents" | "Home";
-
 //
 // Types, the backend also has:
 //
@@ -37,14 +34,15 @@ export type LocalStateBackup = {
 export type LocalStateBackupEntry = {
 	id: string;
 	name: string;
-	origin: string | null;
-	target: string | null;
+	origin: string;
+	target: string;
 	is_active: boolean;
 	// Used for visual indication as both directories and files can contain a "."
 	variant: FileOrDirectory | null;
 	filters: LocalStateBackupFilters;
 };
 
+// The filters each backup-entry has
 type LocalStateBackupFilters = {
 	max_size_in_mb: number | null;
 	included_file_extensions: Array<string> | null;
@@ -53,31 +51,26 @@ type LocalStateBackupFilters = {
 
 // The structure a backup-execution log has, that is shown in its specific tab inside the overview
 export type BackupExecutionLog =
+	| { Finished: string }
+	| { Information: string }
+	| { ErrorCopying: string }
 	| {
-			variant: "information" | "finished";
-			message: string;
+			SuccessCopying: {
+				variant: FileOrDirectory;
+				from_path: string;
+				to_path: string;
+			};
 	  }
-	| ({
-			from_path: string;
-			to_path: string;
-			entryName: string;
-	  } & (
-			| {
-					variant: "success_copying";
-					// Here, the "Directory" or "File" is stored in the field "type" because the field "variant" is already used
-					type: FileOrDirectory;
-			  }
-			| {
-					variant: "error_copying";
-					reason: string;
-			  }
-			| {
-					variant: "ignore_copying";
-					// Here, the "Directory" or "File" is stored in the field "type" because the field "variant" is already used
-					type: FileOrDirectory;
-					reason: string;
-			  }
-	  ));
+	| {
+			IgnoreCopying: {
+				from_path: string;
+				to_path: string;
+				reason: IgnoreFileReason;
+			};
+	  };
+
+// The reasons a file is ignored and not copied
+export type IgnoreFileReason = "WrongName" | "WrongExtension" | "TooLargeSize";
 
 // The blocks at the top bar in the PathSelector that indicate directories
 export type PathElement = {
@@ -89,3 +82,6 @@ export type PathElement = {
 
 // The results that show up in the PathSelector
 export type DirectoryContent = PathElement & { is_hidden: boolean };
+
+// The values that return the path to the user's specific location on his file-system
+export type UserLocation = "Desktop" | "Downloads" | "Documents" | "Home";

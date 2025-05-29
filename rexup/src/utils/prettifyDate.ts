@@ -1,6 +1,10 @@
 // Takes in miliseconds and returns the date created from it as a pretty string
 export function prettifyDate(miliseconds: string) {
-	const date = new Date(miliseconds);
+	const milisecondsAsNumber = Number(miliseconds);
+
+	if(Number.isNaN(milisecondsAsNumber)) return;
+
+	const date = new Date(milisecondsAsNumber);
 
 	let weekday: string;
 	switch (date.getDay()) {

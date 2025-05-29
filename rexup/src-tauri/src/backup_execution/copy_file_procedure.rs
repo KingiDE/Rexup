@@ -1,4 +1,4 @@
-use std::{ ffi::OsStr, fs::{ self, File }, io::Write, path::Path };
+use std::{ fs::{ self, File }, io::Write, path::Path };
 
 use zip::{ write::SimpleFileOptions, ZipWriter };
 
@@ -19,28 +19,13 @@ pub fn copy_file_procedure(
 	origin: &Path,
 	relative_target: &Path,
 	parent_path: &Path,
+	file_name: &str,
 	zip_writer: &mut Option<ZipWriter<File>>,
-	fiters: &BackupEntryFilters
+	filters: &BackupEntryFilters
 ) -> Option<BackupExecutionLog> {
-	// Get the file_name of the file that should be copied
-	let file_name = match origin.file_name() {
-		Some(name) => { name }
-		None => {
-			return Some(
-				BackupExecutionLog::ErrorCopying(
-					format!(
-						"Couldn't get the origin's file_name of '{:?}'. Therefore, copying this file is not possible.",
-						origin
-					)
-				)
-			);
-		}
-	};
-
 	// Check if the filters can be validated and return the correct reason if not
-	if let Some(ignore_reason) = do_filters_apply(origin, file_name, fiters) {
+	if let Some(ignore_reason) = do_filters_apply(origin, file_name, filters) {
 		return Some(BackupExecutionLog::IgnoreCopying {
-			// TODO: are these lossy conversions ok?
 			from_path: origin.to_string_lossy().to_string(),
 			to_path: relative_target.join(file_name).to_string_lossy().to_string(),
 			reason: ignore_reason,
@@ -138,26 +123,20 @@ pub fn copy_file_procedure(
 		}
 	}
 
-	return None;
+	None
 }
 
 fn do_filters_apply(
 	file_path: &Path,
-	file_name: &OsStr,
+	file_name: &str,
 	filters: &BackupEntryFilters
 ) -> Option<IgnoreFileReason> {
-	// If the `included_file_names` are `Some(...)`, the `file_name` of the actual copied file can be converted to a `String`
-	// and then the `Vec` doesn't contain this converted `file_name`, the function returns `Some(IgnoreFileReason::WrongName)`.
 	if let Some(file_names) = &filters.included_file_names {
-		if let Some(file_name) = file_name.to_str() {
-			if !file_names.contains(&file_name.to_string()) {
-				Some(IgnoreFileReason::WrongName);
-			}
+		if !file_names.contains(&file_name.to_string()) {
+			Some(IgnoreFileReason::WrongName);
 		}
 	}
 
-	// If the `included_file_extensions` are `Some(...)`, the `file_name` of the actual copied file can be converted to a `String`,
-	// the extension can be obtained and then the `Vec` doesn't contain this converted `file_extension`, the function returns `Some(IgnoreFileReason::WrongExtension)`.
 	if let Some(file_extensions) = &filters.included_file_extensions {
 		if let Some(file_name) = file_path.extension() {
 			if let Some(file_name) = file_name.to_str() {

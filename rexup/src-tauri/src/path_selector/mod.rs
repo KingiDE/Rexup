@@ -35,19 +35,20 @@ pub fn list_contents_of(path: String) -> Vec<DirectoryContent> {
 				let path = readable_entry.path();
 
 				if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
-					let variant = if path.is_file() {
-						FileOrDirectory::File
-					} else {
-						FileOrDirectory::Directory
-					};
+					if let Some(converted_path) = path.to_str() {
+						let variant = if path.is_file() {
+							FileOrDirectory::File
+						} else {
+							FileOrDirectory::Directory
+						};
 
-					directories.push(DirectoryContent {
-						// TODO: Is the lossy conversion ok?
-						id: path.to_string_lossy().to_string(),
-						name: name.to_string(),
-						is_hidden: is_thing_at_path_hidden(&path),
-						variant,
-					});
+						directories.push(DirectoryContent {
+							id: converted_path.to_string(),
+							name: name.to_string(),
+							is_hidden: is_thing_at_path_hidden(&path),
+							variant,
+						});
+					}
 				}
 			}
 		}
@@ -165,7 +166,7 @@ fn get_os_specific_path(location: UserLocation) -> Vec<PathElement> {
 		},
 		PathElement {
 			id: format!("/home/{}/", &username),
-			name: &username.clone(),
+			name: username.clone(),
 			variant: FileOrDirectory::Directory,
 		}
 	];
@@ -203,7 +204,6 @@ fn get_os_specific_path(location: UserLocation) -> Vec<PathElement> {
 ///
 /// ## Returns:
 /// The function returns a `Vec<String>` containing the names of all existing drives on the user's OS.
-// TODO: Make drives work on different OSes
 #[tauri::command]
 pub fn get_remaining_drives() -> Vec<String> {
 	get_os_specific_drives()

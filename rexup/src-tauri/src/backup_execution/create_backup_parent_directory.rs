@@ -1,4 +1,4 @@
-use std::fs;
+use std::{ fs, path::PathBuf };
 
 /// Creates either a "normal" directory or a zip-file with the given `name` at the given `path`.
 /// This depends on the value of is_zipped`, which if it's true makes the function create a zip-file.
@@ -13,20 +13,19 @@ pub fn create_backup_parent_directory(
 	name: String,
 	location: Option<String>,
 	is_zipped: bool
-) -> Option<String> {
+) -> Option<PathBuf> {
 	let mut used_directory_path = match location {
-		Some(path) => { path }
+		Some(path) => { PathBuf::from(path) }
 		// Use the user's desktop-path if there's no path set on the frontend
-		// TODO: use some helper function from the "extra"-module
-		None => { "C:/Users/Kingi/Desktop/".to_string() }
+		None => { get_os_specific_desktop_path() }
 	};
 
 	// Add the actual name to the path
-	used_directory_path = format!("{}Backup {}", used_directory_path, name);
+	used_directory_path.push(format!("Backup {}", name));
 
 	if is_zipped {
 		// Add the ".zip"-extension for zip-files
-		used_directory_path = used_directory_path + ".zip";
+		used_directory_path.set_extension(".zip");
 
 		// If the path with .zip already exists, return None
 		if std::path::Path::new(&used_directory_path).exists() {
@@ -34,7 +33,7 @@ pub fn create_backup_parent_directory(
 		}
 
 		match fs::File::create(&used_directory_path) {
-			Ok(_x) => { Some(used_directory_path.to_string()) }
+			Ok(_x) => { Some(used_directory_path) }
 			Err(_err) => { None }
 		}
 	} else {
@@ -44,8 +43,20 @@ pub fn create_backup_parent_directory(
 		}
 
 		match fs::create_dir(&used_directory_path) {
-			Ok(_x) => { Some(used_directory_path.to_string()) }
+			Ok(_x) => { Some(used_directory_path) }
 			Err(_err) => { None }
 		}
 	}
+}
+
+/// Helper function that returns the user's desktop-directory on Windows.
+#[cfg(target_family = "windows")]
+fn get_os_specific_desktop_path() -> PathBuf {
+	PathBuf::from(&format!("C:/Users/{}/Desktop/", whoami::username()))
+}
+
+/// Helper function that returns the user's desktop-directory on Linux.
+#[cfg(target_family = "unix")]
+fn get_os_specific_desktop_path() -> Path {
+	format!("/home/{}/Desktop/", whoami::username())
 }

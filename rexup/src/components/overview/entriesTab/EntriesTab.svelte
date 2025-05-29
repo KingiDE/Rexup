@@ -25,8 +25,8 @@
     currentBackup.entries.push({
       id: Date.now().toString(),
       name,
-      origin: null,
-      target: null,
+      origin: "",
+      target: "",
       variant: null,
       is_active: true,
       filters: {

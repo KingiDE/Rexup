@@ -15,9 +15,9 @@ pub fn run() {
 			tauri::generate_handler![
 				// Read and write the config- and backups-files
 				storage::read_config_file,
-				storage::read_backup_file,
+				storage::read_backups_file,
 				storage::write_config_file,
-				storage::write_backup_file,
+				storage::write_backups_file,
 				// Path-Selector
 				path_selector::list_contents_of,
 				path_selector::get_user_path_to,
@@ -78,6 +78,7 @@ pub struct BackupEntryFilters {
 /// The shape of an `BackupExecutionLog` that is stored in a `Backup`.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum BackupExecutionLog {
+	Finished(String),
 	Information(String),
 	ErrorCopying(String),
 	SuccessCopying {

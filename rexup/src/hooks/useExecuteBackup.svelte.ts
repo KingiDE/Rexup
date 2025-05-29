@@ -24,14 +24,19 @@ export async function executeBackup(currentBackup: LocalStateBackup | null) {
 	// Reset last execution logs
 	currentBackup.logs_of_last_execution = [];
 
-	// Call the backup-execution on the backend
-	await invoke("execute_backup", currentBackup);
+	currentBackup.logs_of_last_execution.push({
+		Information: `Started the backup-execution of ${currentBackup.name} successfully.`,
+	});
+
+	// Call the backup-execution on the backend.
+	await invoke("execute_backup", {
+		backup: currentBackup,
+	});
 
 	// When execution is successfully finished:
 	currentBackup.executions.push(Date.now().toString());
 	currentBackup.logs_of_last_execution.push({
-		variant: "finished",
-		message: "Finished the backup-execution successfully.",
+		Finished: `Finished the backup-execution of ${currentBackup.name} successfully.`,
 	});
 	isBackupExecuting.value = false;
 }

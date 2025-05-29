@@ -2,9 +2,14 @@
   import { invoke } from "@tauri-apps/api/core";
   import { onMount } from "svelte";
   import Sidebar from "./sidebar/Sidebar.svelte";
-  import type { CurrentPopup, LocalStateBackup } from "./types";
+  import type {
+    BackupExecutionLog,
+    CurrentPopup,
+    LocalStateBackup,
+  } from "./types";
   import Overview from "./overview/Overview.svelte";
   import { validateBackupFile } from "../utils/validateBackupFile";
+  import { listen } from "@tauri-apps/api/event";
 
   let backups = $state<Array<LocalStateBackup> | null>(null);
   let currentBackup = $state<LocalStateBackup | null>(null);
@@ -23,14 +28,29 @@
     }
   }
 
+  // Is called when listening to events from the backend while executing the backup.
+  listen<Array<BackupExecutionLog>>("execute_backup", (event) => {
+    if (currentBackup === null) return;
+
+    currentBackup.logs_of_last_execution = [
+      ...currentBackup.logs_of_last_execution,
+      ...event.payload,
+    ];
+  });
+
   onMount(async () => {
-    const readData = (await invoke("read_backup_file")) as string;
+    const readData = (await invoke("read_backups_file")) as string;
     backups = validateBackupFile(readData);
+    // backups = JSON.parse(readData);
   });
 
   $effect(() => {
     async function doAsyncThing() {
-      if (backups !== null) invoke("write_backup_file", { value: backups });
+      if (backups !== null) {
+        invoke("write_backups_file", {
+          value: backups,
+        });
+      }
     }
     doAsyncThing();
   });

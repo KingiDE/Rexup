@@ -3,7 +3,7 @@
     pushDirectoryToPathElements,
     replaceLastPathElement,
   } from "../../../hooks/usePathSelectorPopup";
-  import type { DirecoryResult, PathElement } from "../../types";
+  import type { DirectoryContent, PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
 
@@ -13,7 +13,7 @@
     showFiles,
   }: {
     pathElements: Array<PathElement>;
-    directoryResults: Array<DirecoryResult>;
+    directoryResults: Array<DirectoryContent>;
     showFiles?: boolean;
   } = $props();
 

@@ -15,7 +15,7 @@
 
   // When the user clicks "Select path", this function is passed to the PathSelectorPopup and will be called with the new location
   function setCurrentBackupPath(path: string) {
-    currentBackup.location = path;
+    currentBackup.location = path === "" ? null : path;
     popup = null;
   }
 

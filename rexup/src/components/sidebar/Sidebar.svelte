@@ -34,7 +34,7 @@
       name: name,
       entries: [],
       is_zipped: false,
-      location: null,
+      location: "",
       executions: [],
       logs_of_last_execution: [],
     });

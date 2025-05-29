@@ -1,6 +1,10 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import type { CurrentPopup, DirecoryResult, PathElement } from "../../types";
+  import type {
+    CurrentPopup,
+    DirectoryContent,
+    PathElement,
+  } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
   import { onMount } from "svelte";
@@ -34,7 +38,7 @@
   $inspect(pathElements);
 
   // Holds the results of files and direcotires in the current path
-  let directoryResults = $state<Array<DirecoryResult>>([]);
+  let directoryResults = $state<Array<DirectoryContent>>([]);
 
   // When the user clicks "Select path", this function combines all path elements and call the function passed through props with it
   function selectPath() {
@@ -55,7 +59,7 @@
           ? false
           : true;
       });
-      directoryResults = await read_contents_of_path(pathToSearch, showFiles);
+      directoryResults = await read_contents_of_path(pathToSearch);
     }
     doAsyncThing();
   });

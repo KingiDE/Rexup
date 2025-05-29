@@ -9,7 +9,7 @@ use std::{ fs, path::{ Path, PathBuf } };
 pub fn safely_read_file(path: &Path) -> Option<String> {
 	if let Ok(file_data) = fs::read(&path) {
 		if let Ok(converted_bytes) = str::from_utf8(&file_data) {
-			Some(converted_bytes.to_owned());
+			return Some(converted_bytes.to_owned());
 		}
 	}
 

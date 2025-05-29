@@ -26,7 +26,7 @@ pub fn read_config_file() -> String {
 /// Returns the content of the user's backups-file as a `String`.
 /// If the `safely_read_file`-function returns `None`, this function returns an empty JSON-array like this: `[]`.
 #[tauri::command]
-pub fn read_backup_file() -> String {
+pub fn read_backups_file() -> String {
 	match safely_read_file(&convert_location_to_path(FileLocation::Backups)) {
 		Some(read_value) => read_value,
 		None => "[]".to_owned(),
@@ -55,7 +55,7 @@ pub fn write_config_file(value: Config) {
 /// ## Returns:
 /// Always returns nothing, even if the conversion to JSON fails or the `safely_write_file`-function returns false.
 #[tauri::command]
-pub fn write_backup_file(value: Vec<Backup>) {
+pub fn write_backups_file(value: Vec<Backup>) {
 	if let Ok(data) = serde_json::to_string(&value) {
 		safely_write_file(&convert_location_to_path(FileLocation::Backups), data);
 	}

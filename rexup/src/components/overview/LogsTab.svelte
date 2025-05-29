@@ -20,7 +20,9 @@
       These logs keep track of when this backup was executed the last times.
     </div>
     {#if currentBackup.executions.length > 0}
-      <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">
+      <ol
+        class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px] max-h-[200px] overflow-y-scroll"
+      >
         {#each currentBackup.executions as executionTime}
           <li>&bull; {prettifyDate(executionTime)}</li>
         {/each}

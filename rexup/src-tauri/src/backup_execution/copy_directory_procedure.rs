@@ -15,34 +15,20 @@ use super::copy_file_procedure;
 ///
 /// ## Returns:
 /// This function returns an `Vec<BackupExecutionLog>` containing information about the backup-execution.
-/// If the directory at the given `origin` cannot be read or the given `origin`'s `file_name` is `None`, the function returns an `Vec` with one `BackupExecutionLog`
+/// If the directory at the given `origin` cannot be read or the given `origin`'s `file_or_dir_name` is `None`, the function returns an `Vec` with one `BackupExecutionLog`
 /// that describes this occurence.
 pub fn copy_directory_procedure(
 	origin: &Path,
 	relative_target: &Path,
 	parent_path: &Path,
+	file_or_dir_name: &str,
 	mut zip_writer: &mut Option<ZipWriter<File>>,
-	fiters: &BackupEntryFilters
+	filters: &BackupEntryFilters
 ) -> Vec<BackupExecutionLog> {
 	match fs::read_dir(origin) {
 		Ok(readable_dir) => {
-			// Push the name of the current directory to the relative_target so the nested structure is kept in subsequent calls
-			let origin_file_name = match origin.file_name() {
-				Some(file_name) => file_name,
-				None => {
-					return vec![
-						BackupExecutionLog::ErrorCopying(
-							format!(
-								"Couldn't get the origin's file_name of '{:?}'. Therefore, copying this directory is not possible.",
-								origin
-							)
-						)
-					];
-				}
-			};
-
 			let new_path_segment_in_relative_target =
-				PathBuf::from(relative_target).join(origin_file_name);
+				PathBuf::from(relative_target).join(file_or_dir_name);
 
 			let mut logs: Vec<BackupExecutionLog> = vec![];
 
@@ -56,8 +42,9 @@ pub fn copy_directory_procedure(
 								&entry_path,
 								&new_path_segment_in_relative_target,
 								parent_path,
+								file_or_dir_name,
 								&mut zip_writer,
-								&fiters
+								&filters
 							);
 
 							if let Some(file_logs) = file_logs {
@@ -68,8 +55,9 @@ pub fn copy_directory_procedure(
 								&entry_path,
 								&new_path_segment_in_relative_target,
 								parent_path,
+								file_or_dir_name,
 								&mut zip_writer,
-								&fiters
+								&filters
 							);
 
 							logs.append(&mut dir_logs);
