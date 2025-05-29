@@ -17,7 +17,7 @@ To build this project from source, follow the exact same steps as before and exe
 It might be useful to install extensions for the tools that are used in this project. Here's a short list:
 - Tauri
 - Astro
-- Svelte
+- Svelte for VSCode
 - Biome (Linter and Code-Formatter)
 - TailwindCSS Intellisense
 
@@ -31,7 +31,8 @@ There are three important scripts in the `package.json` file: `tsc-check` checks
 > Note: Currently only Windows and Linux are supported operating systems. Although this will likely change in the future, you can already adjust the code to your likings and build it to work on other devices. 
 
 **On Windows:**
-Simply download either the `rexup_1.0.0_x64_en-US.msi` or the `rexup_1.0.0_x64-setup.exe` file (of course with their respective version names) and follow the installation process after clicking it. 
+Simply download either the `rexup_2.0.0_x64_en-US.msi` or the `rexup_2.0.0_x64-setup.exe` file and follow the installation process after clicking it. <br/>
+On the other hand, you can download the `rexup_2.0.0.exe` which is a standalone executable that runs the same program without creating its own entry inside your Windows-Startup-Menu.
 
 ## ⛏️ Workflow
 
