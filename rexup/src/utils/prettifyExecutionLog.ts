@@ -14,7 +14,10 @@ export function prettifyExecutionLog(log: BackupExecutionLog) {
 	}
 
 	if ("SuccessCopying" in log) {
-		return `&#x2705; Copied the ${log.SuccessCopying.variant.toLocaleLowerCase()} from ${log.SuccessCopying.from_path} to ${log.SuccessCopying.to_path} successfully.`;
+		return `&#x2705; Copied the ${log.SuccessCopying.variant.toLocaleLowerCase()} 
+			from <span class="px-1 bg-gray-800 rounded-md opacity-75">${log.SuccessCopying.from_path}</span> 
+			to <span class="px-1 bg-gray-800 rounded-md opacity-75">${log.SuccessCopying.to_path}</span> 
+			successfully.`;
 	}
 
 	if ("IgnoreCopying" in log) {
@@ -34,6 +37,9 @@ export function prettifyExecutionLog(log: BackupExecutionLog) {
 				break;
 			}
 		}
-		return `&#x2705; Ignored coyping the file from ${log.IgnoreCopying.from_path} to ${log.IgnoreCopying.to_path} because ${reason}.`;
+		return `&#x2705; Ignored coyping the file 
+			from <span class="px-1 bg-gray-800 rounded-md opacity-75">${log.IgnoreCopying.to_path}</span>
+			to <span class="px-1 bg-gray-800 rounded-md opacity-75">${log.IgnoreCopying.to_path}</span>
+			because ${reason}.`;
 	}
 }
