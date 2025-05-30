@@ -32,3 +32,4 @@ dist-ssr
 
 # Manually added
 bun.lockb
+bun.lock

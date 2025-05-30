@@ -71,7 +71,7 @@ fn is_thing_at_path_hidden(path: &Path) -> bool {
 /// Helper function to deterimine if the "thing" (file or directory) at the given `path` is hidden on Linux.
 #[cfg(target_family = "unix")]
 fn is_thing_at_path_hidden(path: &Path) -> bool {
-	path.starts_with('.')
+	path.starts_with(".")
 }
 
 /// Holds all variants of locations the frontend might want to know.
@@ -234,9 +234,9 @@ fn get_os_specific_drives() -> Vec<String> {
 	drives
 }
 
-#[cfg(target_family = "unix")]
 /// Returns a Vec<String> containing paths to all detected drives on Linux.
-fn list_drives() -> Vec<String> {
+#[cfg(target_family = "unix")]
+fn get_os_specific_drives() -> Vec<String> {
 	let mut drives = Vec::new();
 	let sys_block_path = Path::new("/sys/block");
 

@@ -57,6 +57,6 @@ fn get_os_specific_desktop_path() -> PathBuf {
 
 /// Helper function that returns the user's desktop-directory on Linux.
 #[cfg(target_family = "unix")]
-fn get_os_specific_desktop_path() -> Path {
-	format!("/home/{}/Desktop/", whoami::username())
+fn get_os_specific_desktop_path() -> PathBuf {
+	PathBuf::from(&format!("/home/{}/Desktop/", whoami::username()))
 }
