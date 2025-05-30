@@ -233,3 +233,26 @@ fn get_os_specific_drives() -> Vec<String> {
 
 	drives
 }
+
+#[cfg(target_family = "unix")]
+/// Returns a Vec<String> containing paths to all detected drives on Linux.
+fn list_drives() -> Vec<String> {
+	let mut drives = Vec::new();
+	let sys_block_path = Path::new("/sys/block");
+
+	if let Ok(entries) = fs::read_dir(sys_block_path) {
+		for entry in entries.flatten() {
+			if let Some(dev_name) = entry.file_name().to_str() {
+				// Filter out loopback devices, ram devices, etc.
+				if !dev_name.starts_with("loop") && !dev_name.starts_with("ram") {
+					let dev_path = format!("/dev/{}", dev_name);
+					if Path::new(&dev_path).exists() {
+						drives.push(dev_path);
+					}
+				}
+			}
+		}
+	}
+
+	drives
+}
