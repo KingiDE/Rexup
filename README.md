@@ -44,6 +44,7 @@ First, you want to create a backup. After that, you need to add all directories 
 - [x] Add Linux support
 - [ ] Use TOML instead of JSON to store data
 - [ ] Add remote sources like a git repository and run commands in it (like `bun install`) to backup GitHub-Repos
+- [ ] Extend the functionality of filters
 - [ ] (Add MacOS support)
 
 ## ❓ Help
