@@ -11,7 +11,7 @@
   } = $props();
 </script>
 
-<h3 class="mt-2 font-poppins text-xl font-bold">Logs</h3>
+<h3 class="my-2 font-poppins text-xl font-bold">Logs</h3>
 <!-- Execution-History -->
 {#if showBackupExecutionHistory.value}
   <div class="mt-2">
@@ -37,7 +37,7 @@
   </div>
 {/if}
 <!-- Execution-Logs -->
-<div class="mt-4">
+<div class="mt-2">
   <div class="font-semibold">Execution-Logs</div>
   <div class="opacity-75 max-w-[600px]">
     The list below show details of the last backup-execution like errors while

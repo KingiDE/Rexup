@@ -16,6 +16,10 @@
     deleteBackupEntry: (backupToDelete: LocalStateBackupEntry) => void;
   } = $props();
 
+  // Controls if the EditBackupEntry-Popup is shown event if the global value is correct.
+  // This avoid multiple EditBackupEntry-Popups from opening at the same time and overlapping.
+  let showThisPopup = $state(false);
+
   function setEntryOriginPath(path: string) {
     entry.origin = path;
     popup = "edit_backup_entry";
@@ -27,9 +31,14 @@
 >
   <IconAndNameSection bind:entry />
   <InputSection {entry} />
-  <DisableAndEditSection bind:entry bind:popup />
+  <DisableAndEditSection bind:entry bind:popup bind:showThisPopup />
   <!-- Edit Backup-Entry Popup -->
-  <EditBackupEntryPopup bind:entry bind:popup {deleteBackupEntry} />
+  <EditBackupEntryPopup
+    bind:entry
+    bind:popup
+    bind:showThisPopup
+    {deleteBackupEntry}
+  />
   <PathSelectorPopup
     heading="Select origin location"
     bind:popup

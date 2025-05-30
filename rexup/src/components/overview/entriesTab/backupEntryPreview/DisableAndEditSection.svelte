@@ -5,9 +5,11 @@
   let {
     entry = $bindable(),
     popup = $bindable(),
+    showThisPopup = $bindable(),
   }: {
     entry: LocalStateBackupEntry;
     popup: CurrentPopup;
+    showThisPopup: boolean;
   } = $props();
 </script>
 
@@ -23,7 +25,12 @@
   </Button>
   <Button
     meaning="positive"
-    onClick={() => (popup = "edit_backup_entry")}
+    onClick={() => {
+      if (popup !== "edit_backup_entry") {
+        popup = "edit_backup_entry";
+        showThisPopup = true;
+      }
+    }}
     extraCSS="py-1 w-[100px] justify-self-end"
   >
     {#snippet text()}

@@ -15,15 +15,18 @@
   let {
     entry = $bindable(),
     popup = $bindable(),
+    showThisPopup = $bindable(),
     deleteBackupEntry,
   }: {
     entry: LocalStateBackupEntry;
     popup: CurrentPopup;
+    showThisPopup: boolean;
     deleteBackupEntry: (backupToDelete: LocalStateBackupEntry) => void;
   } = $props();
 
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
+      showThisPopup = false;
       popup = null;
     }
   });
@@ -31,14 +34,15 @@
   let tab = $state<EditBackupEntryTab>("overview");
 </script>
 
-{#if popup === "edit_backup_entry"}
+{#if popup === "edit_backup_entry" && showThisPopup}
   <div
     transition:fade={{ duration: 100 }}
-    class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
+    class={`grid w-[600px] min-h-[550px] content-start z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
   >
     <Button
       meaning="neutral"
       onClick={() => {
+        showThisPopup = false;
         popup = null;
       }}
       extraCSS="absolute top-4 right-4 "

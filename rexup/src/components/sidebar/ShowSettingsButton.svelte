@@ -10,7 +10,7 @@
 </script>
 
 <div class="mt-auto self-end">
-  <Button onClick={setPopupToSettings} meaning="neutral">
+  <Button onClick={setPopupToSettings} meaning="neutral" extraCSS="mt-4">
     {#snippet icon()}
       <Icon width={24} height={24} name="settings" extraCSS="fill-gray-50" />
     {/snippet}

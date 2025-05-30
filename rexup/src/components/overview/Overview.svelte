@@ -34,7 +34,7 @@
 </script>
 
 <div
-  class={`bg-gray-800 rounded-md p-4 grid ${currentBackup === null ? "" : "content-start"}`}
+  class={`bg-gray-800 rounded-md p-4 h-full overflow-y-scroll grid ${currentBackup === null ? "" : "content-start"}`}
 >
   {#if currentBackup === null}
     <h2 class="font-poppins text-2xl font-bold self-end text-center">
@@ -51,7 +51,7 @@
     <Button
       meaning="positive"
       onClick={() => executeBackup(currentBackup)}
-      extraCSS="mt-4 justify-self-start px-8"
+      extraCSS="mt-4 justify-self-start px-8 overflow-visible"
       disabled={isBackupExecuting.value}
     >
       {#snippet text()}

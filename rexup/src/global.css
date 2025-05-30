@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-	--font-inter: Inter;
-	--font-poppins: Poppins;
+	--font-inter: "Inter", "Noto Color Emoji", "Segoe UI Emoji";
+	--font-poppins: "Poppins", "Noto Color Emoji", "Segoe UI Emoji";
 }
 
 /* Inter font initialization */

@@ -26,7 +26,7 @@
       id: Date.now().toString(),
       name,
       origin: "",
-      target: "",
+      target: "/",
       variant: null,
       is_active: true,
       filters: {
@@ -41,7 +41,7 @@
 
   function deleteBackupEntry(backupEntry: LocalStateBackupEntry) {
     currentBackup.entries = currentBackup.entries.filter(
-      (el) => el.id !== backupEntry.id,
+      (el) => el.id !== backupEntry.id
     );
 
     popup = null;
@@ -62,7 +62,7 @@
 <Button
   onClick={setPopupToAddBackupEntry}
   meaning="neutral"
-  extraCSS={"mt-2 w-[268px]"}
+  extraCSS="mt-2 w-[268px] overflow-visible"
 >
   {#snippet text()}
     Create Backup-Entry

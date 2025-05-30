@@ -9,7 +9,11 @@
   } = $props();
 </script>
 
-<Button onClick={setPopupToAddBackup} meaning="neutral">
+<Button
+  onClick={setPopupToAddBackup}
+  meaning="neutral"
+  extraCSS="overflow-visible"
+>
   {#snippet text()}
     Create backup
   {/snippet}

@@ -57,9 +57,8 @@
   }
 </script>
 
-<nav class="bg-gray-800 rounded-md p-4 flex flex-col">
-  <h2 class="font-poppins text-2xl font-bold">Backups</h2>
-  <div class="mt-4"></div>
+<nav class="bg-gray-800 rounded-md p-4 flex flex-col h-full overflow-y-scroll">
+  <h2 class="font-poppins text-2xl font-bold mb-4">Backups</h2>
   {#if backups.length > 0}
     <div class="mb-4 grid gap-2">
       {#each backups as backup}
@@ -69,6 +68,7 @@
   {/if}
   <AddBackupButton {setPopupToAddBackup} />
   <ShowSettingsButton {setPopupToSettings} />
+  <!-- Popups -->
+  <AddBackupPopup bind:popup {addBackup} />
+  <SettingsPopup bind:popup {deleteAllData} />
 </nav>
-<AddBackupPopup bind:popup {addBackup} />
-<SettingsPopup bind:popup {deleteAllData} />
