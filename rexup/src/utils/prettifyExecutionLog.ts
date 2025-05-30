@@ -37,7 +37,7 @@ export function prettifyExecutionLog(log: BackupExecutionLog) {
         break;
       }
     }
-    return `&#x2705; Ignored coyping the file 
+    return `&#x1F6AB; Ignored coyping the file 
 			from <span class="px-1 bg-gray-800 rounded-md opacity-75">${log.IgnoreCopying.to_path}</span>
 			to <span class="px-1 bg-gray-800 rounded-md opacity-75">${log.IgnoreCopying.to_path}</span>
 			because ${reason}.`;
