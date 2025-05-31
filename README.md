@@ -28,11 +28,23 @@ There are three important scripts in the `package.json` file: `tsc-check` checks
 
 ## 📜 Installation
 
-> Note: Currently only Windows and Linux are supported operating systems. Although this will likely change in the future, you can already adjust the code to your likings and build it to work on other devices. 
+> Note: Currently only Windows and Linux are supported operating systems. Although this will most likely change in the future, you can already adjust the code to your likings and build it to work on other devices. 
 
-**On Windows:**
-Simply download either the `rexup_2.0.0_x64_en-US.msi` or the `rexup_2.0.0_x64-setup.exe` file and follow the installation process after clicking it. <br/>
-On the other hand, you can download the `rexup_2.0.0.exe` which is a standalone executable that runs the same program without creating its own entry inside your Windows-Startup-Menu.
+### Windows
+Simply download either the `rexup_2.0.0_x64_en-US.msi` or the `rexup_2.0.0_x64-setup.exe` file and follow the installation process after clicking it. 
+If you instead prefer a standalone executable, download `rexup_2.0.0.exe` which runs the same program without creating its own entry inside the Windows-Startup-Menu.
+
+### Linux
+Because there are so many different distributions of Linux, the best way to find out which file you need is to search for the required file-format on the internet. The following section can give you an vague idea but might not fit all the time. The same goes for the installation-process that varies from distribution to distribution.
+
+**AppImage:** <br/>
+`AppImage`s should work on every distribution. The most notably difference is that theyare not installed and just "double-clicked". Therefore, they don't create a startup-menu entry. To use the created `AppImage`, simply download the `rexup_2.0.0_amd64.AppImage` file and run it on your machine. Sometimes you have to make it executable first by modifying the file's permissions.
+
+**Debian:** <br/>
+`.deb` files work work on all distributions that are Debian-based, these include Linux Mint and Ubuntu. To install `rexup_2.0.0_amd64.deb`, right click the downloaded file and open it with "Software install" if your distribution doesn't automatically detect the correct program. After that, you probably have to click "install" a few more times and then you're set. 
+
+**RPM:** <br/>
+For distributions that use the RPM package-manager like Fedora, OpenSUSE and CentOS, use the `rexup_2.0.0_x86_64.rpm` file. Simply download it, right-click and open with "Software install". After that you're ready to go.
 
 ## ⛏️ Workflow
 
