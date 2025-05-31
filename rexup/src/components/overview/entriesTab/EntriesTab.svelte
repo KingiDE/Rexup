@@ -8,6 +8,8 @@
   import Icon from "../../ui/Icon.svelte";
   import AddBackupEntryPopup from "../../popups/AddBackupEntryPopup.svelte";
   import BackupEntryPreview from "./backupEntryPreview/BackupEntryPreview.svelte";
+  import EditBackupEntryPopup from "../../popups/editBackupEntryPopup/EditBackupEntryPopup.svelte";
+  import PathSelectorPopup from "../../popups/pathSelectorPopup/PathSelectorPopup.svelte";
 
   let {
     popup = $bindable(),
@@ -16,6 +18,19 @@
     popup: CurrentPopup;
     currentBackup: LocalStateBackup;
   } = $props();
+
+  let currentBackupEntry = $state<LocalStateBackupEntry | null>(null);
+
+  function selectThisBackupEntry(entry: LocalStateBackupEntry) {
+    currentBackupEntry = entry;
+  }
+
+  function setEntryOriginPath(path: string) {
+    if (currentBackupEntry === null) return;
+
+    currentBackupEntry.origin = path;
+    popup = "edit_backup_entry";
+  }
 
   function setPopupToAddBackupEntry() {
     popup = "add_backup_entry";
@@ -39,9 +54,9 @@
     popup = null;
   }
 
-  function deleteBackupEntry(backupEntry: LocalStateBackupEntry) {
+  function deleteBackupEntry() {
     currentBackup.entries = currentBackup.entries.filter(
-      (el) => el.id !== backupEntry.id
+      (el) => el.id !== currentBackup.id,
     );
 
     popup = null;
@@ -55,7 +70,7 @@
     <BackupEntryPreview
       bind:entry={currentBackup.entries[index]}
       bind:popup
-      {deleteBackupEntry}
+      {selectThisBackupEntry}
     />
   {/each}
 </div>
@@ -72,3 +87,16 @@
   {/snippet}
 </Button>
 <AddBackupEntryPopup bind:popup {addBackupEntry} />
+<!-- EditBackupEntryPopup with PathSelectorPopup -->
+<EditBackupEntryPopup
+  bind:entry={currentBackupEntry}
+  bind:popup
+  {deleteBackupEntry}
+/>
+<PathSelectorPopup
+  heading="Select origin location"
+  bind:popup
+  popupToShowUp="select_backup_entry_origin_location"
+  setOuterPath={setEntryOriginPath}
+  showFiles
+/>
