@@ -132,7 +132,7 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 
 		logs.push(
 			BackupExecutionLog::Information(
-				format!("Finished the execution of of the entry '{}'.", backup_entry.name)
+				format!("Finished the execution of entry '{}'.", backup_entry.name)
 			)
 		);
 

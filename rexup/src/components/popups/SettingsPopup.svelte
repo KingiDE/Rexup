@@ -58,7 +58,7 @@
         This includes your config-file, the recorded backup ececution-history
         and the backup structure but NOT the actual backups itself.
       </div>
-      <Button meaning="negative" onClick={deleteAllData} extraCSS="mt-2">
+      <Button meaning="negative" onClick={deleteAllData} extraCSS="mt-2 px-4">
         {#snippet text()}
           Delete all data
         {/snippet}

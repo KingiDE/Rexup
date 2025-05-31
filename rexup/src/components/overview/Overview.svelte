@@ -67,7 +67,7 @@
       {/snippet}
     </Button>
     <div class="mt-2 opacity-75">
-      Switch to the logs tab (if you haven't already) to see the progress of the
+      Switch to the Logs-tab (if you haven't already) to see the progress of the
       backup-execution after you clicked the button above.
     </div>
     {#if currentTab.value === "entries"}

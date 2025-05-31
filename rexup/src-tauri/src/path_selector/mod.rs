@@ -161,7 +161,7 @@ fn get_os_specific_path(location: UserLocation) -> Vec<PathElement> {
 		PathElement { id: "/".to_string(), name: "/".to_string(), variant: FileOrDirectory::Directory },
 		PathElement {
 			id: "/home/".to_string(),
-			name: "/home".to_string(),
+			name: "home".to_string(),
 			variant: FileOrDirectory::Directory,
 		},
 		PathElement {

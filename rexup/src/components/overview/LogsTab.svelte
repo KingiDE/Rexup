@@ -40,8 +40,8 @@
 <div class="mt-2">
   <div class="font-semibold">Execution-Logs</div>
   <div class="opacity-75 max-w-[600px]">
-    The list below show details of the last backup-execution like errors while
-    copying or ignore files.
+    The list below shows details of the last backup-execution like errors that
+    occured during copying files.
   </div>
   {#if currentBackup.logs_of_last_execution.length > 0}
     <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">

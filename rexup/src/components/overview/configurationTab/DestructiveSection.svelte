@@ -26,7 +26,7 @@
     <Button
       onClick={() => (hasTriedToDeleteBackup = true)}
       meaning="negative"
-      extraCSS="mt-2"
+      extraCSS="mt-2 px-4"
     >
       {#snippet text()}
         Delete this backup
@@ -40,7 +40,7 @@
         <Button
           onClick={() => deleteCurrentBackup(currentBackup)}
           meaning="negative"
-          extraCSS="mt-2"
+          extraCSS="mt-2 px-4"
         >
           {#snippet text()}
             REALLY delete?

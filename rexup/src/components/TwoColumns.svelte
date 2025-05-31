@@ -54,6 +54,13 @@
     }
     doAsyncThing();
   });
+
+  // Closes all popups when the currentBackup changes
+  $effect(() => {
+    if (currentBackup) {
+      popup = null;
+    }
+  });
 </script>
 
 {#if backups !== null}
