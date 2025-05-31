@@ -24,6 +24,11 @@
 	"bundle": {
 		"active": true,
 		"targets": "all",
-		"icon": ["icons/icon.ico", "icons/icon.png"]
+		"icon": [
+			"icons/icon.ico",
+			"icons/icon-32x32.png",
+			"icons/icon-64x64.png",
+			"icons/iconx128-128.png"
+		]
 	}
 }
