@@ -69,13 +69,10 @@ export async function updatePathElementsFromUserLocationTo(
     location,
   })) as Array<PathElement>;
 
-  console.log(path);
-
   return path;
 }
 
 export async function read_contents_of_path(pathElements: Array<PathElement>) {
-  // The "as" operator actually claims something wrong because in reality the variant field is "File" or "Directory" and will be changed later
   const blankResults = (await invoke("list_contents_of", {
     path: getPathString(pathElements),
   })) as Array<DirectoryContent>;

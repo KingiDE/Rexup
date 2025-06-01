@@ -35,7 +35,6 @@
 
   // Keeps track of the current path that is selected at the top bar
   let pathElements = $state<Array<PathElement>>([]);
-  // $inspect(pathElements);
 
   // Holds the results of files and direcotires in the current path
   let directoryResults = $state<Array<DirectoryContent>>([]);
