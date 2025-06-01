@@ -205,13 +205,16 @@ fn get_os_specific_path(location: UserLocation) -> Vec<PathElement> {
 /// ## Returns:
 /// The function returns a `Vec<String>` containing the names of all existing drives on the user's OS.
 #[tauri::command]
-pub fn get_remaining_drives() -> Vec<String> {
+pub fn get_remaining_drives() -> Vec<Vec<PathElement>> {
 	get_os_specific_drives()
 }
 
 #[cfg(target_family = "windows")]
-fn get_os_specific_drives() -> Vec<String> {
-	let mut drives = Vec::new();
+fn get_os_specific_drives() -> Vec<Vec<PathElement>> {
+	let username = whoami::username();
+
+	// Stores a list of drives found on the machine
+	let mut drives = vec![];
 
 	unsafe {
 		extern "system" {
@@ -226,7 +229,13 @@ fn get_os_specific_drives() -> Vec<String> {
 		for i in 0..26 {
 			if (drive_mask & (1 << i)) != 0 {
 				let drive_letter = (b'A' + i) as char;
-				drives.push(format!("{}:/", drive_letter));
+				drives.push(
+					vec![PathElement {
+						id: format!("{}:/", drive_letter),
+						name: format!("{}:/", drive_letter),
+						variant: FileOrDirectory::Directory,
+					}]
+				);
 			}
 		}
 	}
@@ -236,20 +245,46 @@ fn get_os_specific_drives() -> Vec<String> {
 
 /// Returns a Vec<String> containing paths to all detected drives on Linux.
 #[cfg(target_family = "unix")]
-fn get_os_specific_drives() -> Vec<String> {
+fn get_os_specific_drives() -> Vec<Vec<PathElement>> {
 	let mut drives = Vec::new();
-	let sys_block_path = Path::new("/sys/block");
 
-	if let Ok(entries) = fs::read_dir(sys_block_path) {
-		for entry in entries.flatten() {
-			if let Some(dev_name) = entry.file_name().to_str() {
-				// Filter out loopback devices, ram devices, etc.
-				if !dev_name.starts_with("loop") && !dev_name.starts_with("ram") {
-					let dev_path = format!("/dev/{}", dev_name);
-					if Path::new(&dev_path).exists() {
-						drives.push(dev_path);
+	let username = whoami::username();
+
+	if let Ok(entries) = fs::read_dir(format!("/media/{}/", &username)) {
+		for entry in entries {
+			if let Ok(working_entry) = entry {
+				// let file_name = working_entry.file_name().to_string_lossy();
+
+				let path_to_drive = vec![
+					PathElement {
+						id: "/".to_string(),
+						name: "/".to_string(),
+						variant: FileOrDirectory::Directory,
+					},
+					PathElement {
+						id: "/media/".to_string(),
+						name: "media".to_string(),
+						variant: FileOrDirectory::Directory,
+					},
+					PathElement {
+						id: format!("/media/{}/", &username),
+						name: username.clone(),
+						variant: FileOrDirectory::Directory,
+					},
+					PathElement {
+						id: format!(
+							"/media/{}/{}/",
+							&username,
+							working_entry.file_name().to_string_lossy().to_string()
+						),
+						name: working_entry.file_name().to_string_lossy().to_string(),
+						variant: FileOrDirectory::Directory,
 					}
-				}
+				];
+
+				println!("{:#?}", path_to_drive);
+
+				drives.push(path_to_drive);
 			}
 		}
 	}

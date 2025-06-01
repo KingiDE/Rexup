@@ -12,10 +12,12 @@
     pathElements: Array<PathElement>;
   } = $props();
 
-  let drives = $state([]);
+  let drives = $state<Array<Array<PathElement>>>([]);
 
   onMount(async () => {
-    drives = await invoke("get_remaining_drives");
+    drives = (await invoke("get_remaining_drives")) as Array<
+      Array<PathElement>
+    >;
   });
 </script>
 
@@ -79,13 +81,12 @@
   <!-- List drives -->
   {#each drives as drive}
     <Button
-      onClick={async () =>
-        (pathElements = [{ id: drive, name: drive, variant: "Directory" }])}
+      onClick={async () => (pathElements = drive)}
       meaning="neutral"
       extraCSS="py-1"
     >
       {#snippet text()}
-        {drive}
+        {drive.at(-1)?.name}
       {/snippet}
       {#snippet icon()}
         <Icon width={24} height={24} name="drive" extraCSS="fill-gray-50" />
