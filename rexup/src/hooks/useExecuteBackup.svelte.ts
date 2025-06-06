@@ -33,7 +33,7 @@ export async function executeBackup(currentBackup: LocalStateBackup | null) {
 		backup: currentBackup,
 	});
 
-	// When execution is successfully finished:
+	// When the execution is successfully finished:
 	currentBackup.executions.push(Date.now().toString());
 	currentBackup.logs_of_last_execution.push({
 		Finished: `Finished the backup-execution of ${currentBackup.name} successfully.`,

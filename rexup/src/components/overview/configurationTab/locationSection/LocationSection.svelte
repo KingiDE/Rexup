@@ -22,7 +22,7 @@
   // Checks whether the user has write access to this location
   let hasWriteAccess = $state(true);
 
-  // Cannot use dervied.by() because of await issues
+  // Cannot use dervied.by() because of await issues; calls the backend whenever currentBackup.location changes
   $effect(() => {
     async function doAsyncThing() {
       if (currentBackup.location === null) return;

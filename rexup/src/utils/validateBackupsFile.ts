@@ -4,7 +4,7 @@ import type {
 	LocalStateBackupEntry,
 } from "../components/types";
 
-export function validateBackupFile(readData: string) {
+export function validateBackupsFile(readData: string) {
 	try {
 		const parsed = JSON.parse(readData);
 		if (Array.isArray(parsed) && parsed.every(isLocalStateBackup)) {
@@ -83,45 +83,60 @@ function isLocalStateBackupEntry(obj: unknown): obj is LocalStateBackupEntry {
 function isBackupExecutionLog(obj: unknown): obj is BackupExecutionLog {
 	if (
 		typeof obj === "object" &&
-		obj !== null && "Information" in obj && typeof obj.Information === "string"
-	) return true;
+		obj !== null &&
+		"Information" in obj &&
+		typeof obj.Information === "string"
+	)
+		return true;
 
 	if (
 		typeof obj === "object" &&
-		obj !== null && "Finished" in obj && typeof obj.Finished === "string"
-	) return true;
+		obj !== null &&
+		"Finished" in obj &&
+		typeof obj.Finished === "string"
+	)
+		return true;
 
 	if (
 		typeof obj === "object" &&
-		obj !== null && "ErrorCopying" in obj &&
+		obj !== null &&
+		"ErrorCopying" in obj &&
 		typeof obj.ErrorCopying === "string"
-	) return true;
+	)
+		return true;
 
 	if (
 		typeof obj === "object" &&
-		obj !== null && "SuccessCopying" in obj && obj.SuccessCopying !== null &&
-		typeof obj.SuccessCopying === "object" && "variant" in obj.SuccessCopying &&
+		obj !== null &&
+		"SuccessCopying" in obj &&
+		obj.SuccessCopying !== null &&
+		typeof obj.SuccessCopying === "object" &&
+		"variant" in obj.SuccessCopying &&
 		(obj.SuccessCopying.variant === "File" ||
 			obj.SuccessCopying.variant === "Directory") &&
 		"from_path" in obj.SuccessCopying &&
 		typeof obj.SuccessCopying.from_path === "string" &&
 		"to_path" in obj.SuccessCopying &&
 		typeof obj.SuccessCopying.to_path === "string"
-	) return true;
+	)
+		return true;
 
-if (
+	if (
 		typeof obj === "object" &&
-		obj !== null && "IgnoreCopying" in obj && obj.IgnoreCopying !== null &&
-		typeof obj.IgnoreCopying === "object" && "reason" in obj.IgnoreCopying &&
+		obj !== null &&
+		"IgnoreCopying" in obj &&
+		obj.IgnoreCopying !== null &&
+		typeof obj.IgnoreCopying === "object" &&
+		"reason" in obj.IgnoreCopying &&
 		(obj.IgnoreCopying.reason === "WrongName" ||
 			obj.IgnoreCopying.reason === "WrongExtension" ||
-			obj.IgnoreCopying.reason === "TooLargeSize"
-		) &&
+			obj.IgnoreCopying.reason === "TooLargeSize") &&
 		"from_path" in obj.IgnoreCopying &&
 		typeof obj.IgnoreCopying.from_path === "string" &&
 		"to_path" in obj.IgnoreCopying &&
 		typeof obj.IgnoreCopying.to_path === "string"
-	) return true;
+	)
+		return true;
 
 	return true;
 }

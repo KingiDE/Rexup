@@ -27,7 +27,7 @@
     popup = "settings";
   }
 
-  // Adds backup width the passed name to local state
+  // Adds backup width the passed name to the local state
   function addBackup(name: string) {
     backups.push({
       id: Date.now().toString(),

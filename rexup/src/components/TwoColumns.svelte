@@ -8,7 +8,7 @@
     LocalStateBackup,
   } from "./types";
   import Overview from "./overview/Overview.svelte";
-  import { validateBackupFile } from "../utils/validateBackupFile";
+  import { validateBackupsFile } from "../utils/validateBackupsFile";
   import { listen } from "@tauri-apps/api/event";
 
   let backups = $state<Array<LocalStateBackup> | null>(null);
@@ -40,7 +40,7 @@
 
   onMount(async () => {
     const readData = (await invoke("read_backups_file")) as string;
-    backups = validateBackupFile(readData);
+    backups = validateBackupsFile(readData);
     // backups = JSON.parse(readData);
   });
 

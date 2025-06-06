@@ -25,9 +25,9 @@ pub fn run() {
 				// Backup execution
 				backup_execution::execute_backup,
 				// Extra functionality
-				extra::has_write_access_to,
-				extra::delete_all_data,
-				extra::get_variant_of_path
+				extra::has_write_access_to::has_write_access_to,
+				extra::delete_all_data::delete_all_data,
+				extra::get_variant_of_path::get_variant_of_path
 			]
 		)
 		.run(tauri::generate_context!())
@@ -75,7 +75,7 @@ pub struct BackupEntryFilters {
 	included_file_names: Option<Vec<String>>,
 }
 
-/// The shape of an `BackupExecutionLog` that is stored in a `Backup`.
+/// The shape of an `BackupExecutionLog` that are stored in a `Backup`.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum BackupExecutionLog {
 	Finished(String),
@@ -96,7 +96,10 @@ pub enum BackupExecutionLog {
 /// The possible reasons why a file is ignored when it's copied.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum IgnoreFileReason {
+	/// The file has not the correct name
 	WrongName,
+	/// The file has not the correct file-extension
 	WrongExtension,
+	/// The file is too large
 	TooLargeSize,
 }

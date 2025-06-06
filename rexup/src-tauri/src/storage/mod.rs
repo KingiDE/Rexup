@@ -7,11 +7,15 @@ use write_read::{ safely_read_file, safely_write_file, convert_location_to_path,
 
 use crate::Backup;
 
-/// Tries to return the content of the user's config-file as a `String`.
+/// Reads the contents of the configuration file.
 ///
-/// ## Returns:
-/// Returns the content of the user's config-file as a `String`.
-/// If the `safely_read_file`-function returns `None`, this function returns an empty JSON-object like this: `{}`.
+/// This function attempts to read the file located at the path corresponding to
+/// `FileLocation::Config`. If successful, it returns the file content as a `String`.
+/// If the file cannot be read or doesn't exist, it returns a default empty JSON object (`"{}"`).
+///
+/// # Returns
+///
+/// A `String` containing the configuration data, or `"{}"` if reading fails.
 #[tauri::command]
 pub fn read_config_file() -> String {
 	match safely_read_file(&convert_location_to_path(FileLocation::Config)) {
@@ -20,11 +24,15 @@ pub fn read_config_file() -> String {
 	}
 }
 
-/// Tries to return the content of the user's backups-file as a `String`.
+/// Reads the contents of the backups file.
 ///
-/// ## Returns:
-/// Returns the content of the user's backups-file as a `String`.
-/// If the `safely_read_file`-function returns `None`, this function returns an empty JSON-array like this: `[]`.
+/// This function attempts to read the file located at the path corresponding to
+/// `FileLocation::Backups`. If successful, it returns the file content as a `String`.
+/// If the file cannot be read or doesn't exist, it returns a default empty JSON array (`"[]"`).
+///
+/// # Returns
+///
+/// A `String` containing the backup data, or `"[]"` if reading fails.
 #[tauri::command]
 pub fn read_backups_file() -> String {
 	match safely_read_file(&convert_location_to_path(FileLocation::Backups)) {
@@ -39,24 +47,46 @@ pub struct Config {
 	show_backup_execution_history: bool,
 }
 
-/// Tries to write the given value to the user's config-file.
+/// Writes the given configuration data to the configuration file.
 ///
-/// ## Returns:
-/// Always returns nothing, even if the conversion to JSON fails or the `safely_write_file`-function returns false.
+/// This function serializes the provided `Config` object to a JSON string and writes it
+/// to the file located at the path determined by `FileLocation::Config`. If serialization
+/// or writing fails, it returns `false`.
+///
+/// # Parameters
+///
+/// - `value`: A `Config` instance representing the configuration data to write.
+///
+/// # Returns
+///
+/// `true` if the configuration was successfully serialized and written to the file, `false` otherwise.
 #[tauri::command]
-pub fn write_config_file(value: Config) {
+pub fn write_config_file(value: Config) -> bool {
 	if let Ok(data) = serde_json::to_string(&value) {
-		safely_write_file(&convert_location_to_path(FileLocation::Config), data);
+		return safely_write_file(&convert_location_to_path(FileLocation::Config), data);
 	}
+
+	false
 }
 
-/// Tries to write the given value to the user's backups-file.
+/// Writes the given list of backups to the backups file.
 ///
-/// ## Returns:
-/// Always returns nothing, even if the conversion to JSON fails or the `safely_write_file`-function returns false.
+/// This function serializes a `Vec<Backup>` to a JSON string and writes it to the file
+/// located at the path determined by `FileLocation::Backups`. If serialization
+/// or writing fails, it returns `false`.
+///
+/// # Parameters
+///
+/// - `value`: A vector of `Backup` structs representing the backup data to write.
+///
+/// # Returns
+///
+/// `true` if the backups were successfully serialized and written to the file, `false` otherwise.
 #[tauri::command]
-pub fn write_backups_file(value: Vec<Backup>) {
+pub fn write_backups_file(value: Vec<Backup>) -> bool {
 	if let Ok(data) = serde_json::to_string(&value) {
-		safely_write_file(&convert_location_to_path(FileLocation::Backups), data);
+		return safely_write_file(&convert_location_to_path(FileLocation::Backups), data);
 	}
+
+	false
 }

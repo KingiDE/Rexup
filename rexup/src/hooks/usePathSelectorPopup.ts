@@ -30,7 +30,8 @@ export function slicePathElements(
   // The "filter" for "directory" is accepable becaue files are never listed in the top bar, so they cannot be clicked up there
   const indexOfDir = pathElements.findIndex((el) => el.id === id);
 
-  if (indexOfDir !== -1 /* -1 means not found */) {
+  // -1 means not found 
+  if (indexOfDir !== -1 ) {
     return pathElements.slice(0, indexOfDir + 1);
   }
 

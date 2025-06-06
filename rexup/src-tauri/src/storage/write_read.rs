@@ -1,11 +1,18 @@
 use core::str;
 use std::{ fs, path::{ Path, PathBuf } };
 
-/// Tries to read from a file a the given `path` and returns the file contents as a `String`.
+/// Safely reads the contents of a file from the given path.
 ///
-/// ## Returns:
-/// This function returns the contents of a file at the given `path` if it can be read. If the file cannot be read or the conversion to a `String` fails, the
-/// function will return `None`.
+/// Attempts to read the file into bytes, then convert the bytes to a UTF-8 string.
+/// If any step fails, returns `None`.
+///
+/// # Parameters
+///
+/// - `path`: A reference to the `Path` of the file to read.
+///
+/// # Returns
+///
+/// `Some(String)` if the file is read and parsed successfully, otherwise `None`.
 pub fn safely_read_file(path: &Path) -> Option<String> {
 	if let Ok(file_data) = fs::read(&path) {
 		if let Ok(converted_bytes) = str::from_utf8(&file_data) {
@@ -16,15 +23,19 @@ pub fn safely_read_file(path: &Path) -> Option<String> {
 	None
 }
 
-/// Tries to write the given data to a file at the given `path`.
+/// Safely writes a string to a file at the specified path.
 ///
-/// ## Note:
-/// The function will try to create the file and its parent-directories if they don't exist already.
+/// Ensures that the parent directories exist before writing. If writing is successful,
+/// returns `true`. Otherwise, returns `false`.
 ///
-/// ## Returns:
-/// The function returns `true` if it could write successfully, in all other scenarios the functions returns `false`.
-/// The result of creating the required parent-directories has no influence on the return-value,
-/// even though writing to a file fails if the parent-directories don't exist.
+/// # Parameters
+///
+/// - `path`: A reference to the `Path` where the data should be written.
+/// - `data`: The `String` content to be written to the file.
+///
+/// # Returns
+///
+/// `true` if the file was written successfully, otherwise `false`.
 pub fn safely_write_file(path: &Path, data: String) -> bool {
 	let mut path_without_file = PathBuf::from(path);
 	path_without_file.pop();

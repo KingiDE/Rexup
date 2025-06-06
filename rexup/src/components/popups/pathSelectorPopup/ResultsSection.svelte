@@ -18,8 +18,7 @@
   } = $props();
 
   let shownResults = $derived.by(() => {
-    // false or undefined
-    if (!showFiles)
+    if (showFiles !== true)
       return directoryResults.filter((el) => el.variant !== "File");
     return directoryResults;
   });

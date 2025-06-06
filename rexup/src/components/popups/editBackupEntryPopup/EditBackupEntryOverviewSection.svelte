@@ -22,7 +22,7 @@
 <div class="mt-2 font-semibold">Explanation:</div>
 <p>
   The target-path is the relative location of the backup resource (file or
-  directory) inside the backup-directory.
+  directory) inside the backup-parent-directory.
 </p>
 {#if entry.variant !== null && entry.origin !== null && entry.target !== null && entry.target !== ""}
   <p>

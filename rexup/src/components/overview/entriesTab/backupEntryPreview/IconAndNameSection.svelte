@@ -9,7 +9,7 @@
     entry: LocalStateBackupEntry;
   } = $props();
 
-  // Check the variant ("File" or "Directory") of the entry.origin everytime it changes
+  // Checks the variant ("File" or "Directory") of the entry.origin whenever it changes
   $effect(() => {
     async function doAsyncThing() {
       if (entry.origin === null) return;
