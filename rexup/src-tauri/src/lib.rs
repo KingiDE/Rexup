@@ -19,9 +19,9 @@ pub fn run() {
 				storage::write_config_file,
 				storage::write_backups_file,
 				// Path-Selector
-				path_selector::list_contents_of,
-				path_selector::get_user_path_to,
-				path_selector::get_remaining_drives,
+				path_selector::list_contents_of::list_contents_of,
+				path_selector::get_user_path_to::get_user_path_to,
+				path_selector::get_remaining_drives::get_remaining_drives,
 				// Backup execution
 				backup_execution::execute_backup,
 				// Extra functionality
