@@ -3,7 +3,7 @@
   import Input from "../../ui/Input.svelte";
   import {
     updateDisplayedNames,
-    // getEntryStateAndFileExtensionsToDisplay,
+    updateDisplayedExtensions
   } from "../../../hooks/useEditBackupEntryPopupFilters.svelte";
 
   let {
@@ -13,17 +13,17 @@
   } = $props();
 
   let fileNamesToDisplay = $state<Array<string>>([...entry.filters.included_file_names, ""]);
-    $inspect(fileNamesToDisplay);
-  // let fileExtensionsToDisplay = $state<Array<string>>([""]);
+  let fileExtensionsToDisplay = $state<Array<string>>([...entry.filters.included_file_extensions, ""]);
 
   $effect(() => {
     updateDisplayedNames(fileNamesToDisplay);
-    // entry.filters.included_file_extensions =
-    //  getEntryStateAndFileExtensionsToDisplay();
+    updateDisplayedExtensions(fileExtensionsToDisplay);
   });
 
   $effect(() => {
+    // Set the stored value to be the array without the last empty element
     entry.filters.included_file_names = fileNamesToDisplay.slice(0, fileNamesToDisplay.length - 1);
+    entry.filters.included_file_extensions = fileExtensionsToDisplay.slice(0, fileExtensionsToDisplay.length - 1);
   })
 
   function convertStringToNumber(value: string) {
@@ -69,8 +69,7 @@
   {/each}
 </div>
 <div class="mt-2">File Extensions:</div>
-
-<!-- <div class="grid gap-2">
+<div class="grid gap-2">
   {#each fileExtensionsToDisplay as fileName, index}
     <Input
       getter={() => fileName}
@@ -78,4 +77,4 @@
       placeholder={`File extension to include ${fileExtensionsToDisplay.length === 1 ? "(leave empty to disable this filter)" : ""}`}
     />
   {/each}
-</div> -->
+</div>
