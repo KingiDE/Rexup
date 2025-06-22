@@ -15,7 +15,7 @@ Follow these steps to run Rexup on your local machine:
 After that, everything should work as expected.
 
 **Build from source:**  
-To build the project from source, follow the same steps as in *Run*, and then execute bun tauri build (or use your preferred package manager). The Tauri CLI will guide you to the built files.
+To build the project from source, follow the same steps as in **Run**, and then execute bun tauri build (or use your preferred package manager). The Tauri CLI will guide you to the built files.
 
 **Extensions:**  
 It might be useful to install some extensions before developing. Here's a short list of those used for this project. I use Visual Studio Code, so note that these may vary between IDEs.
