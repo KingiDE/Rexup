@@ -1,47 +1,110 @@
+![Rexup README Banner](https://github.com/user-attachments/assets/5ed72e2e-83ea-4ac1-b830-670f2260e718)
 
-![Rexup README Banner](https://github.com/user-attachments/assets/a6eb8af0-28e4-410f-9fc0-f5436b6efc04)
+**Rexup** is a tool to automate the creation of backups. Each backup copies files and folders into a new "backup" directory. This directory can then be easily stored on a flash drive or uploaded to cloud storage.
 
-Rexup is an tool to automate the creation of backups. Every backup consists of paths to existing folders which are then copied into the "Result"-folder. 
-This one can easily be zipped and safed on an USB-drive or transferred into the cloud.
+## 💻 Run Locally
 
-## ⚠️ Important info
+**Run:**  
+Follow these steps to run Rexup on your local machine:
 
-This project is still in its early stages. This means that although the repository is public and already had its first release, some parts - especially complex features - might have unknown bugs. 
-Also, the code-quality may vary. This is fixed very soon and later will be integrated into the main codebase.
+1. Clone the repository  
+2. Install all required npm packages (e.g., with bun install)  
+3. Start the development server (e.g., with bun run tauri dev)  
+4. Wait for the Rust code to build  
 
-## 💻 Run locally
+After that, everything should work as expected.
 
-**Run locally:** <br/>
-To run this project yourself, simply clone the repository, install all the required npm-packages (e.g. with `bun install`), start the dev-server (e.g. with `bun run tauri dev`) and wait for the Rust-Code to build. 
-After that, everything should work just perfectly fine.
+**Build from source:**  
+To build the project from source, follow the same steps as in **Run**, and then execute bun tauri build (or use your preferred package manager). The Tauri CLI will guide you to the built files.
 
-**Build from source:** <br/>
-To build this project from source, follow the exact same steps as before and execute the command `bun tauri build` (or your preferred package-manager). 
-This will compile the entire project, create a `.msi`-installer-file and print its location to the terminal. You just have to double-click it now and follow the installation-process.   
+**Extensions:**  
+It might be useful to install some extensions before developing. Here's a short list of those used for this project. I use Visual Studio Code, so note that these may vary between IDEs.
 
-## 📜 Installation
+- Tauri  
+- Astro  
+- Svelte for VSCode  
+- Biome (Linter and code formatter)  
+- Tailwind CSS IntelliSense  
 
-> Note: Currently Windows is the only supported operating system. Although this will likely change in the future, you can already adjust the code to your likings and build it to work on other devices. 
+To format code correctly on save, configure your editor to use Biome as the default formatter for .ts and .js files, and "Svelte for VSCode" for .svelte files.
 
-**On Windows:**
-Simply download either the `rexup_1.0.0_x64_en-US.msi` or the `rexup_1.0.0_x64-setup.exe` file (of course with their respective version names) and follow the installation process after clicking it. 
+**Scripts:**
+There are three important scripts in the package.json file:
 
-## ⛏️ Workflow
+- tsc-check: Checks for any TypeScript errors  
+- format: Lints and formats the code (even without the extension installed) and shows possible issues  
+- svelte-check: Reports Svelte-related errors  
 
-First, you want to create a backup. After that, you need to add all folders and files you want to backup. Finally you're ready to configure the backup to your likings and and execute it. 
-For an easier understanding just give the [docs](DOCS.md) a try.
+## 📦 Installation
 
-## 🗺️ Roadmap
+> Currently, only Windows and Linux are supported. This may change in the future, but you can already build Rexup for other systems.
 
-- [ ] Use TOML instead of JSON to store data
-- [ ] Move from React to Svelte
-- [ ] Add remote sources like a git repository and run commands in it (like `bun install`) to backup GitHub-Repos
-- [ ] Add Linux and MacOS support
+### 🟦 Windows
 
-## ❓ Help
+Download either rexup_2.0.0_x64_en-US.msi or rexup_2.0.0_x64-setup.exe and follow the installation instructions.  
+If you prefer a standalone executable, download rexup_2.0.0.exe, which runs without creating a Start Menu entry.
 
-If you are at some point unsure how to proceed you can create an issue inside this repository stating as much information as you have acess to. If you want to, you can also request an improvement to the documentation.  
+### 🐧 Linux
 
-**Try to include...**
-1. ... an exact set of instructions on how to reproduce your problem/bug.
-2. ... screenshots/screen captures in cases where the your problem might be hard to understand for others. 
+Due to the variety of Linux distributions, the best installation method may vary. The following section provides general guidance.
+
+**AppImage:**  
+AppImages should work on nearly all distributions. They are not installed – just double-click to run.  
+They also do not create a Start Menu entry. Download rexup_2.0.0_amd64.AppImage and run it.  
+You may need to make it executable first (chmod +x filename or via file properties).
+
+**Debian:**  
+.deb files work on Debian-based distributions (this means also Ubuntu and Linux Mint).  
+To install rexup_2.0.0_amd64.deb, right-click the file and open it with "Software Install" if your system doesn’t do so automatically.  
+Follow the prompts to complete installation.
+
+**RPM:**  
+For RPM-based distributions like Fedora, openSUSE, and CentOS, use rexup_2.0.0_x86_64.rpm.  
+Download the file, right-click it, and choose "Software Install" to begin the installation.
+
+## ⚙️ Workflow
+
+1. Create a backup  
+2. Add all files and directories you want to include  
+3. Configure the backup (e.g., add filters)  
+4. Run the backup  
+
+## 🚧 Roadmap
+
+- [x] Migrate from React to Svelte  
+- [x] Add Linux support  
+- [ ] Use TOML instead of JSON for storing data
+- [ ] Allow renaming of backuped directories and files  
+- [ ] Add remote sources (e.g., Git repositories) and execute commands in them (bun install) for backing up GitHub repos  
+- [ ] Extend filter functionality  
+- [ ] Add macOS support (planned)  
+
+## ⁉️ Help
+
+If you're unsure how to proceed or have found a bug, check the FAQ section or browse existing Issues or Discussions. Otherwise, feel free to [open an issue](https://github.com/your-repo/issues) and follow the instructions below.
+
+### 🗨️ Issues and Discussion
+
+If you’ve found a problem (and confirmed there isn’t already an open Issue), you can open a new one. Please include as much relevant information as possible.  
+**This includes:**
+
+1. A clear, step-by-step guide on how to reproduce the issue  
+2. Screenshots or screen recordings if the issue is difficult to describe  
+
+If there’s a topic you'd like to discuss, you can open a Discussion — after making sure it hasn’t been addressed already.
+
+### ➕️ How to Contribute
+
+To contribute, follow these steps:
+
+1. Fork the repository  
+2. Create a new branch based on the dev branch and name it after the feature or fix  
+3. Create a pull request  
+
+Before starting, ensure no one else is already working on the same issue.
+
+Thank you to everyone contributing to Rexup!
+
+### ❓ FAQ
+
+This section will contain frequently asked questions to help users with quick guidance. Currently, there are no entries, but they will be added soon.
