@@ -22,21 +22,23 @@ pub fn do_filters_apply(
 	file_name: &OsStr,
 	filters: &BackupEntryFilters
 ) -> Option<IgnoreFileReason> {
-	if
-		filters.included_file_names.len() > 0 &&
-		!filters.included_file_names.contains(&file_name.to_string_lossy().to_string())
-	{
-		return Some(IgnoreFileReason::WrongName);
-	}
+	let file_name_path = Path::new(file_name);
 
-	if let Some(file_name) = file_name.to_str() {
-		if
-			filters.included_file_extensions.len() > 0 &&
-			!filters.included_file_extensions.contains(&file_name.to_string())
-		{
-			return Some(IgnoreFileReason::WrongExtension);
-		}
-	}
+    if let Some(stem_osstr) = file_name_path.file_stem() {
+        if let Some(stem_str) = stem_osstr.to_str() {
+            if filters.included_file_names.len() > 0 && !filters.included_file_names.iter().any(|s| s == stem_str) {
+				return Some(IgnoreFileReason::WrongName);
+			}
+        }
+    }
+
+    if let Some(ext_osstr) = file_name_path.extension() {
+        if let Some(ext_str) = ext_osstr.to_str() {
+			if filters.included_file_extensions.len() > 0 && !filters.included_file_extensions.iter().any(|s| s == ext_str) {
+				return Some(IgnoreFileReason::WrongExtension);
+			}
+        }
+    }
 
 	// If the metadata of the file a the given `file_path` can be obtained, the max_size_in_mb is `Some(...)` and
 	// the size is actual size is greater than the allowed size, the function returns `Some(IgnoreFileReason::TooLargeSize)`

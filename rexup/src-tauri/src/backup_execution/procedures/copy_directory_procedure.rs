@@ -43,17 +43,19 @@ pub fn copy_directory_procedure(
 						let entry_path = readable_entry.path();
 
 						if entry_path.is_file() {
-							let file_logs = copy_file_procedure(
-								&entry_path,
-								&new_path_segment_in_relative_target,
-								parent_path,
-								entry_path.file_name().expect("Err"),
-								&mut zip_writer,
-								&filters
-							);
+							if let Some(file_name) = entry_path.file_name() {
+								let file_logs = copy_file_procedure(
+									&entry_path,
+									&new_path_segment_in_relative_target,
+									parent_path,
+									file_name,
+									&mut zip_writer,
+									&filters
+								);
 
-							if let Some(file_logs) = file_logs {
-								logs.push(file_logs);
+								if let Some(file_logs) = file_logs {
+									logs.push(file_logs);
+								}
 							}
 						} else if entry_path.is_dir() {
 							let mut dir_logs = copy_directory_procedure(

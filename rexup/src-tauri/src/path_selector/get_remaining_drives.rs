@@ -64,6 +64,8 @@ fn get_os_specific_drives() -> Vec<Vec<PathElement>> {
 
 	let username = whoami::username();
 
+	use std::fs;
+
 	if let Ok(entries) = fs::read_dir(format!("/media/{}/", &username)) {
 		for entry in entries {
 			if let Ok(working_entry) = entry {

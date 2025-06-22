@@ -47,7 +47,7 @@ pub fn is_thing_at_path_hidden(path: &Path) -> bool {
 /// - This function does not use extended attributes like `chflags hidden`.
 /// - If the path does not exist, or if metadata cannot be read, it returns `false`.
 #[cfg(target_family = "unix")]
-fn is_thing_at_path_hidden(path: &std::path::Path) -> bool {
+pub fn is_thing_at_path_hidden(path: &std::path::Path) -> bool {
 	use std::os::unix::fs::PermissionsExt;
 
 	// Check if the file/directory name starts with a dot
@@ -67,9 +67,11 @@ fn is_thing_at_path_hidden(path: &std::path::Path) -> bool {
 			// File is considered readable if the user has read bits (0o400)
 			let is_readable = (permissions.mode() & 0o444) != 0;
 
-			!is_readable
+			return !is_readable;
 		}
 		// If we can't read metadata, assume no access
-		Err(_) => false,
+		Err(_) => {
+			return false;
+		},
 	};
 }
