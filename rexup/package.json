@@ -1,32 +1,32 @@
 {
 	"name": "rexup",
 	"private": true,
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Rexup is a backup creation tool",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"preview": "vite preview",
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
 		"tauri": "tauri",
-		"check": "tsc --noEmit --skipLibCheck",
-		"format": "prettier --write \"**/*.{js,ts,jsx,tsx,css,scss,html,json}\""
+		"tsc-check": "tsc --noEmit --skipLibCheck",
+		"svelte-check": "svelte-check",
+		"format": "biome check --write ./src astro.config.mjs package.json svelte.config.js tsconfig.json"
 	},
 	"dependencies": {
-		"@tailwindcss/vite": "^4.0.9",
+		"@astrojs/svelte": "^7.0.13",
+		"@tailwindcss/vite": "^4.1.5",
 		"@tauri-apps/api": "^2",
 		"@tauri-apps/plugin-opener": "^2",
-		"prettier": "^3.5.2",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"tailwindcss": "^4.0.9"
+		"astro": "^5.7.10",
+		"svelte": "^5.28.6",
+		"tailwindcss": "^4.1.5"
 	},
 	"devDependencies": {
-		"@types/react": "^18.3.1",
-		"@types/react-dom": "^18.3.1",
-		"@vitejs/plugin-react": "^4.3.4",
-		"typescript": "~5.6.2",
-		"vite": "^6.0.3",
-		"@tauri-apps/cli": "^2"
+		"@biomejs/biome": "1.9.4",
+		"@tauri-apps/cli": "^2",
+		"svelte-check": "^4.2.0",
+		"typescript": "^5.8.3"
 	}
 }

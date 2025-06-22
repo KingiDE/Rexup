@@ -1,0 +1,74 @@
+<script lang="ts">
+  import { invoke } from "@tauri-apps/api/core";
+  import { onMount } from "svelte";
+  import Sidebar from "./sidebar/Sidebar.svelte";
+  import type {
+    BackupExecutionLog,
+    CurrentPopup,
+    LocalStateBackup,
+  } from "./types";
+  import Overview from "./overview/Overview.svelte";
+  import { validateBackupsFile } from "../utils/validateBackupsFile";
+  import { listen } from "@tauri-apps/api/event";
+
+  let backups = $state<Array<LocalStateBackup> | null>(null);
+  let currentBackup = $state<LocalStateBackup | null>(null);
+
+  let popup = $state<CurrentPopup>(null);
+
+  function selectBackup(backup: LocalStateBackup) {
+    currentBackup = backup;
+  }
+
+  // Deletes the passed backup fron the local state
+  function deleteCurrentBackup(backupToDelete: LocalStateBackup) {
+    if (backups !== null) {
+      backups = backups.filter((el) => el.id !== backupToDelete.id);
+      currentBackup = null;
+    }
+  }
+
+  // Is called when listening to events from the backend while executing the backup.
+  listen<Array<BackupExecutionLog>>("execute_backup", (event) => {
+    if (currentBackup === null) return;
+
+    currentBackup.logs_of_last_execution =
+      currentBackup.logs_of_last_execution.concat(...event.payload);
+  });
+
+  onMount(async () => {
+    const readData = (await invoke("read_backups_file")) as string;
+    backups = validateBackupsFile(readData);
+  });
+
+  $effect(() => {
+    async function doAsyncThing() {
+      if (backups !== null) {
+        const result = (await invoke("write_backups_file", {
+          value: backups,
+        })) as boolean;
+
+        if (result === false) {
+          console.error("The backups-file couldn't be read!");
+        }
+      }
+    }
+    doAsyncThing();
+  });
+
+  // Closes all popups when the currentBackup changes
+  $effect(() => {
+    if (currentBackup) {
+      popup = null;
+    }
+  });
+</script>
+
+{#if backups !== null}
+  <div
+    class="p-2 font-inter bg-gray-900 text-gray-50 grid grid-cols-[300px_auto] h-[100vh] gap-2"
+  >
+    <Sidebar bind:popup bind:backups {selectBackup} bind:currentBackup />
+    <Overview bind:popup bind:currentBackup {deleteCurrentBackup} />
+  </div>
+{/if}

@@ -1,148 +1,89 @@
-use serde::{ Deserialize, Serialize };
 use core::str;
-use std::{ fs::{ self, File }, path::PathBuf };
+use std::{ fs, path::{ Path, PathBuf } };
 
-// Expected argument from the frontend when saving the config-file
-#[derive(Deserialize, Serialize, Debug)]
-pub struct ConfigFile {
-  show_edit_warning: bool,
-  show_history: bool,
+/// Safely reads the contents of a file from the given path.
+///
+/// Attempts to read the file into bytes, then convert the bytes to a UTF-8 string.
+/// If any step fails, returns `None`.
+///
+/// # Parameters
+///
+/// - `path`: A reference to the `Path` of the file to read.
+///
+/// # Returns
+///
+/// `Some(String)` if the file is read and parsed successfully, otherwise `None`.
+pub fn safely_read_file(path: &Path) -> Option<String> {
+	if let Ok(file_data) = fs::read(&path) {
+		if let Ok(converted_bytes) = str::from_utf8(&file_data) {
+			return Some(converted_bytes.to_owned());
+		}
+	}
+
+	None
 }
 
-// Expected argument from the frontend when saving a backup-history-entry
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupHistoryEntry {
-  time: u128,
-  id: String,
+/// Safely writes a string to a file at the specified path.
+///
+/// Ensures that the parent directories exist before writing. If writing is successful,
+/// returns `true`. Otherwise, returns `false`.
+///
+/// # Parameters
+///
+/// - `path`: A reference to the `Path` where the data should be written.
+/// - `data`: The `String` content to be written to the file.
+///
+/// # Returns
+///
+/// `true` if the file was written successfully, otherwise `false`.
+pub fn safely_write_file(path: &Path, data: String) -> bool {
+	let mut path_without_file = PathBuf::from(path);
+	path_without_file.pop();
+
+	let _ = fs::create_dir_all(path_without_file);
+
+	match fs::write(&path, &data) {
+		Ok(_nothing) => true,
+		Err(_err) => false,
+	}
 }
 
-// Expected argument from the frontend when saving a backup with id
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupWithId {
-  id: String,
-  backup: BackupsFileEntry,
+/// Contains the two variants a stored file can be written to or read from.
+pub enum FileLocation {
+	/// location of the config-file in the file-system
+	Config,
+	/// location of the backups-file in the file-system
+	Backups,
 }
 
-// Expected argument from the frontend when saving a backup
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupsFileEntry {
-  name: String,
-  entries: Vec<(String, BackupsFileFolder)>,
-  is_zipped: bool,
-  location: String,
+/// Converts the `file_location` to an usable path on different operating systems.
+pub fn convert_location_to_path(file_location: FileLocation) -> PathBuf {
+	match file_location {
+		FileLocation::Config => get_config_file_location(),
+		FileLocation::Backups => get_backups_file_location(),
+	}
 }
 
-// Expected argument from the frontend when saving a folderPair
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupsFileFolder {
-  variant: String,
-  origin: String,
-  target: String,
-  is_active: bool,
-  filters: BackupsFileFilters,
+/// Helper function that returns the correct config-file location on Windows.
+#[cfg(target_family = "windows")]
+fn get_config_file_location() -> PathBuf {
+	PathBuf::from(format!("C:/Users/{}/AppData/Roaming/.rexup/config.json", whoami::username()))
 }
 
-// Stores filters that every BackupsFileFolder has
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BackupsFileFilters {
-  pub max_size_in_mb: Option<u32>,
-  pub included_file_types: Option<Vec<String>>,
-  pub included_file_names: Option<Vec<String>>,
+/// Helper function that returns the correct config-file location on Linux.
+#[cfg(target_family = "unix")]
+fn get_config_file_location() -> PathBuf {
+	PathBuf::from(format!("/home/{}/.rexup/config.json", whoami::username()))
 }
 
-//
-// SECTION: Write to a file, log a message to the console when erroring and returing a variant of the `ReadFileError` enum
-//
-pub enum ReadFileError {
-  UnableToReadExistingFile,
-  UnableToFindFile,
-  UnableToCreateFile,
-  UnableToCreatePath,
-  UnableToConvertIntoUTF8,
+/// Helper function that returns the correct backups-file location on Windows.
+#[cfg(target_family = "windows")]
+fn get_backups_file_location() -> PathBuf {
+	PathBuf::from(format!("C:/Users/{}/AppData/Roaming/.rexup/backups.json", whoami::username()))
 }
 
-pub fn safely_read_file(path: FileVariants) -> Result<String, ReadFileError> {
-  let path = convert_enum_to_path(path);
-
-  let data;
-
-  if path.exists() {
-    match fs::read(&path) {
-      Ok(file_data) => {
-        data = file_data;
-      }
-      Err(_err) => {
-        println!("Error: The backend was unable to read the existing file: {:#?}", &path);
-        return Err(ReadFileError::UnableToReadExistingFile);
-      }
-    }
-  } else {
-    let mut path_without_file = path.clone();
-    path_without_file.pop();
-
-    match fs::create_dir_all(path_without_file) {
-      Ok(_nothing) => {}
-      Err(_err) => {
-        println!(
-          "Error: The backend was unable to create the path to the not existing file: {:#?}",
-          &path
-        );
-        return Err(ReadFileError::UnableToCreatePath);
-      }
-    }
-
-    match File::create(&path) {
-      Ok(_file) => {
-        println!("Error: The backend was unable to find the file: {:#?}", &path);
-        return Err(ReadFileError::UnableToFindFile);
-      }
-      Err(_err) => {
-        println!("Error: The backend was unable to create the file: {:#?}", &path);
-        return Err(ReadFileError::UnableToCreateFile);
-      }
-    };
-  }
-
-  match str::from_utf8(&data) {
-    Ok(converted_bytes) => { Ok(converted_bytes.to_owned()) }
-    Err(_err) => { Err(ReadFileError::UnableToConvertIntoUTF8) }
-  }
-}
-
-// Write to a file and log a message to the console when erroring
-pub fn safely_write_file(path: FileVariants, data: String) {
-  let path = convert_enum_to_path(path);
-
-  match fs::write(&path, data) {
-    Ok(_nothing) => {}
-    Err(_err) => {
-      println!("Error: Could not write new data to file: {:#?}", &path);
-    }
-  };
-}
-
-//
-// SECTION: Convert the `FileVariants` enum to an usable `PathBuf`; currently only Windows support
-//
-pub enum FileVariants {
-  Config,
-  History,
-  Backups,
-}
-
-fn convert_enum_to_path(path_enum: FileVariants) -> PathBuf {
-  match path_enum {
-    FileVariants::Config =>
-      PathBuf::from(
-        format!("C:\\Users\\{}\\AppData\\Roaming\\.rexup\\config.json", whoami::username())
-      ),
-    FileVariants::History =>
-      PathBuf::from(
-        format!("C:\\Users\\{}\\AppData\\Roaming\\.rexup\\history.json", whoami::username())
-      ),
-    FileVariants::Backups =>
-      PathBuf::from(
-        format!("C:\\Users\\{}\\AppData\\Roaming\\.rexup\\backups.json", whoami::username())
-      ),
-  }
+/// Helper function that returns the correct backups-file location on Linux.
+#[cfg(target_family = "unix")]
+fn get_backups_file_location() -> PathBuf {
+	PathBuf::from(format!("/home/{}/.rexup/backups.json", whoami::username()))
 }
