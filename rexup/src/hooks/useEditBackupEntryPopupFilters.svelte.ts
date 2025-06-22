@@ -1,31 +1,20 @@
-// @ts-ignore: TypeScript doesn't recognize the $state rune
-const fileNamesToDisplay = $state<{ value: Array<string> }>({
-	value: [],
-});
-
-export function loadFileNamesToDisplay(
-	included_file_names: Array<string> | null,
-) {
-	if (included_file_names !== null)
-		fileNamesToDisplay.value = [...included_file_names, ""];
-}
-
-export function getEntryStateAndFileNamesToDisplay() {
-	const amountOfEmptyElements = fileNamesToDisplay.value.filter(
+export function updateDisplayedNames(fileNamesToDisplay: Array<string>) {
+	const amountOfEmptyElements = fileNamesToDisplay.filter(
 		(el: string) => el === "",
 	).length;
 
-	const filterWithoutEmptyElements = fileNamesToDisplay.value.filter(
-		(el: string) => el !== "",
-	);
-
 	if (amountOfEmptyElements > 1) {
-		fileNamesToDisplay.value = [...filterWithoutEmptyElements, ""];
+		// Mutates the original array instead of copying; this way it works
+		for(let i = fileNamesToDisplay.length - 1; i >= 0; i--) {
+			if(fileNamesToDisplay[i] === "") {
+				fileNamesToDisplay.splice(i, 1);
+			}
+		};
 	} else if (amountOfEmptyElements < 1) {
-		fileNamesToDisplay.value.push("");
+		fileNamesToDisplay.push("");
 	}
 
-	return filterWithoutEmptyElements;
+	return fileNamesToDisplay;
 }
 
 // @ts-ignore: TypeScript doesn't recognize the $state rune
@@ -57,3 +46,4 @@ export function getEntryStateAndFileExtensionsToDisplay() {
 
 	return filterWithoutEmptyElements;
 }
+

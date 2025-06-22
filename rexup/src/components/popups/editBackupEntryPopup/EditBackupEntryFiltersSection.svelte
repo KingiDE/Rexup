@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import type { LocalStateBackupEntry } from "../../types";
   import Input from "../../ui/Input.svelte";
   import {
-    getEntryStateAndFileNamesToDisplay,
-    getEntryStateAndFileExtensionsToDisplay,
-    loadFileNamesToDisplay,
+    updateDisplayedNames,
+    // getEntryStateAndFileExtensionsToDisplay,
   } from "../../../hooks/useEditBackupEntryPopupFilters.svelte";
 
   let {
@@ -14,19 +12,19 @@
     entry: LocalStateBackupEntry;
   } = $props();
 
-  let fileNamesToDisplay = $state<Array<string>>([""]);
-  let fileExtensionsToDisplay = $state<Array<string>>([""]);
+  let fileNamesToDisplay = $state<Array<string>>([...entry.filters.included_file_names, ""]);
+    $inspect(fileNamesToDisplay);
+  // let fileExtensionsToDisplay = $state<Array<string>>([""]);
 
-  onMount(() => {
-    loadFileNamesToDisplay(fileNamesToDisplay);
-    loadFileNamesToDisplay(fileExtensionsToDisplay);
+  $effect(() => {
+    updateDisplayedNames(fileNamesToDisplay);
+    // entry.filters.included_file_extensions =
+    //  getEntryStateAndFileExtensionsToDisplay();
   });
 
   $effect(() => {
-    entry.filters.included_file_names = getEntryStateAndFileNamesToDisplay();
-    entry.filters.included_file_extensions =
-      getEntryStateAndFileExtensionsToDisplay();
-  });
+    entry.filters.included_file_names = fileNamesToDisplay.slice(0, fileNamesToDisplay.length - 1);
+  })
 
   function convertStringToNumber(value: string) {
     const possibleConvertedNumber = Number(value);
@@ -63,13 +61,16 @@
   {#each fileNamesToDisplay as fileName, index}
     <Input
       getter={() => fileName}
-      setter={(newValue) => (fileNamesToDisplay[index] = newValue)}
+      setter={(newValue) => {
+        fileNamesToDisplay[index] = newValue;
+      }}
       placeholder={`File name to include ${fileNamesToDisplay.length === 1 ? "(leave empty to disable this filter)" : ""}`}
     />
   {/each}
 </div>
 <div class="mt-2">File Extensions:</div>
-<div class="grid gap-2">
+
+<!-- <div class="grid gap-2">
   {#each fileExtensionsToDisplay as fileName, index}
     <Input
       getter={() => fileName}
@@ -77,4 +78,4 @@
       placeholder={`File extension to include ${fileExtensionsToDisplay.length === 1 ? "(leave empty to disable this filter)" : ""}`}
     />
   {/each}
-</div>
+</div> -->
