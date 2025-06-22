@@ -1,4 +1,4 @@
-![Rexup README Banner](https://github.com/user-attachments/assets/a6eb8af0-28e4-410f-9fc0-f5436b6efc04)
+![Rexup README Banner](https://github.com/user-attachments/assets/228e2bd0-a768-4c92-abcf-c9acbc81876e)
 
 **Rexup** is a tool to automate the creation of backups. Each backup copies files and folders into a new "backup" directory. This directory can then be easily stored on a flash drive or uploaded to cloud storage.
 
