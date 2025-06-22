@@ -30,7 +30,7 @@ export type LocalStateBackup = {
 	logs_of_last_execution: Array<BackupExecutionLog>;
 };
 
-// The structure a loaded backup entry has
+// The structure a loaded backup-entry has
 export type LocalStateBackupEntry = {
 	id: string;
 	name: string;
@@ -45,8 +45,8 @@ export type LocalStateBackupEntry = {
 // The filters each backup-entry has
 type LocalStateBackupFilters = {
 	max_size_in_mb: number | null;
-	included_file_extensions: Array<string> | null;
-	included_file_names: Array<string> | null;
+	included_file_extensions: Array<string>;
+	included_file_names: Array<string>;
 };
 
 // The structure a backup-execution log has, that is shown in its specific tab inside the overview

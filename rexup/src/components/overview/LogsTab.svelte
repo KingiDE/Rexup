@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { LocalStateBackup } from "../types";
   import { prettifyDate } from "../../utils/prettifyDate";
-  import { prettifyExecutionLog } from "../../utils/prettifyExecutionLog";
   import { showBackupExecutionHistory } from "../../hooks/useSettingsPopup.svelte";
 
   let {
@@ -46,7 +45,64 @@
   {#if currentBackup.logs_of_last_execution.length > 0}
     <ol class="mt-2 p-2 rounded-md bg-gray-900 inline-block min-w-[400px]">
       {#each currentBackup.logs_of_last_execution as executionLog}
-        <li>{@html prettifyExecutionLog(executionLog)}</li>
+        {#if "Finished" in executionLog}
+          <li>&#x1F3C1; {executionLog.Finished}</li>
+        {:else if "Information" in executionLog}
+          <li>&#x2139; {executionLog.Information}</li>
+        {:else if "ErrorCopying" in executionLog}
+          <li>&#x274C; {executionLog.ErrorCopying}</li>
+        {:else if "SuccessCopying" in executionLog}
+          <li>
+            &#x2705; Copied the {executionLog.SuccessCopying.variant.toLocaleLowerCase()}
+            from
+            <span class="px-1 bg-gray-800 rounded-md opacity-75"
+              >{executionLog.SuccessCopying.from_path}</span
+            >
+            to
+            <span class="px-1 bg-gray-800 rounded-md opacity-75"
+              >/{executionLog.SuccessCopying.to_path}</span
+            >
+            successfully.
+          </li>
+        {:else if "IgnoreCopying" in executionLog}
+          {#if executionLog.IgnoreCopying.reason === "TooLargeSize"}
+            <li>
+              &#x1F6AB; Ignored copying the file from <span
+                class="px-1 bg-gray-800 rounded-md opacity-75"
+                >{executionLog.IgnoreCopying.from_path}</span
+              >
+              to
+              <span class="px-1 bg-gray-800 rounded-md opacity-75"
+                >/{executionLog.IgnoreCopying.to_path}</span
+              >
+              because the file is too large.
+            </li>
+          {:else if executionLog.IgnoreCopying.reason === "WrongName"}
+            <li>
+              &#x1F6AB; Ignored copying the file from <span
+                class="px-1 bg-gray-800 rounded-md opacity-75"
+                >{executionLog.IgnoreCopying.from_path}</span
+              >
+              to
+              <span class="px-1 bg-gray-800 rounded-md opacity-75"
+                >/{executionLog.IgnoreCopying.to_path}</span
+              >
+              because the file has the wrong name.
+            </li>
+          {:else if executionLog.IgnoreCopying.reason === "WrongExtension"}
+            <li>
+              &#x1F6AB; Ignored copying the file from <span
+                class="px-1 bg-gray-800 rounded-md opacity-75"
+                >{executionLog.IgnoreCopying.from_path}</span
+              >
+              to
+              <span class="px-1 bg-gray-800 rounded-md opacity-75"
+                >/{executionLog.IgnoreCopying.to_path}</span
+              >
+              because the file has the wrong extension.
+            </li>
+          {/if}
+        {/if}
       {/each}
     </ol>
   {:else}

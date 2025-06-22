@@ -65,17 +65,13 @@ function isLocalStateBackupEntry(obj: unknown): obj is LocalStateBackupEntry {
 		(typeof obj.filters.max_size_in_mb === "number" ||
 			obj.filters.max_size_in_mb === null) &&
 		"included_file_extensions" in obj.filters &&
-		(obj.filters.included_file_extensions === null ||
-			(Array.isArray(obj.filters.included_file_extensions) &&
-				obj.filters.included_file_extensions.every(
-					(t: unknown) => typeof t === "string",
-				))) &&
+		Array.isArray(obj.filters.included_file_extensions) &&
+		obj.filters.included_file_extensions.every(
+			(t: unknown) => typeof t === "string",
+		) &&
 		"included_file_names" in obj.filters &&
-		(obj.filters.included_file_names === null ||
-			(Array.isArray(obj.filters.included_file_names) &&
-				obj.filters.included_file_names.every(
-					(t: unknown) => typeof t === "string",
-				)))
+		Array.isArray(obj.filters.included_file_names) &&
+		obj.filters.included_file_names.every((t: unknown) => typeof t === "string")
 	);
 }
 

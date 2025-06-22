@@ -62,7 +62,7 @@ pub struct Config {
 /// `true` if the configuration was successfully serialized and written to the file, `false` otherwise.
 #[tauri::command]
 pub fn write_config_file(value: Config) -> bool {
-	if let Ok(data) = serde_json::to_string(&value) {
+	if let Ok(data) = serde_json::to_string_pretty(&value) {
 		return safely_write_file(&convert_location_to_path(FileLocation::Config), data);
 	}
 
@@ -84,7 +84,7 @@ pub fn write_config_file(value: Config) -> bool {
 /// `true` if the backups were successfully serialized and written to the file, `false` otherwise.
 #[tauri::command]
 pub fn write_backups_file(value: Vec<Backup>) -> bool {
-	if let Ok(data) = serde_json::to_string(&value) {
+	if let Ok(data) = serde_json::to_string_pretty(&value) {
 		return safely_write_file(&convert_location_to_path(FileLocation::Backups), data);
 	}
 

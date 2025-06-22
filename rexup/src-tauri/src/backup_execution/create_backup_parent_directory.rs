@@ -1,14 +1,29 @@
 use std::{ fs, path::PathBuf };
 
-/// Creates either a "normal" directory or a zip-file with the given `name` at the given `path`.
-/// This depends on the value of is_zipped`, which if it's true makes the function create a zip-file.
+/// Creates a new backup directory or ZIP file path, optionally in a custom location,
+/// and returns the resulting `PathBuf` if successful.
 ///
-/// ## Note:
-/// The function will not overwrite an already existing zip-file or directory at the given `path` and instead return `None`.
+/// This function is typically used to set up the parent location where a backup will be saved.
+/// It either creates a new folder or an empty `.zip` file, depending on the `is_zipped` flag.
+/// If a file or directory with the same name already exists at the target location,
+/// the function will return `None` to avoid overwriting existing backups.
 ///
-/// ## Returns:
-/// If the creation of the backup-parent-directory succeeds, the function will return `Some(String)` containing the path of the created directory or zip-file.
-/// Otherwise the function returns `None`.
+/// If no custom location is provided via `location`, the user's **Desktop** is used as the default
+/// backup target. The backup folder or file will be named `Backup {name}`.
+///
+/// # Parameters
+/// - `name`: The base name to be used for the backup folder or ZIP file (e.g., `"June 2025"`).
+/// - `location`: Optional custom path (as a `String`) where the backup should be saved.
+///   If `None`, the function falls back to the Desktop path (OS-specific).
+/// - `is_zipped`: If `true`, creates a `.zip` file; if `false`, creates a folder.
+///
+/// # Returns
+/// - `Some(PathBuf)` if the directory or file is successfully created and did **not** already exist.
+/// - `None` if a file/folder with the target name already exists, or if creation fails (e.g., due to permissions).
+///
+/// # Platform Behavior
+/// - On **Windows**, the default Desktop path is `C:/Users/{username}/Desktop/`.
+/// - On **Unix/Linux**, the default Desktop path is `/home/{username}/Desktop/`.
 pub fn create_backup_parent_directory(
 	name: String,
 	location: Option<String>,
@@ -25,7 +40,7 @@ pub fn create_backup_parent_directory(
 
 	if is_zipped {
 		// Add the ".zip"-extension for zip-files
-		used_directory_path.set_extension(".zip");
+		used_directory_path.set_extension("zip");
 
 		// If the path with .zip already exists, return None
 		if std::path::Path::new(&used_directory_path).exists() {

@@ -1,27 +1,32 @@
-use std::{ fs::{ self, File }, path::{ Path, PathBuf }, vec };
-
+use std::{ ffi::OsStr, fs::{ self, File }, path::{ Path, PathBuf }, vec };
 use zip::ZipWriter;
 
-use crate::{ BackupEntryFilters, BackupExecutionLog };
+use crate::{
+	backup_execution::procedures::copy_file_procedure,
+	BackupEntryFilters,
+	BackupExecutionLog,
+};
 
-use super::copy_file_procedure;
-
-/// Calls either `copy_file_procedure` on files or `copy_directory_procedure` on directories recursively by reading all entries on the given `origin`.
-/// The name of origin is pushed/joined to the `relative_target` which is passed to subsequent function calls.
+/// Recursively copies the contents of a directory into the backup location.
 ///
-/// ## Note:
-/// Every `entry` that cannot be read is automatically skipped.
-/// This means that `copy_file_procedure` or `copy_directory_procedure` is not called on this specific `entry` but a describing log is still added to the returned Vec<BackupExecutionLog>.
+/// For each entry in the directory, it checks if it’s a file or subdirectory,
+/// applies filters, and copies accordingly.
 ///
-/// ## Returns:
-/// This function returns an `Vec<BackupExecutionLog>` containing information about the backup-execution.
-/// If the directory at the given `origin` cannot be read or the given `origin`'s `file_or_dir_name` is `None`, the function returns an `Vec` with one `BackupExecutionLog`
-/// that describes this occurence.
+/// # Arguments
+/// * `origin` - Path to the directory to be copied.
+/// * `relative_target` - The relative target path within the backup.
+/// * `parent_path` - The base backup directory or zip root.
+/// * `file_or_dir_name` - The name of the directory to be created in the target.
+/// * `zip_writer` - Optional ZipWriter used for zip file creation.
+/// * `filters` - Filters applied to the files during copying.
+///
+/// # Returns
+/// A `Vec<BackupExecutionLog>` containing logs of each success, ignore, or error event.
 pub fn copy_directory_procedure(
 	origin: &Path,
 	relative_target: &Path,
 	parent_path: &Path,
-	file_or_dir_name: &str,
+	file_or_dir_name: &OsStr,
 	mut zip_writer: &mut Option<ZipWriter<File>>,
 	filters: &BackupEntryFilters
 ) -> Vec<BackupExecutionLog> {
@@ -42,7 +47,7 @@ pub fn copy_directory_procedure(
 								&entry_path,
 								&new_path_segment_in_relative_target,
 								parent_path,
-								file_or_dir_name,
+								entry_path.file_name().expect("Err"),
 								&mut zip_writer,
 								&filters
 							);

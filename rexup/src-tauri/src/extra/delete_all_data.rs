@@ -7,10 +7,10 @@ use std::{ fs, path::PathBuf };
 /// and all its contents using `fs::remove_dir_all`.
 ///
 /// On **Windows**, this typically targets:
-/// `C:/Users/<username>/AppData/Roaming/.rexup`
+/// `C:/Users/{username}/AppData/Roaming/.rexup`
 ///
 /// On **Linux**, this typically targets:
-/// `/home/<username>/.rexup`
+/// `/home/{username}/.rexup`
 ///
 /// # Note
 /// If the directory does not exist or the removal fails (due to permission

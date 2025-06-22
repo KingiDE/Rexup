@@ -28,7 +28,7 @@
   <p>
     In this case, the {entry.variant === "File" ? "file" : "directory"} located at
     <span class="px-1 py-0.5 bg-gray-900 rounded-md">{entry.origin}</span>
-    will be copied to
+    will be copied {entry.variant === "File" ? "to" : "into"}
     <span class="px-1 py-0.5 bg-gray-900 rounded-md">{entry.target}</span>
     {entry.target === "/" ? "(= root)" : ""} inside the backup-directory.
   </p>

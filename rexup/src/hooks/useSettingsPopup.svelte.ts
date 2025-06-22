@@ -8,7 +8,6 @@ export async function loadAndSetData() {
 	const readData = await invoke("read_config_file");
 
 	if (typeof readData !== "string") {
-		console.error("Could not read the config file on the frontend!");
 		return;
 	}
 
@@ -29,12 +28,18 @@ export async function loadAndSetData() {
 	}
 }
 
-// Toggle the state of showBackupExecutionHistory in the local state as well as in the config-file
+// Toggles the state of showBackupExecutionHistory in the local state as well as in the config-file.
+// It logs an error if the file could not be written.
 export async function toggleShowBackupExecutionHistory() {
-	invoke("write_config_file", {
+	showBackupExecutionHistory.value = !showBackupExecutionHistory.value;
+
+	const result = (await invoke("write_config_file", {
 		value: {
 			show_backup_execution_history: !showBackupExecutionHistory.value,
 		},
-	});
-	showBackupExecutionHistory.value = !showBackupExecutionHistory.value;
+	})) as boolean;
+
+	if (result === false) {
+		console.error("The config-file couldn't be read!");
+	}
 }

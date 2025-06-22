@@ -58,23 +58,23 @@
   placeholder="The maximum file size in MB (leave empty to disable this filter)"
   type="number"
 />
-<div class="mt-2">Filenames:</div>
+<div class="mt-2">File names:</div>
 <div class="grid gap-2">
   {#each fileNamesToDisplay as fileName, index}
     <Input
       getter={() => fileName}
       setter={(newValue) => (fileNamesToDisplay[index] = newValue)}
-      placeholder={`Filename to include ${fileNamesToDisplay.length === 1 ? "(leave empty to disable this filter)" : ""}`}
+      placeholder={`File name to include ${fileNamesToDisplay.length === 1 ? "(leave empty to disable this filter)" : ""}`}
     />
   {/each}
 </div>
-<div class="mt-2">Fileextensions:</div>
+<div class="mt-2">File Extensions:</div>
 <div class="grid gap-2">
   {#each fileExtensionsToDisplay as fileName, index}
     <Input
       getter={() => fileName}
       setter={(newValue) => (fileExtensionsToDisplay[index] = newValue)}
-      placeholder={`Fileextension to include ${fileExtensionsToDisplay.length === 1 ? "(leave empty to disable this filter)" : ""}`}
+      placeholder={`File extension to include ${fileExtensionsToDisplay.length === 1 ? "(leave empty to disable this filter)" : ""}`}
     />
   {/each}
 </div>

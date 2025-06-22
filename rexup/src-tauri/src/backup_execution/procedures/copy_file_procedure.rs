@@ -1,25 +1,33 @@
-use std::{ fs::{ self, File }, io::Write, path::Path };
-
+use std::{ ffi::OsStr, fs::{ self, File }, io::Write, path::Path };
 use zip::{ write::SimpleFileOptions, ZipWriter };
 
-use crate::{ BackupEntryFilters, BackupExecutionLog, IgnoreFileReason };
+use crate::{
+	backup_execution::procedures::do_filters_apply::do_filters_apply,
+	BackupEntryFilters,
+	BackupExecutionLog,
+};
 
-/// Copies a file from the given origin to...
+/// Handles copying of an individual file either to the filesystem or into a zip archive.
 ///
-/// If `zip_writer` is `Some(...)`: ...into the given `relative_target` inside the zip-file at the given `parent_path`. <br/>
-/// If `zip_writer` is `None`: ...into the given `relative_target` inside the directory at the given `parent_path`.
+/// Applies file filters before copying. If the file is filtered out, a reason is returned.
+/// Supports fallback between writing to the filesystem and writing to a zip archive.
 ///
-/// In both cases the file_name from the origin is used.
+/// # Arguments
+/// * `origin` - Path to the source file.
+/// * `relative_target` - Path within the backup destination relative to the backup root.
+/// * `parent_path` - Path to the root of the backup location.
+/// * `file_name` - Name of the file to be copied.
+/// * `zip_writer` - Optional ZipWriter used to write files into a zip archive.
+/// * `filters` - Backup filters such as allowed file names, extensions, or size limits.
 ///
-/// ## Returns:
-/// This function returns an `Option<BackupExecutionLog>` containing information about the backup-execution. Everytime the function returns a `Some(...)`,
-/// it will include information about relevant errors. Only if everthing went fine, the function returns `None` although the function still returns `Some(...)`
-/// if theoretically the file could be copied but the filters disallow it.
+/// # Returns
+/// `Some(BackupExecutionLog)` if a log-worthy event occurs (e.g., ignore, error),
+/// or `None` if the file was successfully copied with no issues.
 pub fn copy_file_procedure(
 	origin: &Path,
 	relative_target: &Path,
 	parent_path: &Path,
-	file_name: &str,
+	file_name: &OsStr,
 	zip_writer: &mut Option<ZipWriter<File>>,
 	filters: &BackupEntryFilters
 ) -> Option<BackupExecutionLog> {
@@ -119,43 +127,6 @@ pub fn copy_file_procedure(
 						)
 					);
 				}
-			}
-		}
-	}
-
-	None
-}
-
-fn do_filters_apply(
-	file_path: &Path,
-	file_name: &str,
-	filters: &BackupEntryFilters
-) -> Option<IgnoreFileReason> {
-	if let Some(file_names) = &filters.included_file_names {
-		if !file_names.contains(&file_name.to_string()) {
-			Some(IgnoreFileReason::WrongName);
-		}
-	}
-
-	if let Some(file_extensions) = &filters.included_file_extensions {
-		if let Some(file_name) = file_path.extension() {
-			if let Some(file_name) = file_name.to_str() {
-				if !file_extensions.contains(&file_name.to_string()) {
-					Some(IgnoreFileReason::WrongExtension);
-				}
-			}
-		}
-	}
-
-	// If the metadata of the file a the given `file_path` can be obtained, the max_size_in_mb is `Some(...)` and
-	// the size is actual size is greater than the allowed size, the function returns `Some(IgnoreFileReason::TooLargeSize)`
-	if let Some(max_size_in_mb) = filters.max_size_in_mb {
-		if let Ok(metadata) = fs::metadata(file_path) {
-			let actual_size_in_bytes = metadata.len() as u32;
-			let filter_size_in_bytes = max_size_in_mb * 1024 * 1024;
-
-			if actual_size_in_bytes > filter_size_in_bytes {
-				Some(IgnoreFileReason::TooLargeSize);
 			}
 		}
 	}

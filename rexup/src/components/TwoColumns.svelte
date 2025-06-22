@@ -32,24 +32,25 @@
   listen<Array<BackupExecutionLog>>("execute_backup", (event) => {
     if (currentBackup === null) return;
 
-    currentBackup.logs_of_last_execution = [
-      ...currentBackup.logs_of_last_execution,
-      ...event.payload,
-    ];
+    currentBackup.logs_of_last_execution =
+      currentBackup.logs_of_last_execution.concat(...event.payload);
   });
 
   onMount(async () => {
     const readData = (await invoke("read_backups_file")) as string;
     backups = validateBackupsFile(readData);
-    // backups = JSON.parse(readData);
   });
 
   $effect(() => {
     async function doAsyncThing() {
       if (backups !== null) {
-        invoke("write_backups_file", {
+        const result = (await invoke("write_backups_file", {
           value: backups,
-        });
+        })) as boolean;
+
+        if (result === false) {
+          console.error("The backups-file couldn't be read!");
+        }
       }
     }
     doAsyncThing();
