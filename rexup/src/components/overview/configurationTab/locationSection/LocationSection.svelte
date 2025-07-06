@@ -1,22 +1,21 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
   import PathSelectorPopup from "../../../popups/pathSelectorPopup/PathSelectorPopup.svelte";
-  import type { CurrentPopup, LocalStateBackup } from "../../../types";
+  import type { LocalStateBackup } from "../../../types";
   import WriteAccessBox from "./WriteAccessBox.svelte";
   import BackupLocationInput from "./BackupLocationInput.svelte";
+  import { closePopup } from "../../../../hooks/useHotkeyHandler.svelte";
 
   let {
     currentBackup = $bindable(),
-    popup = $bindable(),
   }: {
     currentBackup: LocalStateBackup;
-    popup: CurrentPopup;
   } = $props();
 
   // When the user clicks "Select path", this function is passed to the PathSelectorPopup and will be called with the new location
   function setCurrentBackupPath(path: string) {
     currentBackup.location = path === "" ? null : path;
-    popup = null;
+    closePopup();
   }
 
   // Checks whether the user has write access to this location
@@ -42,10 +41,9 @@
     location can be configured here. To change it, simply click the
     "Edit"-button below and choose a diretory, the backup will be placed in.
   </div>
-  <BackupLocationInput bind:popup bind:currentBackup />
+  <BackupLocationInput bind:currentBackup />
   <PathSelectorPopup
     heading="Select backup location"
-    bind:popup
     popupToShowUp="select_backup_location"
     setOuterPath={setCurrentBackupPath}
   />

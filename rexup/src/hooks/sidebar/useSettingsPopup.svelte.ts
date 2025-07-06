@@ -1,6 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
 
-// @ts-ignore: TypeScript doesn't recognize the $state rune
 export const showBackupExecutionHistory = $state({ value: false });
 
 // Read the config-file from the backend

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { popup } from "../../../hooks/useHotkeyHandler.svelte";
   import type { LocalStateBackup } from "../../types";
   import Input from "../../ui/Input.svelte";
 
@@ -21,5 +22,6 @@
     setter={(newValue) => {
       currentBackup.name = newValue;
     }}
+    disabled={popup.value !== null}
   />
 </div>

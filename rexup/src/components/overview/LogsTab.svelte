@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LocalStateBackup } from "../types";
   import { prettifyDate } from "../../utils/prettifyDate";
-  import { showBackupExecutionHistory } from "../../hooks/useSettingsPopup.svelte";
+  import { showBackupExecutionHistory } from "../../hooks/sidebar/useSettingsPopup.svelte";
 
   let {
     currentBackup,

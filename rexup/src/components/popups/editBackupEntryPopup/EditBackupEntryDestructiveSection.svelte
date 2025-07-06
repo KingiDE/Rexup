@@ -3,19 +3,18 @@
   import type { LocalStateBackupEntry } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
+  import { deleteBackupEntry } from "../../../hooks/overview/useEntriesTab.svelte";
 
   let {
     entry,
-    deleteBackupEntry,
   }: {
     entry: LocalStateBackupEntry;
-    deleteBackupEntry: (backupToDelete: LocalStateBackupEntry) => void;
   } = $props();
 
   let hasTriedToDeleteBackupEntry = $state(false);
 </script>
 
-<div class="mt-4">
+<div class="mt-2">
   <div class="font-semibold">Delete Backup-Entry</div>
   <div class="opacity-75 max-w-[600px]">
     To delete your backup-entry, click the "Delete this backup-entry"-button
@@ -32,7 +31,7 @@
         Delete this backup-entry
       {/snippet}
       {#snippet icon()}
-        <Icon width={24} height={24} name="delete" extraCSS="fill-gray-50" />
+        <Icon name="delete" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
     {#if hasTriedToDeleteBackupEntry}

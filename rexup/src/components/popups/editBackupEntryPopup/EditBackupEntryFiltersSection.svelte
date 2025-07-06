@@ -3,8 +3,8 @@
   import Input from "../../ui/Input.svelte";
   import {
     updateDisplayedNames,
-    updateDisplayedExtensions
-  } from "../../../hooks/useEditBackupEntryPopupFilters.svelte";
+    updateDisplayedExtensions,
+  } from "../../../hooks/overview/useEditBackupEntryPopupFilters.svelte";
 
   let {
     entry = $bindable(),
@@ -12,8 +12,15 @@
     entry: LocalStateBackupEntry;
   } = $props();
 
-  let fileNamesToDisplay = $state<Array<string>>([...entry.filters.included_file_names, ""]);
-  let fileExtensionsToDisplay = $state<Array<string>>([...entry.filters.included_file_extensions, ""]);
+  let fileNamesToDisplay = $state<Array<string>>([
+    ...entry.filters.included_file_names,
+    "",
+  ]);
+
+  let fileExtensionsToDisplay = $state<Array<string>>([
+    ...entry.filters.included_file_extensions,
+    "",
+  ]);
 
   $effect(() => {
     updateDisplayedNames(fileNamesToDisplay);
@@ -22,9 +29,15 @@
 
   $effect(() => {
     // Set the stored value to be the array without the last empty element
-    entry.filters.included_file_names = fileNamesToDisplay.slice(0, fileNamesToDisplay.length - 1);
-    entry.filters.included_file_extensions = fileExtensionsToDisplay.slice(0, fileExtensionsToDisplay.length - 1);
-  })
+    entry.filters.included_file_names = fileNamesToDisplay.slice(
+      0,
+      fileNamesToDisplay.length - 1,
+    );
+    entry.filters.included_file_extensions = fileExtensionsToDisplay.slice(
+      0,
+      fileExtensionsToDisplay.length - 1,
+    );
+  });
 
   function convertStringToNumber(value: string) {
     const possibleConvertedNumber = Number(value);
@@ -41,8 +54,8 @@
 <div class="mt-2 font-semibold">Filters:</div>
 <p class="opacity-75">
   Note that these filters will only work if the origin-path points to a
-  directory and not a file. If you add any filenames or -extensions to this this
-  list only files with these names or extensions will be backuped. All other
+  directory and not a file. If you add any filenames or -extensions to this
+  list, only files with these names or extensions will be backuped. All other
   files will be ignored and therefore not be in your final backup.
 </p>
 <div class="mt-2">Maximum file size:</div>

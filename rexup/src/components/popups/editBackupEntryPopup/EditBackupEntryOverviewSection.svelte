@@ -1,14 +1,13 @@
 <script lang="ts">
-  import type { CurrentPopup, LocalStateBackupEntry } from "../../types";
+  import { popup } from "../../../hooks/useHotkeyHandler.svelte";
+  import type { LocalStateBackupEntry } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Input from "../../ui/Input.svelte";
 
   let {
     entry = $bindable(),
-    popup = $bindable(),
   }: {
     entry: LocalStateBackupEntry;
-    popup: CurrentPopup;
   } = $props();
 </script>
 
@@ -50,7 +49,7 @@
     />
     <Button
       meaning="positive"
-      onClick={() => (popup = "select_backup_entry_origin_location")}
+      onClick={() => (popup.value = "select_backup_entry_origin_location")}
       extraCSS="py-1 w-20"
     >
       {#snippet text()}

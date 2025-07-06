@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { slicePathElements } from "../../../hooks/usePathSelectorPopup";
+  import { slicePathElements } from "../../../hooks/overview/usePathSelectorPopup";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
 

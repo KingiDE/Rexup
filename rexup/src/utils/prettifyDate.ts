@@ -2,7 +2,7 @@
 export function prettifyDate(miliseconds: string) {
 	const milisecondsAsNumber = Number(miliseconds);
 
-	if(Number.isNaN(milisecondsAsNumber)) return;
+	if (Number.isNaN(milisecondsAsNumber)) return;
 
 	const date = new Date(milisecondsAsNumber);
 

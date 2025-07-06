@@ -25,8 +25,6 @@
 <div class="flex gap-4">
   <div class="w-6 h-6">
     <Icon
-      width={24}
-      height={24}
       name={entry.variant === "File"
         ? "file"
         : entry.variant === "Directory"

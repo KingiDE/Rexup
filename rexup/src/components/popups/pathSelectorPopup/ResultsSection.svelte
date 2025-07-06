@@ -2,7 +2,7 @@
   import {
     pushDirectoryToPathElements,
     replaceLastPathElement,
-  } from "../../../hooks/usePathSelectorPopup";
+  } from "../../../hooks/overview/usePathSelectorPopup";
   import type { DirectoryContent, PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
@@ -24,10 +24,10 @@
   });
 </script>
 
-<div>
+<div class="overflow-hidden">
   <div>Directories in this directory:</div>
   <div
-    class={`mt-1 grid gap-1 h-[300px] overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
+    class={`mt-1 grid gap-1 h-full overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
   >
     {#if shownResults.length === 0}
       <div class="text-center self-center">
@@ -54,20 +54,15 @@
                 );
               }
             }}
-            meaning="neutral"
             extraRules={["no-outline"]}
-            extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""} ${result.id === pathElements.at(-1)?.id ? "outline-gray-50" : "outline-gray-500"}`}
+            meaning="neutral"
+            extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""} outline -outline-offset-1 ${result.id === pathElements.at(-1)?.id ? "outline-gray-50" : "outline-gray-500"}`}
           >
             {#snippet text()}
               {result.name}
             {/snippet}
             {#snippet icon()}
-              <Icon
-                width={24}
-                height={24}
-                name="file"
-                extraCSS="fill-gray-50"
-              />
+              <Icon name="file" extraCSS="fill-gray-50" />
             {/snippet}
           </Button>
         {:else if result.variant === "Directory"}
@@ -86,12 +81,7 @@
               {result.name}
             {/snippet}
             {#snippet icon()}
-              <Icon
-                width={24}
-                height={24}
-                name="directory"
-                extraCSS="fill-gray-50"
-              />
+              <Icon name="directory" extraCSS="fill-gray-50" />
             {/snippet}
           </Button>
         {/if}

@@ -13,22 +13,12 @@
 >
   {#if hasWriteAccess}
     <div class="flex gap-2">
-      <Icon
-        width={24}
-        height={24}
-        name="checked"
-        extraCSS="fill-gray-50 shrink-0"
-      />
+      <Icon name="checked" extraCSS="fill-gray-50 shrink-0" />
       Everything is fine! You have access to this location on your filesystem.
     </div>
   {:else}
     <div class="flex gap-2">
-      <Icon
-        width={24}
-        height={24}
-        name="close"
-        extraCSS="fill-gray-50 shrink-0"
-      />
+      <Icon name="close" extraCSS="fill-gray-50 shrink-0" />
       Something is not working! You don't seem to have access to this location on
       your filesystem. Please choose a different directory.
     </div>

@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { popup } from "../../../hooks/useHotkeyHandler.svelte";
   import type { LocalStateBackup } from "../../types";
   import Button from "../../ui/Button.svelte";
+  import Slider from "../../ui/Slider.svelte";
 
   let {
     currentBackup = $bindable(),
@@ -17,29 +19,32 @@
     transfer between devices. On the other hand, Zip-Folders need to be
     extracted if you want to work with the files inside them.
   </div>
-  <div
-    class="relative isolate mt-2 inline-flex -outline-offset-1 outline-1 outline-gray-500 rounded-md"
+  <Slider
+    extraCSS="mt-2 justify-self-start"
+    sizeOfSingleElement={120}
+    indexOfSelectedElement={currentBackup.is_zipped ? 1 : 0}
   >
-    <div
-      class={`-z-10 absolute h-full w-[120px] bg-gray-500 rounded-md transition-[left] ${currentBackup.is_zipped ? "left-[120px]" : "left-0"}`}
-    ></div>
-    <Button
-      onClick={() => (currentBackup.is_zipped = false)}
-      meaning="discrete-neutral"
-      extraCSS="w-[120px] px-4 py-1"
-    >
-      {#snippet text()}
-        Directory
-      {/snippet}
-    </Button>
-    <Button
-      onClick={() => (currentBackup.is_zipped = true)}
-      meaning="discrete-neutral"
-      extraCSS="w-[120px] px-4 py-1"
-    >
-      {#snippet text()}
-        Zip-Folder
-      {/snippet}
-    </Button>
-  </div>
+    {#snippet elements()}
+      <Button
+        onClick={() => (currentBackup.is_zipped = false)}
+        meaning="discrete-neutral"
+        extraCSS="w-[120px] px-4 py-1"
+        disabled={popup.value !== null}
+      >
+        {#snippet text()}
+          Directory
+        {/snippet}
+      </Button>
+      <Button
+        onClick={() => (currentBackup.is_zipped = true)}
+        meaning="discrete-neutral"
+        extraCSS="w-[120px] px-4 py-1"
+        disabled={popup.value !== null}
+      >
+        {#snippet text()}
+          Zip-Folder
+        {/snippet}
+      </Button>
+    {/snippet}
+  </Slider>
 </div>

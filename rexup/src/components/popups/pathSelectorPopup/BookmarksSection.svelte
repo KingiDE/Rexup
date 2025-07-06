@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { updatePathElementsFromUserLocationTo } from "../../../hooks/usePathSelectorPopup";
+  import { updatePathElementsFromUserLocationTo } from "../../../hooks/overview/usePathSelectorPopup";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
@@ -22,7 +22,7 @@
 </script>
 
 <div
-  class="row-start-1 row-end-3 col-start-1 grid gap-1 content-start self-start h-[300px] overflow-y-scroll"
+  class="row-start-1 row-end-3 col-start-1 grid gap-1 content-start self-start h-full overflow-y-scroll"
 >
   <div>Bookmarks:</div>
   <Button
@@ -35,7 +35,7 @@
       Home
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="home" extraCSS="fill-gray-50" />
+      <Icon name="home" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <!-- List bookmarks -->
@@ -49,7 +49,7 @@
       Desktop
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="pin" extraCSS="fill-gray-50" />
+      <Icon name="pin" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <Button
@@ -62,7 +62,7 @@
       Downloads
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="pin" extraCSS="fill-gray-50" />
+      <Icon name="pin" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <Button
@@ -75,7 +75,7 @@
       Documents
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="pin" extraCSS="fill-gray-50" />
+      <Icon name="pin" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <!-- List drives -->
@@ -89,7 +89,7 @@
         {drive.at(-1)?.name}
       {/snippet}
       {#snippet icon()}
-        <Icon width={24} height={24} name="drive" extraCSS="fill-gray-50" />
+        <Icon name="drive" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
   {/each}

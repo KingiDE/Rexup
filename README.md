@@ -73,7 +73,6 @@ Download the file, right-click it, and choose "Software Install" to begin the in
 
 - [x] Migrate from React to Svelte  
 - [x] Add Linux support  
-- [ ] Use TOML instead of JSON for storing data
 - [ ] Allow renaming of backuped directories and files  
 - [ ] Add remote sources (e.g., Git repositories) and execute commands in them (bun install) for backing up GitHub repos  
 - [ ] Extend filter functionality  

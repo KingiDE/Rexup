@@ -3,16 +3,23 @@
   import type { LocalStateBackup } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
+  import { deleteCurrentBackup } from "../../../hooks/useTwoColumns.svelte";
+  import { popup } from "../../../hooks/useHotkeyHandler.svelte";
 
   let {
     currentBackup,
-    deleteCurrentBackup,
   }: {
     currentBackup: LocalStateBackup;
-    deleteCurrentBackup: (backupToDelete: LocalStateBackup) => void;
   } = $props();
 
   let hasTriedToDeleteBackup = $state(false);
+
+  // Reset value (= false) if the currentSelectedBackup changes
+  $effect(() => {
+    if (currentBackup) {
+      hasTriedToDeleteBackup = false;
+    }
+  });
 </script>
 
 <div class="mt-4">
@@ -27,12 +34,13 @@
       onClick={() => (hasTriedToDeleteBackup = true)}
       meaning="negative"
       extraCSS="mt-2 px-4"
+      disabled={popup.value !== null}
     >
       {#snippet text()}
         Delete this backup
       {/snippet}
       {#snippet icon()}
-        <Icon width={24} height={24} name="delete" extraCSS="fill-gray-50" />
+        <Icon name="delete" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
     {#if hasTriedToDeleteBackup}
@@ -41,6 +49,7 @@
           onClick={() => deleteCurrentBackup(currentBackup)}
           meaning="negative"
           extraCSS="mt-2 px-4"
+          disabled={popup.value !== null}
         >
           {#snippet text()}
             REALLY delete?
