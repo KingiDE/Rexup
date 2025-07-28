@@ -31,7 +31,7 @@
   // Stores the current path that is selected at the top bar
   let pathElements = $state<Array<PathElement>>([]);
 
-  // Stores the results of files and direcotires in the current path
+  // Stores the results of files and directories in the current path
   let directoryResults = $state<Array<DirectoryContent>>([]);
 
   // When the user clicks "Select path", this function combines all path elements and call the function passed through props with it

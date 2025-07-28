@@ -12,12 +12,26 @@
 
   // Shows a yellow outline around the preview-box if at least the origin or target is "" (an empty string)
   function showYellowOutline() {
-    return entry.origin === "" || entry.target === "";
+    if (
+      entry.origin.active_mode === "Commands" &&
+      entry.origin.commands.length === 0
+    )
+      return true;
+    if (
+      entry.origin.active_mode === "LocalFileSystem" &&
+      entry.origin.local_file_system === ""
+    )
+      return true;
+    if (entry.target === "") return true;
+
+    return false;
   }
 </script>
 
 <div
-  class={`bg-gray-900 p-4 rounded-md grid transition-[opacity_outline] ${showYellowOutline() ? "-outline-offset-2 outline-2 outline-yellow-500" : "outline-0"} ${entry.is_active ? "" : "opacity-50"}`}
+  class={`min-w-[500px] w-full max-w-[min(700px,_100%)]  bg-gray-900 p-4 rounded-md grid transition-[opacity,_outline] outline-2 -outline-offset-2 
+    ${showYellowOutline() ? "outline-yellow-500" : "outline-transparent"} ${entry.is_active ? "" : "opacity-50"}
+  `}
 >
   <IconAndNameSection bind:entry />
   <InputSection {entry} />

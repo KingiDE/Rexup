@@ -18,7 +18,7 @@
   class={`${vertical ? "grid" : "flex"} relative isolate -outline-offset-1 outline-1 outline-gray-500 rounded-md ${extraCSS}`}
 >
   <div
-    class={`-z-10 absolute bg-gray-500 rounded-md transition-[left_top] ${vertical ? "w-full" : "h-full"}`}
+    class={`-z-10 absolute bg-gray-500 rounded-md transition-[left,_top] ${vertical ? "w-full" : "h-full"}`}
     style={`
       ${vertical ? "height" : "width"}: ${sizeOfSingleElement}px; 
       ${vertical ? "top" : "left"}: ${sizeOfSingleElement * indexOfSelectedElement}px;

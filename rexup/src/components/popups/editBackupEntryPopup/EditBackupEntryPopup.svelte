@@ -3,12 +3,14 @@
   import type { EditBackupEntryTab } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
-  import EditBackupEntryTabSwitcher from "./EditBackupEntryTabSwitcher.svelte";
-  import EditBackupEntryOverviewSection from "./EditBackupEntryOverviewSection.svelte";
-  import EditBackupEntryFiltersSection from "./EditBackupEntryFiltersSection.svelte";
-  import EditBackupEntryDestructiveSection from "./EditBackupEntryDestructiveSection.svelte";
   import { closePopup, popup } from "../../../hooks/useHotkeyHandler.svelte";
   import { currentBackupEntry } from "../../../hooks/overview/useEntriesTab.svelte";
+  import NavbarIcon from "./NavbarIcon.svelte";
+  import OverviewTab from "./editBackupEntryTabs/OverviewTab.svelte";
+  import DestructiveTab from "./editBackupEntryTabs/DestructiveTab.svelte";
+  import FiltersTab from "./editBackupEntryTabs/FiltersTab.svelte";
+  import OriginTab from "./editBackupEntryTabs/OriginTab.svelte";
+  import TargetTab from "./editBackupEntryTabs/TargetTab.svelte";
 
   let tab = $state<EditBackupEntryTab>("overview");
 </script>
@@ -16,13 +18,12 @@
 {#if popup.value === "edit_backup_entry" && currentBackupEntry.value !== null}
   <div
     transition:fade={{ duration: 100 }}
-    class={`grid w-[600px] min-h-[550px] content-start z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
+    class={`w-[850px] h-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
   >
     <Button
       meaning="neutral"
       onClick={() => {
         closePopup();
-        tab = "overview";
       }}
       extraCSS="absolute top-4 right-4 "
     >
@@ -31,18 +32,52 @@
       {/snippet}
     </Button>
     <h2 class="font-poppins text-2xl font-bold">Edit Backup-Entry</h2>
-    <p class="mt-4">
-      Edit this backup-entry by modifying the origin-path and the target-path,
-      which is the relative path inside the created backup-directory.
-      Additionally, you can enable filters.
-    </p>
-    <EditBackupEntryTabSwitcher bind:tab />
-    {#if tab === "overview"}
-      <EditBackupEntryOverviewSection bind:entry={currentBackupEntry.value} />
-    {:else if tab === "filters"}
-      <EditBackupEntryFiltersSection bind:entry={currentBackupEntry.value} />
-    {:else}
-      <EditBackupEntryDestructiveSection entry={currentBackupEntry.value} />
-    {/if}
+    <div class="mt-4 grid grid-cols-[250px_auto] gap-8">
+      <nav class="grid gap-2 content-start">
+        <NavbarIcon
+          buttonText="Overview"
+          iconName="edit"
+          tabValue="overview"
+          bind:tab
+        />
+        <NavbarIcon
+          buttonText="Origin"
+          iconName="file"
+          tabValue="origin"
+          bind:tab
+        />
+        <NavbarIcon
+          buttonText="Target"
+          iconName="drive"
+          tabValue="target"
+          bind:tab
+        />
+        <NavbarIcon
+          buttonText="Filters"
+          iconName="filter"
+          tabValue="filters"
+          bind:tab
+        />
+        <NavbarIcon
+          buttonText="Destructive"
+          iconName="delete"
+          tabValue="destructive"
+          bind:tab
+        />
+      </nav>
+      <div class="h-[520px] grid content-start">
+        {#if tab === "overview"}
+          <OverviewTab bind:entry={currentBackupEntry.value} />
+        {:else if tab === "origin"}
+          <OriginTab bind:entry={currentBackupEntry.value} />
+        {:else if tab === "target"}
+          <TargetTab bind:entry={currentBackupEntry.value} />
+        {:else if tab === "filters"}
+          <FiltersTab bind:entry={currentBackupEntry.value} />
+        {:else if tab === "destructive"}
+          <DestructiveTab entry={currentBackupEntry.value} />
+        {/if}
+      </div>
+    </div>
   </div>
 {/if}

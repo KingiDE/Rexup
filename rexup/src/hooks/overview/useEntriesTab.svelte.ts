@@ -6,6 +6,7 @@ import {
 } from "./useAddBackupEntryPopup.svelte";
 import { closePopup, popup } from "../useHotkeyHandler.svelte";
 import { currentBackup } from "../useTwoColumns.svelte";
+import { displayedLocalFileSystemPath } from "./useEditBackupEntryPopupOrigin.svelte";
 
 export const currentBackupEntry = $state<{
 	value: LocalStateBackupEntry | null;
@@ -18,7 +19,10 @@ export function selectThisBackupEntry(entry: LocalStateBackupEntry) {
 export function setEntryOriginPath(path: string) {
 	if (currentBackupEntry.value === null) return;
 
-	currentBackupEntry.value.origin = path;
+	// Also update the displayedLocalFileSystemPath
+	displayedLocalFileSystemPath.value = path;
+
+	currentBackupEntry.value.origin.local_file_system = path;
 	popup.value = "edit_backup_entry";
 }
 
@@ -33,14 +37,20 @@ export function addBackupEntry(name: string) {
 	currentBackup.value.entries.push({
 		id: Date.now().toString(),
 		name,
-		origin: "",
-		target: "/",
-		variant: null,
+		origin: {
+			active_mode: "LocalFileSystem",
+			commands: [],
+			local_file_system: "",
+		},
+		target: "",
+		rename_to: "",
 		is_active: true,
+		variant: null,
 		filters: {
-			included_file_names: [],
-			included_file_extensions: [],
 			max_size_in_mb: null,
+			mode: "Include",
+			file_names: [],
+			path_elements: [],
 		},
 	});
 

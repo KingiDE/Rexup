@@ -1,10 +1,9 @@
 use tauri::AppHandle;
-use std::{ fs::{ File, OpenOptions }, vec };
+use std::{ fs::OpenOptions, vec };
 use zip::ZipWriter;
 
 use crate::{ Backup, BackupExecutionLog };
 
-mod procedures;
 mod create_backup_parent_directory;
 mod copy_backup_entry;
 mod emit;
@@ -13,14 +12,14 @@ use create_backup_parent_directory::create_backup_parent_directory;
 use copy_backup_entry::copy_backup_entry;
 use emit::emit_to_frontend;
 
-/// Manages creating the backup-parent-directory as well as copying all the contained `entries` of the given `backup`.
+/// Manages creating the backup parent directory as well as copying all the contained entries of the passed `backup`.
 ///
-/// ## Note:
-/// Instead of returning errors or one long success-object, this function will actually send events to the frontend to display important information.
+/// # Note
+/// Instead of returning errors or one heavy success object, this function will send events to the frontend to display important information.
 /// This way, it becomes like a "live-ticker" by regularly reporting finished entries in contrast of having to wait for the entire execution to finish and return all the
 /// results afterwards.
 ///
-/// ## Returns:
+/// # Returns
 /// This function returns early but no value if some crucial error occurs.
 ///
 /// These are the possible reasons of an early return:
@@ -46,7 +45,7 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 		}
 	};
 
-	let mut zip_writer: Option<ZipWriter<File>> = None;
+	let mut opt_zip_writer = None;
 
 	if backup.is_zipped {
 		// Create a ZipWriter
@@ -66,7 +65,7 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 			}
 		};
 
-		zip_writer = Some(ZipWriter::new(file));
+		opt_zip_writer = Some(ZipWriter::new(file));
 	}
 
 	for backup_entry in backup.entries {
@@ -93,8 +92,9 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 		let mut entry_logs = copy_backup_entry(
 			backup_entry.origin,
 			backup_entry.target,
+			backup_entry.rename_to,
 			&parent_path,
-			&mut zip_writer,
+			&mut opt_zip_writer,
 			backup_entry.filters
 		);
 

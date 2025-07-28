@@ -24,10 +24,10 @@
   });
 </script>
 
-<div class="overflow-hidden">
+<div class="overflow-hidden grid gap-1 grid-rows-[24px_auto] h-[400px]">
   <div>Directories in this directory:</div>
   <div
-    class={`mt-1 grid gap-1 h-full overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
+    class={`grid gap-1 h-full overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
   >
     {#if shownResults.length === 0}
       <div class="text-center self-center">
@@ -44,7 +44,12 @@
             onClick={() => {
               // If the last element is already a file, replace it
               if (pathElements.at(-1)?.variant === "File") {
-                replaceLastPathElement(pathElements, result.name, result.id);
+                replaceLastPathElement(
+                  pathElements,
+                  result.name,
+                  result.id,
+                  "File",
+                );
               } else {
                 pushDirectoryToPathElements(
                   pathElements,
@@ -67,13 +72,24 @@
           </Button>
         {:else if result.variant === "Directory"}
           <Button
-            onClick={() =>
-              pushDirectoryToPathElements(
-                pathElements,
-                result.name,
-                result.id,
-                result.variant,
-              )}
+            onClick={() => {
+              // If the last element is already a file, replace it
+              if (pathElements.at(-1)?.variant === "File") {
+                replaceLastPathElement(
+                  pathElements,
+                  result.name,
+                  result.id,
+                  "Directory",
+                );
+              } else {
+                pushDirectoryToPathElements(
+                  pathElements,
+                  result.name,
+                  result.id,
+                  result.variant,
+                );
+              }
+            }}
             meaning="neutral"
             extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""}`}
           >

@@ -1,9 +1,11 @@
 use std::{ fs, path::PathBuf };
 
+use crate::path_utils::get_desktop_path;
+
 /// Creates a new backup directory or ZIP file path, optionally in a custom location,
 /// and returns the resulting `PathBuf` if successful.
 ///
-/// This function is typically used to set up the parent location where a backup will be saved.
+/// This function is used to set up the parent-location where a backup will be saved.
 /// It either creates a new folder or an empty `.zip` file, depending on the `is_zipped` flag.
 /// If a file or directory with the same name already exists at the target location,
 /// the function will return `None` to avoid overwriting existing backups.
@@ -12,9 +14,9 @@ use std::{ fs, path::PathBuf };
 /// backup target. The backup folder or file will be named `Backup {name}`.
 ///
 /// # Parameters
-/// - `name`: The base name to be used for the backup folder or ZIP file (e.g., `"June 2025"`).
-/// - `location`: Optional custom path (as a `String`) where the backup should be saved.
-///   If `None`, the function falls back to the Desktop path (OS-specific).
+/// - `name`: The base name to be used for the backup folder or ZIP file (e.g., `"GHG"`).
+/// - `location`: Custom path (as a `String`) where the backup should be saved.
+///   If empty (= ""), the function falls back to the Desktop path (OS-specific).
 /// - `is_zipped`: If `true`, creates a `.zip` file; if `false`, creates a folder.
 ///
 /// # Returns
@@ -26,14 +28,16 @@ use std::{ fs, path::PathBuf };
 /// - On **Unix/Linux**, the default Desktop path is `/home/{username}/Desktop/`.
 pub fn create_backup_parent_directory(
 	name: String,
-	location: Option<String>,
+	location: String,
 	is_zipped: bool
 ) -> Option<PathBuf> {
-	let mut used_directory_path = match location {
-		Some(path) => { PathBuf::from(path) }
-		// Use the user's desktop-path if there's no path set on the frontend
-		None => { get_os_specific_desktop_path() }
-	};
+	// Use the user's desktop as default backup location
+	let mut used_directory_path = get_desktop_path();
+
+	// Update this value if the input is not empty
+	if !location.is_empty() {
+		used_directory_path = PathBuf::from(location);
+	}
 
 	// Add the actual name to the path
 	used_directory_path.push(format!("Backup {}", name));
@@ -62,16 +66,4 @@ pub fn create_backup_parent_directory(
 			Err(_err) => { None }
 		}
 	}
-}
-
-/// Helper function that returns the user's desktop-directory on Windows.
-#[cfg(target_family = "windows")]
-fn get_os_specific_desktop_path() -> PathBuf {
-	PathBuf::from(&format!("C:/Users/{}/Desktop/", whoami::username()))
-}
-
-/// Helper function that returns the user's desktop-directory on Linux.
-#[cfg(target_family = "unix")]
-fn get_os_specific_desktop_path() -> PathBuf {
-	PathBuf::from(&format!("/home/{}/Desktop/", whoami::username()))
 }

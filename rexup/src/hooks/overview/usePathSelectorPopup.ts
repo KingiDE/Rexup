@@ -4,7 +4,7 @@ import type {
 	FileOrDirectory,
 	PathElement,
 	UserLocation,
-} from "../components/types";
+} from "../../components/types";
 
 // Returns the pathElements in form of a string value that can be displayed in an input-field
 export function getPathString(pathElements: Array<PathElement>) {
@@ -22,7 +22,7 @@ export function getPathString(pathElements: Array<PathElement>) {
 	return path;
 }
 
-// Removes all elements from pathElements that come after the directory with the specified name
+// Removes all elements from pathElements that come after the directory with the specified id
 export function slicePathElements(
 	pathElements: Array<PathElement>,
 	id: string,
@@ -31,11 +31,11 @@ export function slicePathElements(
 	const indexOfDir = pathElements.findIndex((el) => el.id === id);
 
 	// -1 means not found
-	if (indexOfDir !== -1) {
-		return pathElements.slice(0, indexOfDir + 1);
+	if (indexOfDir === -1) {
+		return pathElements;
 	}
 
-	return pathElements;
+	return pathElements.slice(0, indexOfDir + 1);
 }
 
 // Pushes the directory as a new element to the pathElements when a directory-result is clicked
@@ -53,12 +53,14 @@ export function replaceLastPathElement(
 	pathElements: Array<PathElement>,
 	name: string,
 	id: string,
+	variant: FileOrDirectory,
 ) {
 	const lastPathElement = pathElements.at(-1);
 
 	if (lastPathElement !== undefined) {
 		lastPathElement.id = id;
 		lastPathElement.name = name;
+		lastPathElement.variant = variant;
 	}
 }
 

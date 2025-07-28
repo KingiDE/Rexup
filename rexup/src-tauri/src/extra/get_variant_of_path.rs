@@ -9,7 +9,7 @@ use std::path::Path;
 /// the function returns `None`.
 ///
 /// # Parameters
-/// - `path`: A `String` representing the absolute or relative file system path to check.
+/// - `path`: A `String` representing the absolute or relative file-system path to check.
 ///
 /// # Returns
 /// - `Some(FileOrDirectory::File)` if the path points to a regular file.

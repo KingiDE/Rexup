@@ -1,5 +1,8 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { CurrentOverviewTab, LocalStateBackup } from "../components/types";
+import type {
+	CurrentOverviewTab,
+	LocalStateBackup,
+} from "../../components/types";
 
 export const currentTab = $state<{ value: CurrentOverviewTab }>({
 	value: "entries",

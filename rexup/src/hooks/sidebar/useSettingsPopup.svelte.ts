@@ -14,7 +14,9 @@ export async function loadAndSetData() {
 
 	try {
 		convertedData = JSON.parse(readData);
-	} catch (error) {}
+	} catch (error) {
+		console.error("The config-file couldn't be parsed!");
+	}
 
 	if (
 		convertedData &&
@@ -39,6 +41,6 @@ export async function toggleShowBackupExecutionHistory() {
 	})) as boolean;
 
 	if (result === false) {
-		console.error("The config-file couldn't be read!");
+		console.error("The config-file couldn't be written!");
 	}
 }

@@ -11,7 +11,7 @@
   } = $props();
 </script>
 
-<div class="mt-4">
+<div class="grid mt-4">
   <div class="font-semibold">Output-Variant</div>
   <div class="opacity-75 max-w-[600px]">
     Your backup can either be a simple directory containing files or it can be a

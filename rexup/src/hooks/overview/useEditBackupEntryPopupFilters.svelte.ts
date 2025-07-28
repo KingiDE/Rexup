@@ -1,39 +1,85 @@
-export function updateDisplayedNames(fileNamesToDisplay: Array<string>) {
-	const amountOfEmptyElements = fileNamesToDisplay.filter(
-		(el: string) => el === "",
-	).length;
+import type { LocalStateBackupEntry } from "../../components/types";
 
-	if (amountOfEmptyElements > 1) {
-		// Mutates the original array instead of copying; this way it works
-		for (let i = fileNamesToDisplay.length - 1; i >= 0; i--) {
-			if (fileNamesToDisplay[i] === "") {
-				fileNamesToDisplay.splice(i, 1);
-			}
-		}
-	} else if (amountOfEmptyElements < 1) {
-		fileNamesToDisplay.push("");
+export const displayedFileNames = $state<{ value: Array<string> | null }>({
+	value: null,
+});
+
+export function updateDisplayedNames(
+	doReset: boolean,
+	entry: LocalStateBackupEntry,
+) {
+	// Load the file names from currentBackupEntry.value.filters.file_names and update the displayedFileNames.
+	if (displayedFileNames.value === null || doReset) {
+		displayedFileNames.value = [...entry.filters.file_names, ""];
 	}
 
-	return fileNamesToDisplay;
+	const amountOfEmptyElements = displayedFileNames.value.filter(
+		(cmd) => cmd === "",
+	).length;
+
+	// If there are more than one empty element, update entry.filters.file_names with the new file names list that has no empty elements.
+	// Then, push one empty item to the displayed file names list.
+	if (amountOfEmptyElements > 1) {
+		displayedFileNames.value = displayedFileNames.value.filter(
+			(cmd) => cmd !== "",
+		);
+		entry.filters.file_names = displayedFileNames.value;
+		displayedFileNames.value.push("");
+	}
+
+	// If there's no empty element, update entry.filters.file_names with the new file names list.
+	// Then, push one empty item to the displayed file names list.
+	if (amountOfEmptyElements === 0) {
+		entry.filters.file_names = displayedFileNames.value;
+		displayedFileNames.value.push("");
+	}
+
+	// If there's exactly one empty element, update entry.filters.file_names with this exact list but without the empty element.
+	if (amountOfEmptyElements === 1) {
+		entry.filters.file_names = displayedFileNames.value.filter(
+			(cmd) => cmd !== "",
+		);
+	}
 }
 
-export function updateDisplayedExtensions(
-	fileExtensionsToDisplay: Array<string>,
-) {
-	const amountOfEmptyElements = fileExtensionsToDisplay.filter(
-		(el: string) => el === "",
-	).length;
+export const displayedPathElements = $state<{ value: Array<string> | null }>({
+	value: null,
+});
 
-	if (amountOfEmptyElements > 1) {
-		// Mutates the original array instead of copying; this way it works
-		for (let i = fileExtensionsToDisplay.length - 1; i >= 0; i--) {
-			if (fileExtensionsToDisplay[i] === "") {
-				fileExtensionsToDisplay.splice(i, 1);
-			}
-		}
-	} else if (amountOfEmptyElements < 1) {
-		fileExtensionsToDisplay.push("");
+export function updateDisplayedPathElements(
+	doReset: boolean,
+	entry: LocalStateBackupEntry,
+) {
+	// Load the file names from entry.filters.path_elements and update the displayedPathElements.
+	if (displayedPathElements.value === null || doReset) {
+		displayedPathElements.value = [...entry.filters.path_elements, ""];
 	}
 
-	return fileExtensionsToDisplay;
+	const amountOfEmptyElements = displayedPathElements.value.filter(
+		(cmd) => cmd === "",
+	).length;
+
+	// If there are more than one empty element, update entry.filters.path_elements with the new file names list that has no empty elements.
+	// Then, push one empty item to the displayed file names list.
+	if (amountOfEmptyElements > 1) {
+		displayedPathElements.value = displayedPathElements.value.filter(
+			(cmd) => cmd !== "",
+		);
+		entry.filters.path_elements = displayedPathElements.value;
+		displayedPathElements.value.push("");
+	}
+
+	// If there's no empty element, update entry.filters.path_elements with the new file names list.
+	// Then, push one empty item to the displayed file names list.
+	if (amountOfEmptyElements === 0) {
+		entry.filters.path_elements = displayedPathElements.value;
+		displayedPathElements.value.push("");
+	}
+
+	// If there's exactly one empty element, update entry.filters.path_elements with this exact list but without the empty element.
+	if (amountOfEmptyElements === 1) {
+		entry.filters.path_elements = displayedPathElements.value.filter(
+			(cmd) => cmd !== "",
+		);
+	}
 }

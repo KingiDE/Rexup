@@ -45,8 +45,8 @@ fn get_os_specific_drives() -> Vec<Vec<PathElement>> {
 				let drive_letter = (b'A' + i) as char;
 				drives.push(
 					vec![PathElement {
-						id: format!("{}:/", drive_letter),
-						name: format!("{}:/", drive_letter),
+						id: format!("{}:", drive_letter),
+						name: format!("{}:", drive_letter),
 						variant: FileOrDirectory::Directory,
 					}]
 				);

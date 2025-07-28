@@ -37,7 +37,7 @@ export async function triggerWriteBackupsFile() {
 		})) as boolean;
 
 		if (result === false) {
-			console.error("The backups-file couldn't be read!");
+			console.error("The backups-file couldn't be written!");
 		}
 	}
 }

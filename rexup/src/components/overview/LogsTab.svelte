@@ -51,55 +51,67 @@
           <li>&#x2139; {executionLog.Information}</li>
         {:else if "ErrorCopying" in executionLog}
           <li>&#x274C; {executionLog.ErrorCopying}</li>
-        {:else if "SuccessCopying" in executionLog}
+        {:else if "SuccessExecutingCommand" in executionLog}
           <li>
-            &#x2705; Copied the {executionLog.SuccessCopying.variant.toLocaleLowerCase()}
-            from
+            &#x2705; Executed the command
             <span class="px-1 bg-gray-800 rounded-md opacity-75"
-              >{executionLog.SuccessCopying.from_path}</span
+              >{executionLog.SuccessExecutingCommand.command}</span
             >
-            to
+            in
             <span class="px-1 bg-gray-800 rounded-md opacity-75"
-              >/{executionLog.SuccessCopying.to_path}</span
+              >{executionLog.SuccessExecutingCommand.to_path}</span
             >
             successfully.
           </li>
-        {:else if "IgnoreCopying" in executionLog}
-          {#if executionLog.IgnoreCopying.reason === "TooLargeSize"}
+        {:else if "SuccessCopyingFileOrDirectory" in executionLog}
+          <li>
+            &#x2705; Copied the {executionLog.SuccessCopyingFileOrDirectory.variant.toLocaleLowerCase()}
+            from
+            <span class="px-1 bg-gray-800 rounded-md opacity-75"
+              >{executionLog.SuccessCopyingFileOrDirectory.from_path}</span
+            >
+            to
+            <span class="px-1 bg-gray-800 rounded-md opacity-75"
+              >{executionLog.SuccessCopyingFileOrDirectory.to_path}</span
+            >
+            successfully.
+          </li>
+        {:else if "IgnoreCopyingFile" in executionLog}
+          {#if executionLog.IgnoreCopyingFile.reason === "TooLargeSize"}
             <li>
               &#x1F6AB; Ignored copying the file from <span
                 class="px-1 bg-gray-800 rounded-md opacity-75"
-                >{executionLog.IgnoreCopying.from_path}</span
+                >{executionLog.IgnoreCopyingFile.from_path}</span
               >
               to
               <span class="px-1 bg-gray-800 rounded-md opacity-75"
-                >/{executionLog.IgnoreCopying.to_path}</span
+                >{executionLog.IgnoreCopyingFile.to_path}</span
               >
               because the file is too large.
             </li>
-          {:else if executionLog.IgnoreCopying.reason === "WrongName"}
+          {:else if executionLog.IgnoreCopyingFile.reason === "WrongName"}
             <li>
               &#x1F6AB; Ignored copying the file from <span
                 class="px-1 bg-gray-800 rounded-md opacity-75"
-                >{executionLog.IgnoreCopying.from_path}</span
+                >{executionLog.IgnoreCopyingFile.from_path}</span
               >
               to
               <span class="px-1 bg-gray-800 rounded-md opacity-75"
-                >/{executionLog.IgnoreCopying.to_path}</span
+                >{executionLog.IgnoreCopyingFile.to_path}</span
               >
               because the file has the wrong name.
             </li>
-          {:else if executionLog.IgnoreCopying.reason === "WrongExtension"}
+          {:else if executionLog.IgnoreCopyingFile.reason === "WrongPathElements"}
             <li>
               &#x1F6AB; Ignored copying the file from <span
                 class="px-1 bg-gray-800 rounded-md opacity-75"
-                >{executionLog.IgnoreCopying.from_path}</span
+                >{executionLog.IgnoreCopyingFile.from_path}</span
               >
               to
               <span class="px-1 bg-gray-800 rounded-md opacity-75"
-                >/{executionLog.IgnoreCopying.to_path}</span
+                >{executionLog.IgnoreCopyingFile.to_path}</span
               >
-              because the file has the wrong extension.
+              because the file has the wrong path elements.
             </li>
           {/if}
         {/if}

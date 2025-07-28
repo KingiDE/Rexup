@@ -14,7 +14,7 @@
 
   // When the user clicks "Select path", this function is passed to the PathSelectorPopup and will be called with the new location
   function setCurrentBackupPath(path: string) {
-    currentBackup.location = path === "" ? null : path;
+    currentBackup.location = path;
     closePopup();
   }
 
@@ -39,7 +39,7 @@
   <div class="opacity-75 max-w-[600px]">
     After your backup has been executed, it will be placed somewhere. This
     location can be configured here. To change it, simply click the
-    "Edit"-button below and choose a diretory, the backup will be placed in.
+    "Edit"-button below and choose a directory, the backup will be placed in.
   </div>
   <BackupLocationInput bind:currentBackup />
   <PathSelectorPopup

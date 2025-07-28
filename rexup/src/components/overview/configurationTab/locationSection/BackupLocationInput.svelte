@@ -15,8 +15,7 @@
   <Input
     inputExtraCSS="min-w-[400px]"
     placeholder="Your desktop"
-    getter={() =>
-      currentBackup.location === null ? "" : currentBackup.location}
+    getter={() => currentBackup.location}
     setter={() => {}}
     disabled
     alwaysReadable
@@ -33,9 +32,9 @@
   </Button>
   <Button
     meaning="neutral"
-    onClick={() => (currentBackup.location = null)}
+    onClick={() => (currentBackup.location = "")}
     extraCSS="py-1 w-20"
-    disabled={currentBackup.location === null || popup.value !== null}
+    disabled={currentBackup.location === "" || popup.value !== null}
   >
     {#snippet text()}
       Reset

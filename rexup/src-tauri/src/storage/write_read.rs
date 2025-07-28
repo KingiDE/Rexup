@@ -42,48 +42,5 @@ pub fn safely_write_file(path: &Path, data: String) -> bool {
 
 	let _ = fs::create_dir_all(path_without_file);
 
-	match fs::write(&path, &data) {
-		Ok(_nothing) => true,
-		Err(_err) => false,
-	}
-}
-
-/// Contains the two variants a stored file can be written to or read from.
-pub enum FileLocation {
-	/// location of the config-file in the file-system
-	Config,
-	/// location of the backups-file in the file-system
-	Backups,
-}
-
-/// Converts the `file_location` to an usable path on different operating systems.
-pub fn convert_location_to_path(file_location: FileLocation) -> PathBuf {
-	match file_location {
-		FileLocation::Config => get_config_file_location(),
-		FileLocation::Backups => get_backups_file_location(),
-	}
-}
-
-/// Helper function that returns the correct config-file location on Windows.
-#[cfg(target_family = "windows")]
-fn get_config_file_location() -> PathBuf {
-	PathBuf::from(format!("C:/Users/{}/AppData/Roaming/.rexup/config.json", whoami::username()))
-}
-
-/// Helper function that returns the correct config-file location on Linux.
-#[cfg(target_family = "unix")]
-fn get_config_file_location() -> PathBuf {
-	PathBuf::from(format!("/home/{}/.rexup/config.json", whoami::username()))
-}
-
-/// Helper function that returns the correct backups-file location on Windows.
-#[cfg(target_family = "windows")]
-fn get_backups_file_location() -> PathBuf {
-	PathBuf::from(format!("C:/Users/{}/AppData/Roaming/.rexup/backups.json", whoami::username()))
-}
-
-/// Helper function that returns the correct backups-file location on Linux.
-#[cfg(target_family = "unix")]
-fn get_backups_file_location() -> PathBuf {
-	PathBuf::from(format!("/home/{}/.rexup/backups.json", whoami::username()))
+	!fs::write(&path, &data).is_err()
 }
