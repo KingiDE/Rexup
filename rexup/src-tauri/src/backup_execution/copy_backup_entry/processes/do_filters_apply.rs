@@ -57,11 +57,13 @@ pub fn do_filters_apply(
 	if filters.file_names.len() > 0 {
 		let mut is_included = false;
 
-		filters.file_names.iter().for_each(|path_element| {
-			if file_path.components().any(|component| component.as_os_str() == OsStr::new(path_element)) {
-				is_included = true;
-			}
-		});
+		if let Some(name_of_existing_file) = file_path.file_name() {
+			filters.file_names.iter().for_each(|file_name| {
+				if OsStr::new(file_name) == name_of_existing_file {
+					is_included = true;
+				}
+			});
+		}
 
 		match filters.mode {
 			BackupEntryFiltersMode::Include => {
