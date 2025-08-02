@@ -38,7 +38,7 @@ export function slicePathElements(
 	return pathElements.slice(0, indexOfDir + 1);
 }
 
-// Pushes the directory as a new element to the pathElements when a directory-result is clicked
+// Pushes the directory as a new element to the pathElements when a directory result is clicked
 export function pushDirectoryToPathElements(
 	pathElements: Array<PathElement>,
 	name: string,

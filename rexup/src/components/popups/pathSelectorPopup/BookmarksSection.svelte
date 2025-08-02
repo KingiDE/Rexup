@@ -82,7 +82,7 @@
   <!-- List drives -->
   {#each drives as drive}
     <Button
-      onClick={async () => (pathElements = drive)}
+      onClick={async () => (pathElements = [...drive])}
       meaning="neutral"
       extraCSS="py-1"
     >
