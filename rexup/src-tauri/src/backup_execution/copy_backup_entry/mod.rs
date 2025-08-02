@@ -5,7 +5,13 @@ mod processes;
 use std::{ fs::File, path::{ Path, PathBuf }, vec };
 use zip::ZipWriter;
 
-use crate::{ BackupEntryFilters, BackupEntryOrigin, BackupEntryOriginMode, BackupExecutionLog };
+use crate::{
+	global_texts,
+	BackupEntryFilters,
+	BackupEntryOrigin,
+	BackupEntryOriginMode,
+	BackupExecutionLog,
+};
 
 /// Copies a file or directory from the `origin` to a `target` within a backup context.
 ///
@@ -14,9 +20,9 @@ use crate::{ BackupEntryFilters, BackupEntryOrigin, BackupEntryOriginMode, Backu
 ///
 /// # Arguments
 /// * `origin` - A struct containing multiple fields:
-/// 	- A `String` that acts like a path to a resource on the local file system
-/// 	- A `Vec<String>` of commands that will be executed
-/// 	- A `BackupEntryOriginMode` that decides which of the two other fields will actually be used
+/// 	- `local_file_system` - A `String` that acts like a path to a resource on the local file system.
+/// 	- `commands` - A `Vec<String>` of commands that are executed.
+/// 	- `active_mode` - A `BackupEntryOriginMode` that decides which of the two other fields () are actually used.
 /// * `target` - A `String` representing the relative path where the file or directory should be placed in the backup root.
 /// * `parent_path` - The base path of the backup.
 /// * `zip_writer` - A mutable reference to an optional `ZipWriter`, used if writing into a zip archive.
@@ -33,11 +39,11 @@ pub fn copy_backup_entry(
 	zip_writer: &mut Option<ZipWriter<File>>,
 	filters: BackupEntryFilters
 ) -> Vec<BackupExecutionLog> {
-	// The path to the parent-directory that already contains the name of the backup
+	// The path to the parent directory that already contains the name of the backup
 	// Example: "C:/Users/{username}/Desktop/Backup Main" with the potential ".zip" extension
 	let parent_path = Path::new(&parent_path);
 
-	// The relative path inside the parent-directory
+	// The relative path inside the parent directory
 	// Example: "someSubdir/anotherDir" (Note: the prefix "/" gets removed below)
 	let mut corrected_relative_target = Path::new(&target);
 
@@ -47,11 +53,7 @@ pub fn copy_backup_entry(
 				corrected_relative_target = path;
 			}
 			Err(_err) => {
-				return vec![
-					BackupExecutionLog::ErrorCopying(
-						format!("Couldn't strip the leading '/' of '{}'. Therefore, copying this backup-entry is not possible.", target)
-					)
-				];
+				return vec![BackupExecutionLog::ErrorCopying(global_texts::prefix_not_stripped(&target))];
 			}
 		};
 	}
@@ -62,8 +64,7 @@ pub fn copy_backup_entry(
 				origin.commands,
 				parent_path,
 				zip_writer,
-				corrected_relative_target,
-				&filters
+				corrected_relative_target
 			)
 		}
 		BackupEntryOriginMode::LocalFileSystem => {

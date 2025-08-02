@@ -12,6 +12,7 @@
   } from "../../hooks/overview/useExecuteBackup.svelte";
   import { currentBackup } from "../../hooks/useTwoColumns.svelte";
   import { popup } from "../../hooks/useHotkeyHandler.svelte";
+  import { globalTexts } from "../../globalTexts";
 </script>
 
 <div
@@ -20,15 +21,18 @@
   {#if currentBackup.value === null}
     <div class="h-full grid place-content-center">
       <h2 class="font-poppins text-2xl font-bold text-center">
-        There's no backup selected <span class="ml-2">:/</span>
+        {globalTexts.overview.noBackupSelected.heading}
+        <span class="ml-2"
+          >{globalTexts.overview.noBackupSelected.headingEmoji}</span
+        >
       </h2>
       <p class="mt-2 text-center">
-        Click on an existing backup or create one to edit it here.
+        {globalTexts.overview.noBackupSelected.description}
       </p>
     </div>
   {:else}
     <h2 class="font-poppins text-2xl font-bold mb-2">
-      Overview of Backup: "{currentBackup.value.name}"
+      {globalTexts.overview.backupOverview.heading(currentBackup.value.name)}
     </h2>
     <TabSwitcher bind:currentTab={currentTab.value} />
     <Button
@@ -38,15 +42,14 @@
       disabled={isBackupExecuting.value || popup.value !== null}
     >
       {#snippet text()}
-        Execute backup
+        {globalTexts.overview.backupOverview.executeBackup}
       {/snippet}
       {#snippet icon()}
         <Icon name="triangle" extraCSS="fill-gray-50 rotate-90" />
       {/snippet}
     </Button>
     <div class="mt-2 opacity-75">
-      Switch to the Logs-Tab (if you haven't already) to see the progress of the
-      backup-execution after you clicked the button above.
+      {globalTexts.overview.backupOverview.switchToLogTabHint}
     </div>
     {#if currentTab.value === "entries"}
       <EntriesTab bind:currentBackup={currentBackup.value} />

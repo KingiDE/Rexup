@@ -2,7 +2,7 @@
 
 use std::{ ffi::OsStr, fs, path::Path };
 
-use crate::BackupExecutionLog;
+use crate::{ global_texts, BackupExecutionLog };
 
 /// Handles copying of an individual file to a target directory.
 ///
@@ -24,15 +24,11 @@ pub fn copy_file(
 ) -> Option<BackupExecutionLog> {
 	let parent_directory_and_relative_target = &parent_path.join(&relative_target);
 
-	// Create the required subdirectories in the backup-parent-directory
+	// Create the required subdirectories in the backup parent directory
 	if let Err(_err) = fs::create_dir_all(&parent_directory_and_relative_target) {
 		return Some(
 			BackupExecutionLog::ErrorCopying(
-				format!(
-					"The subdirectories at {:?} inside the backup-parent-directory couldn't be created. Therefore, this file at {:?} can't be copied.",
-					relative_target,
-					origin
-				)
+				global_texts::subdirectories_for_file_in_backup_parent_not_created(relative_target, origin)
 			)
 		);
 	}
@@ -44,11 +40,7 @@ pub fn copy_file(
 	if let Err(_err) = fs::write(entire_filepath, file_contents) {
 		return Some(
 			BackupExecutionLog::ErrorCopying(
-				format!(
-					"The file at {:?} couldn't be written to {:?}. Therefore, this file can't be copied.",
-					origin,
-					relative_target.join(file_name)
-				)
+				global_texts::file_not_copied(origin, relative_target.join(file_name))
 			)
 		);
 	}

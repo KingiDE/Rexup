@@ -31,8 +31,6 @@ pub fn get_backups_file_path() -> PathBuf {
 	get_config_directory().join("backups.json")
 }
 
-// TODO: Implement for Unix
-
 #[cfg(target_family = "unix")]
 pub fn get_home_path() -> PathBuf {
 	match env::var("HOME") {

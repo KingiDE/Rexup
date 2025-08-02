@@ -11,7 +11,7 @@ export function validateBackupsFile(readData: string) {
 			return parsed;
 		}
 	} catch (err) {
-		console.error("The backups-file couldn't be parsed!");
+		console.error("The backups file couldn't be parsed!");
 	}
 	return [];
 }

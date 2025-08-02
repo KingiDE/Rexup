@@ -11,6 +11,7 @@
   import Icon from "../ui/Icon.svelte";
   import { closePopup, popup } from "../../hooks/useHotkeyHandler.svelte";
   import { deleteAllData } from "../../hooks/sidebar/useSidebar.svelte";
+  import { globalTexts } from "../../globalTexts";
 
   onMount(() => {
     loadAndSetData();
@@ -33,28 +34,27 @@
         <Icon name="close" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
-    <h2 class="font-poppins text-2xl font-bold">Settings</h2>
+    <h2 class="font-poppins text-2xl font-bold">
+      {globalTexts.sidebar.settingsPopup.heading}
+    </h2>
     <div class="mt-4">
       <Checkbox
         value={showBackupExecutionHistory.value}
         onClick={toggleShowBackupExecutionHistory}
-        label="Show backup execution history"
+        label={globalTexts.sidebar.settingsPopup.toggleDisplayHistoryLabel}
       />
       <div class="opacity-75">
-        Enable or disable the appearence of the execution-history at the top of
-        an backup overview.
+        {globalTexts.sidebar.settingsPopup.toggleDisplayHistoryDescription}
       </div>
     </div>
     <div class="mt-4">
-      Delete all of your data
+      {globalTexts.sidebar.settingsPopup.deleteAllDataLabel}
       <div class="opacity-75">
-        This includes your config-file, the recorded backup execution-history
-        and the backup structure(s) but NOT the actual backups that were created
-        themselves.
+        {globalTexts.sidebar.settingsPopup.deleteAllDataDescription}
       </div>
       <Button meaning="negative" onClick={deleteAllData} extraCSS="mt-2 px-4">
         {#snippet text()}
-          Delete all data
+          {globalTexts.sidebar.settingsPopup.deleteAllDataButton}
         {/snippet}
         {#snippet icon()}
           <Icon name="delete" extraCSS="fill-gray-50" />

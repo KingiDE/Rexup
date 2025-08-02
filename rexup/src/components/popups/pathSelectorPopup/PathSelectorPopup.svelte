@@ -13,6 +13,7 @@
   import BookmarksSection from "./BookmarksSection.svelte";
   import ResultsSection from "./ResultsSection.svelte";
   import { closePopup, popup } from "../../../hooks/useHotkeyHandler.svelte";
+  import { globalTexts } from "../../../globalTexts";
 
   let {
     setOuterPath,
@@ -94,7 +95,7 @@
       extraCSS="mt-4 px-8 justify-self-end"
     >
       {#snippet text()}
-        Select path
+        {globalTexts.overview.pathSelectorPopup.selectPathConfirm}
       {/snippet}
     </Button>
   </div>

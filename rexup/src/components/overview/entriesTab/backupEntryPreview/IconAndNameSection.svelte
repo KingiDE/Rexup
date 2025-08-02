@@ -2,6 +2,7 @@
   import type { LocalStateBackupEntry } from "../../../types";
   import { invoke } from "@tauri-apps/api/core";
   import Icon from "../../../ui/Icon.svelte";
+  import { globalTexts } from "../../../../globalTexts";
 
   let {
     entry = $bindable(),
@@ -15,20 +16,26 @@
 
   $effect(() => {
     async function doAsyncThing() {
-      if (entry.origin.active_mode === "Commands")
-        return (previewIcon = "commands");
-      else {
+      if (entry.origin.active_mode === "Commands") {
+        entry.variant = null;
+        previewIcon = "commands";
+      } else {
         switch (
           await invoke("get_variant_of_path", {
             path: entry.origin.local_file_system,
           })
         ) {
           case "File":
-            return (previewIcon = "file");
+            previewIcon = "file";
+            entry.variant = "File";
+            break;
           case "Directory":
-            return (previewIcon = "directory");
+            previewIcon = "directory";
+            entry.variant = "Directory";
+            break;
           default:
-            return (previewIcon = "missing");
+            previewIcon = "missing";
+            entry.variant = null;
         }
       }
     }
@@ -44,12 +51,12 @@
 </div>
 <div class="mt-1 opacity-75">
   {#if entry.origin.active_mode === "LocalFileSystem"}
-    This backup entry currently copies a {entry.variant === "File"
-      ? "file"
-      : "directory"} at following location:
+    {globalTexts.overview.entriesTab.backupEntryPreview.localFileSystemPreviewText(
+      entry.variant,
+    )}
   {:else}
-    This backup entry currently executes {entry.origin.commands.length === 1
-      ? "a command"
-      : `${entry.origin.commands.length} commands`}.
+    {globalTexts.overview.entriesTab.backupEntryPreview.commandPreviewText(
+      entry.origin.commands.length,
+    )}
   {/if}
 </div>

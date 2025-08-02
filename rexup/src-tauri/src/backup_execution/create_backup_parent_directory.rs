@@ -5,17 +5,17 @@ use crate::path_utils::get_desktop_path;
 /// Creates a new backup directory or ZIP file path, optionally in a custom location,
 /// and returns the resulting `PathBuf` if successful.
 ///
-/// This function is used to set up the parent-location where a backup will be saved.
+/// This function is used to set up the parent location where a backup is saved.
 /// It either creates a new folder or an empty `.zip` file, depending on the `is_zipped` flag.
 /// If a file or directory with the same name already exists at the target location,
-/// the function will return `None` to avoid overwriting existing backups.
+/// the function returns `None` to avoid overwriting existing backups.
 ///
 /// If no custom location is provided via `location`, the user's **Desktop** is used as the default
-/// backup target. The backup folder or file will be named `Backup {name}`.
+/// backup target. The backup folder or file is named `Backup {name}`.
 ///
 /// # Parameters
 /// - `name`: The base name to be used for the backup folder or ZIP file (e.g., `"GHG"`).
-/// - `location`: Custom path (as a `String`) where the backup should be saved.
+/// - `location`: Custom path (as a `&str`) where the backup should be saved.
 ///   If empty (= ""), the function falls back to the Desktop path (OS-specific).
 /// - `is_zipped`: If `true`, creates a `.zip` file; if `false`, creates a folder.
 ///
@@ -28,7 +28,7 @@ use crate::path_utils::get_desktop_path;
 /// - On **Unix/Linux**, the default Desktop path is `/home/{username}/Desktop/`.
 pub fn create_backup_parent_directory(
 	name: String,
-	location: String,
+	location: &str,
 	is_zipped: bool
 ) -> Option<PathBuf> {
 	// Use the user's desktop as default backup location
@@ -43,7 +43,7 @@ pub fn create_backup_parent_directory(
 	used_directory_path.push(format!("Backup {}", name));
 
 	if is_zipped {
-		// Add the ".zip"-extension for zip-files
+		// Add the ".zip"-extension for zip files
 		used_directory_path.set_extension("zip");
 
 		// If the path with .zip already exists, return None

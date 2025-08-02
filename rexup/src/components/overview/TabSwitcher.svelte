@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../globalTexts";
   import { popup } from "../../hooks/useHotkeyHandler.svelte";
   import type { CurrentOverviewTab } from "../types";
   import Button from "../ui/Button.svelte";
@@ -35,7 +36,7 @@
       disabled={popup.value !== null}
     >
       {#snippet text()}
-        Entries
+        {globalTexts.overview.backupOverview.tabSwitcher.entries}
       {/snippet}
     </Button>
     <Button
@@ -45,7 +46,7 @@
       disabled={popup.value !== null}
     >
       {#snippet text()}
-        Logs
+        {globalTexts.overview.backupOverview.tabSwitcher.logs}
       {/snippet}
     </Button>
     <Button
@@ -55,7 +56,7 @@
       disabled={popup.value !== null}
     >
       {#snippet text()}
-        Configuration
+        {globalTexts.overview.backupOverview.tabSwitcher.configuration}
       {/snippet}
     </Button>
   {/snippet}

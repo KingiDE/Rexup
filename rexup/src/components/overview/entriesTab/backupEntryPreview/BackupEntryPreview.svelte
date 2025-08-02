@@ -10,19 +10,18 @@
     entry: LocalStateBackupEntry;
   } = $props();
 
-  // Shows a yellow outline around the preview-box if at least the origin or target is "" (an empty string)
   function showYellowOutline() {
     if (
       entry.origin.active_mode === "Commands" &&
       entry.origin.commands.length === 0
     )
       return true;
+
     if (
       entry.origin.active_mode === "LocalFileSystem" &&
       entry.origin.local_file_system === ""
     )
       return true;
-    if (entry.target === "") return true;
 
     return false;
   }

@@ -11,7 +11,7 @@ export function getPathString(pathElements: Array<PathElement>) {
 	let path = "";
 
 	for (const pathElement of pathElements) {
-		// Don't add trailing slashes for files and the Linux root-directory
+		// Don't add trailing slashes for files and the Linux root directory
 		if (pathElement.variant === "File" || pathElement.name === "/") {
 			path += `${pathElement.name}`;
 		} else {

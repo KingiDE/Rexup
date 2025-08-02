@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../../globalTexts";
   import type { LocalStateBackupEntry } from "../../../types";
   import Button from "../../../ui/Button.svelte";
   import Input from "../../../ui/Input.svelte";
@@ -10,20 +11,22 @@
   } = $props();
 </script>
 
-<div class="font-semibold">Target:</div>
-<div class="opacity-75">
-  Here you can select the location of the copied resource relative to the
-  directory or zip-file that has been created. If the input-field is empty, the
-  resource will be placed in the root-directory (= "/").
+<div class="font-semibold">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab.target
+    .heading}
 </div>
 <div class="opacity-75">
-  For further assistance, switch to the Overview-Tab that explains the
-  copy-process in detail.
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab.target
+    .description}
+</div>
+<div class="opacity-75">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.assistanceReference}
 </div>
 <div class="mt-1 flex gap-2">
   <Input
     labelExtraCSS="grow"
-    placeholder="Unset"
+    placeholder={globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab
+      .placeholder}
     getter={() => entry.target}
     setter={(newValue) => {
       entry.target = newValue;
@@ -36,25 +39,26 @@
     disabled={entry.target === ""}
   >
     {#snippet text()}
-      Reset
+      {globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab.reset}
     {/snippet}
   </Button>
 </div>
-<div class="mt-2 font-semibold">Rename to:</div>
-<div class="opacity-75">
-  Here you can pick the new name of the copied resource. If the input-field is
-  empty, the resource won't be renamed and keeps it original name. Note that the
-  rename-functionality only works on files and directories that are stored on
-  your local file-system.
+<div class="mt-2 font-semibold">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab.rename
+    .heading}
 </div>
 <div class="opacity-75">
-  For further assistance, switch to the Overview-Tab that explains the
-  copy-process in detail.
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab.rename
+    .description}
+</div>
+<div class="opacity-75">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.assistanceReference}
 </div>
 <div class="mt-1 flex gap-2">
   <Input
     labelExtraCSS="grow"
-    placeholder="Unset"
+    placeholder={globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab
+      .placeholder}
     getter={() => entry.rename_to}
     setter={(newValue) => {
       entry.rename_to = newValue;
@@ -67,7 +71,7 @@
     disabled={entry.rename_to === ""}
   >
     {#snippet text()}
-      Reset
+      {globalTexts.overview.entriesTab.editBackupEntryPopup.targetTab.reset}
     {/snippet}
   </Button>
 </div>

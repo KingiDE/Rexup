@@ -31,7 +31,7 @@ export function addBackup(name: string) {
 	closePopup();
 }
 
-// Resets all local states to empty values and calls the Rust backend to delete the entire "rexup"-directory recursively
+// Resets all local states to empty values and calls the Rust backend to delete the entire "rexup" directory recursively
 export async function deleteAllData() {
 	backups.value = [];
 	currentBackup.value = null;

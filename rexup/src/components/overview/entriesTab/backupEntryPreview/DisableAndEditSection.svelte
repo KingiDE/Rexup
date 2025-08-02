@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../../globalTexts";
   import { selectThisBackupEntry } from "../../../../hooks/overview/useEntriesTab.svelte";
   import { popup } from "../../../../hooks/useHotkeyHandler.svelte";
   import type { LocalStateBackupEntry } from "../../../types";
@@ -19,7 +20,9 @@
     disabled={popup.value !== null}
   >
     {#snippet text()}
-      {entry.is_active ? "Enabled" : "Disabled"}
+      {entry.is_active
+        ? globalTexts.overview.entriesTab.backupEntryPreview.entryEnabled
+        : globalTexts.overview.entriesTab.backupEntryPreview.entryDisabled}
     {/snippet}
   </Button>
   <Button
@@ -32,7 +35,7 @@
     disabled={popup.value !== null}
   >
     {#snippet text()}
-      Edit
+      {globalTexts.overview.entriesTab.backupEntryPreview.edit}
     {/snippet}
   </Button>
 </div>

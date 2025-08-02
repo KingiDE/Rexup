@@ -6,7 +6,7 @@ import { addBackup } from "./sidebar/useSidebar.svelte";
 import { addBackupEntryInput } from "./overview/useAddBackupEntryPopup.svelte";
 import { addBackupEntry } from "./overview/useEntriesTab.svelte";
 
-// Everytime a hotkey is pressed, the handler will go down the hierarchy and chooses the correct function to call.
+// Every time a hotkey is pressed, the handler goes down the hierarchy and chooses the correct function to call.
 export function initializeHotkeys() {
 	document.addEventListener("keydown", (e) => {
 		if (e.key === "Escape") {

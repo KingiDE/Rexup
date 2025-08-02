@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../globalTexts";
   import { updatePathElementsFromUserLocationTo } from "../../../hooks/overview/usePathSelectorPopup";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
@@ -24,7 +25,7 @@
 <div
   class="row-start-1 row-end-3 col-start-1 grid gap-1 content-start self-start h-full overflow-y-scroll"
 >
-  <div>Bookmarks:</div>
+  <div>{globalTexts.overview.pathSelectorPopup.bookmarks.heading}</div>
   <Button
     onClick={async () =>
       (pathElements = await updatePathElementsFromUserLocationTo("Home"))}
@@ -32,7 +33,7 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Home
+      {globalTexts.overview.pathSelectorPopup.bookmarks.home}
     {/snippet}
     {#snippet icon()}
       <Icon name="home" extraCSS="fill-gray-50" />
@@ -46,7 +47,7 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Desktop
+      {globalTexts.overview.pathSelectorPopup.bookmarks.desktop}
     {/snippet}
     {#snippet icon()}
       <Icon name="pin" extraCSS="fill-gray-50" />
@@ -59,7 +60,7 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Downloads
+      {globalTexts.overview.pathSelectorPopup.bookmarks.downloads}
     {/snippet}
     {#snippet icon()}
       <Icon name="pin" extraCSS="fill-gray-50" />
@@ -72,7 +73,7 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Documents
+      {globalTexts.overview.pathSelectorPopup.bookmarks.documents}
     {/snippet}
     {#snippet icon()}
       <Icon name="pin" extraCSS="fill-gray-50" />

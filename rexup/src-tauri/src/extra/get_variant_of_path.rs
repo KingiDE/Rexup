@@ -17,7 +17,7 @@ use std::path::Path;
 /// - `None` if the path does not exist or is not a recognized file/directory.
 ///
 /// # Notes
-/// - If the path points to a symlink, the result will reflect the target's type.
+/// - If the path points to a symlink, the result reflects the target's type.
 #[tauri::command]
 pub fn get_variant_of_path(path: String) -> Option<FileOrDirectory> {
 	let converted_path = Path::new(&path);

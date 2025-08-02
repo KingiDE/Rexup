@@ -5,6 +5,7 @@
   import WriteAccessBox from "./WriteAccessBox.svelte";
   import BackupLocationInput from "./BackupLocationInput.svelte";
   import { closePopup } from "../../../../hooks/useHotkeyHandler.svelte";
+  import { globalTexts } from "../../../../globalTexts";
 
   let {
     currentBackup = $bindable(),
@@ -12,7 +13,7 @@
     currentBackup: LocalStateBackup;
   } = $props();
 
-  // When the user clicks "Select path", this function is passed to the PathSelectorPopup and will be called with the new location
+  // When the user clicks "Select path", this function is called with the updated location
   function setCurrentBackupPath(path: string) {
     currentBackup.location = path;
     closePopup();
@@ -35,15 +36,16 @@
 </script>
 
 <div class="mt-4">
-  <div class="font-semibold">Backup-Location</div>
-  <div class="opacity-75 max-w-[600px]">
-    After your backup has been executed, it will be placed somewhere. This
-    location can be configured here. To change it, simply click the
-    "Edit"-button below and choose a directory, the backup will be placed in.
+  <div class="font-semibold">
+    {globalTexts.overview.configurationTab.locationSection.label}
+  </div>
+  <div class="opacity-75 max-w-[700px]">
+    {globalTexts.overview.configurationTab.locationSection.description}
   </div>
   <BackupLocationInput bind:currentBackup />
   <PathSelectorPopup
-    heading="Select backup location"
+    heading={globalTexts.overview.configurationTab.locationSection
+      .pathSelectorHeading}
     popupToShowUp="select_backup_location"
     setOuterPath={setCurrentBackupPath}
   />

@@ -8,9 +8,10 @@
   import NavbarIcon from "./NavbarIcon.svelte";
   import OverviewTab from "./editBackupEntryTabs/OverviewTab.svelte";
   import DestructiveTab from "./editBackupEntryTabs/DestructiveTab.svelte";
-  import FiltersTab from "./editBackupEntryTabs/FiltersTab.svelte";
-  import OriginTab from "./editBackupEntryTabs/OriginTab.svelte";
+  import FiltersTab from "./editBackupEntryTabs/filtersTab/FiltersTab.svelte";
+  import OriginTab from "./editBackupEntryTabs/originTab/OriginTab.svelte";
   import TargetTab from "./editBackupEntryTabs/TargetTab.svelte";
+  import { globalTexts } from "../../../globalTexts";
 
   let tab = $state<EditBackupEntryTab>("overview");
 </script>
@@ -18,7 +19,7 @@
 {#if popup.value === "edit_backup_entry" && currentBackupEntry.value !== null}
   <div
     transition:fade={{ duration: 100 }}
-    class={`w-[850px] h-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
+    class={`w-[900px] h-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
   >
     <Button
       meaning="neutral"
@@ -31,35 +32,42 @@
         <Icon name="close" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
-    <h2 class="font-poppins text-2xl font-bold">Edit Backup-Entry</h2>
+    <h2 class="font-poppins text-2xl font-bold">
+      {globalTexts.overview.entriesTab.editBackupEntryPopup.heading}
+    </h2>
     <div class="mt-4 grid grid-cols-[250px_auto] gap-8">
       <nav class="grid gap-2 content-start">
         <NavbarIcon
-          buttonText="Overview"
+          buttonText={globalTexts.overview.entriesTab.editBackupEntryPopup
+            .navbarIcons.overview}
           iconName="edit"
           tabValue="overview"
           bind:tab
         />
         <NavbarIcon
-          buttonText="Origin"
+          buttonText={globalTexts.overview.entriesTab.editBackupEntryPopup
+            .navbarIcons.origin}
           iconName="file"
           tabValue="origin"
           bind:tab
         />
         <NavbarIcon
-          buttonText="Target"
+          buttonText={globalTexts.overview.entriesTab.editBackupEntryPopup
+            .navbarIcons.target}
           iconName="drive"
           tabValue="target"
           bind:tab
         />
         <NavbarIcon
-          buttonText="Filters"
+          buttonText={globalTexts.overview.entriesTab.editBackupEntryPopup
+            .navbarIcons.filters}
           iconName="filter"
           tabValue="filters"
           bind:tab
         />
         <NavbarIcon
-          buttonText="Destructive"
+          buttonText={globalTexts.overview.entriesTab.editBackupEntryPopup
+            .navbarIcons.destructive}
           iconName="delete"
           tabValue="destructive"
           bind:tab

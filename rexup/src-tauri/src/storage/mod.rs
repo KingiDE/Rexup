@@ -33,7 +33,7 @@ pub fn read_backups_file() -> String {
 	}
 }
 
-/// Expected shape from the frontend when saving the config-file.
+/// Expected shape from the frontend when saving the config file.
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
 	show_backup_execution_history: bool,

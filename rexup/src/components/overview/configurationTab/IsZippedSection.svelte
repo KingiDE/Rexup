@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../globalTexts";
   import { popup } from "../../../hooks/useHotkeyHandler.svelte";
   import type { LocalStateBackup } from "../../types";
   import Button from "../../ui/Button.svelte";
@@ -12,12 +13,11 @@
 </script>
 
 <div class="grid mt-4">
-  <div class="font-semibold">Output-Variant</div>
-  <div class="opacity-75 max-w-[600px]">
-    Your backup can either be a simple directory containing files or it can be a
-    Zip-Folder. Zip-Folders have the advantage of being smaller and easier to
-    transfer between devices. On the other hand, Zip-Folders need to be
-    extracted if you want to work with the files inside them.
+  <div class="font-semibold">
+    {globalTexts.overview.configurationTab.isZippedSection.label}
+  </div>
+  <div class="opacity-75 max-w-[700px]">
+    {globalTexts.overview.configurationTab.isZippedSection.description}
   </div>
   <Slider
     extraCSS="mt-2 justify-self-start"
@@ -32,7 +32,8 @@
         disabled={popup.value !== null}
       >
         {#snippet text()}
-          Directory
+          {globalTexts.overview.configurationTab.isZippedSection
+            .directoryOption}
         {/snippet}
       </Button>
       <Button
@@ -42,7 +43,7 @@
         disabled={popup.value !== null}
       >
         {#snippet text()}
-          Zip-Folder
+          {globalTexts.overview.configurationTab.isZippedSection.zipFileOption}
         {/snippet}
       </Button>
     {/snippet}

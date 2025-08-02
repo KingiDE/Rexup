@@ -2,7 +2,7 @@
 
 use std::{ ffi::OsStr, fs::{ self, File }, path::{ Path, PathBuf } };
 use zip::ZipWriter;
-use crate::{ BackupEntryFilters, BackupExecutionLog };
+use crate::{ global_texts, BackupEntryFilters, BackupExecutionLog };
 use do_filters_apply::do_filters_apply;
 
 mod copy_file;
@@ -18,40 +18,43 @@ mod do_filters_apply;
 /// - `parent_path` - Path to the backup root location (only of use if `zip_writer` is `None`).
 /// - `zip_writer` - An optional `ZipWriter<File>` that handles writing to zip files.
 /// - `relative_target` - Relative path from the backup root location to the target location (but without the ending file name).
-/// - `file_name` - The file name that will be written to.
-/// - `filters` - Backup entry filters (like allowed names, path elements and size limits) applied before copying.
+/// - `file_name` - The file name that is written to.
+/// - `filters` - Optional backup entry filters (like allowed names, path elements and size limits) applied before copying.
 ///
 /// # Returns
 /// `Some(BackupExecutionLog)` if an error occurs in this function or one of these ones: `copy_file` and `zip_file`.
-/// If everything works fine, it will return `None`.
+/// If everything works fine, it returns `None`.
 pub fn copy_file_process(
 	origin: &Path,
 	parent_path: &Path,
 	zip_writer: &mut Option<ZipWriter<File>>,
 	relative_target: &Path,
 	file_name: &OsStr,
-	filters: &BackupEntryFilters
+	filters: Option<&BackupEntryFilters>
 ) -> Option<BackupExecutionLog> {
 	let relative_target_and_file_name = relative_target.join(file_name);
 
-	// Check if the filters can be passed and return the correct reason if not
-	if let Some(ignore_reason) = do_filters_apply(origin, filters) {
-		return Some(BackupExecutionLog::IgnoreCopyingFile {
-			from_path: origin.to_string_lossy().to_string(),
-			to_path: relative_target_and_file_name.to_string_lossy().to_string(),
-			reason: ignore_reason,
-		});
+	match filters {
+		Some(actual_filters) => {
+			// Check if the filters can be passed and return the correct reason if not
+			if let Some(ignore_reason) = do_filters_apply(origin, actual_filters) {
+				return Some(BackupExecutionLog::IgnoreCopyingFile {
+					from_path: origin.to_string_lossy().to_string(),
+					to_path: relative_target_and_file_name.to_string_lossy().to_string(),
+					reason: ignore_reason,
+				});
+			}
+		}
+		None => {
+			// Don't check anything
+		}
 	}
 
 	// Read the contents of the original file
 	let file_contents = match fs::read(origin) {
 		Ok(contents) => contents,
 		Err(_err) => {
-			return Some(
-				BackupExecutionLog::ErrorCopying(
-					format!("The file at {:?} could not be read and therefore not be copied.", origin)
-				)
-			);
+			return Some(BackupExecutionLog::ErrorCopying(global_texts::file_not_read(origin)));
 		}
 	};
 
@@ -72,8 +75,8 @@ pub fn copy_file_process(
 /// - `parent_path` - Path to the backup root location (only of use if `zip_writer` is `None`).
 /// - `zip_writer` - An optional `ZipWriter<File>` that handles writing to zip files.
 /// - `relative_target` - Relative path from the backup root location to the target location (but without the ending file name).
-/// - `dir_name` - The directory name that will be used in the backup. It's appended to the `relative_target` to preserve nested directories.
-/// - `filters` - Backup entry filters (like allowed names, path elements and size limits) applied before copying.
+/// - `dir_name` - The directory name that is used in the backup. It's appended to the `relative_target` to preserve nested directories.
+/// - `filters` - Optional backup entry filters (like allowed names, path elements and size limits) applied before copying.
 ///
 /// # Returns
 /// A `Vec<BackupExecutionLog>` that contains collected logs from the recursive function calls.
@@ -83,7 +86,7 @@ pub fn copy_directory_process(
 	zip_writer: &mut Option<ZipWriter<File>>,
 	relative_target: &Path,
 	dir_name: &OsStr,
-	filters: &BackupEntryFilters
+	filters: Option<&BackupEntryFilters>
 ) -> Vec<BackupExecutionLog> {
 	match fs::read_dir(origin) {
 		Ok(readable_dir) => {
@@ -104,7 +107,7 @@ pub fn copy_directory_process(
 									zip_writer,
 									&new_path_segment_in_relative_target,
 									file_or_dir_name,
-									&filters
+									filters
 								);
 
 								if let Some(file_logs) = file_logs {
@@ -117,21 +120,16 @@ pub fn copy_directory_process(
 									zip_writer,
 									&new_path_segment_in_relative_target,
 									file_or_dir_name,
-									&filters
+									filters
 								);
 
 								logs.append(&mut dir_logs);
 							}
 						}
 					}
-					Err(_err) => {
+					Err(error) => {
 						logs.push(
-							BackupExecutionLog::ErrorCopying(
-								format!(
-									"An entry in {:?} is not readable. No further information is available",
-									origin
-								)
-							)
+							BackupExecutionLog::ErrorCopying(global_texts::entry_not_read(error, origin))
 						);
 					}
 				}
@@ -140,14 +138,7 @@ pub fn copy_directory_process(
 			return logs;
 		}
 		Err(_err) => {
-			vec![
-				BackupExecutionLog::ErrorCopying(
-					format!(
-						"The directory at {:?} can't be read. Therefore, copying this directory is not possible.",
-						origin
-					)
-				)
-			]
+			vec![BackupExecutionLog::ErrorCopying(global_texts::directory_not_read(origin))]
 		}
 	}
 }

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../globalTexts";
   import {
     pushDirectoryToPathElements,
     replaceLastPathElement,
@@ -25,15 +26,17 @@
 </script>
 
 <div class="overflow-hidden grid gap-1 grid-rows-[24px_auto] h-[400px]">
-  <div>Directories in this directory:</div>
+  <div>{globalTexts.overview.pathSelectorPopup.results.heading}</div>
   <div
     class={`grid gap-1 h-full overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
   >
     {#if shownResults.length === 0}
       <div class="text-center self-center">
-        <div class="font-bold">:/</div>
         <div class="font-bold">
-          There don't exist any entries in this directory
+          {globalTexts.overview.pathSelectorPopup.results.noResults.infoEmoji}
+        </div>
+        <div class="font-bold">
+          {globalTexts.overview.pathSelectorPopup.results.noResults.info}
         </div>
       </div>
     {:else}

@@ -4,6 +4,7 @@
   import Button from "../../../ui/Button.svelte";
   import Icon from "../../../ui/Icon.svelte";
   import { deleteBackupEntry } from "../../../../hooks/overview/useEntriesTab.svelte";
+  import { globalTexts } from "../../../../globalTexts";
 
   let {
     entry,
@@ -14,11 +15,12 @@
   let hasTriedToDeleteBackupEntry = $state(false);
 </script>
 
-<div class="font-semibold">Delete Backup-Entry:</div>
+<div class="font-semibold">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.destructiveTab.heading}
+</div>
 <div class="opacity-75">
-  To delete your backup-entry, click the "Delete this backup-entry"-button
-  below. This will remove the entire backup-entry structure from you disk but
-  NOT the backups that were created from it.
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.destructiveTab
+    .description}
 </div>
 <div class="flex gap-4">
   <Button
@@ -27,7 +29,8 @@
     extraCSS="mt-2 px-4"
   >
     {#snippet text()}
-      Delete this backup-entry
+      {globalTexts.overview.entriesTab.editBackupEntryPopup.destructiveTab
+        .delete}
     {/snippet}
     {#snippet icon()}
       <Icon name="delete" extraCSS="fill-gray-50" />
@@ -41,7 +44,8 @@
         extraCSS="mt-2 px-4"
       >
         {#snippet text()}
-          REALLY delete?
+          {globalTexts.overview.entriesTab.editBackupEntryPopup.destructiveTab
+            .reallyDelete}
         {/snippet}
       </Button>
     </div>

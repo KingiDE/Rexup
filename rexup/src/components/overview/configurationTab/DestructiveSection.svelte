@@ -5,6 +5,7 @@
   import Icon from "../../ui/Icon.svelte";
   import { deleteCurrentBackup } from "../../../hooks/useTwoColumns.svelte";
   import { popup } from "../../../hooks/useHotkeyHandler.svelte";
+  import { globalTexts } from "../../../globalTexts";
 
   let {
     currentBackup,
@@ -23,11 +24,11 @@
 </script>
 
 <div class="mt-4">
-  <div class="font-semibold">Delete Backup</div>
-  <div class="opacity-75 max-w-[600px]">
-    To delete your backup, click the "Delete this backup"-button below. This
-    will remove the entire backup structure from you disk but NOT the backups
-    that were created from it.
+  <div class="font-semibold">
+    {globalTexts.overview.configurationTab.destructiveSection.label}
+  </div>
+  <div class="opacity-75 max-w-[700px]">
+    {globalTexts.overview.configurationTab.destructiveSection.description}
   </div>
   <div class="flex gap-4">
     <Button
@@ -37,7 +38,7 @@
       disabled={popup.value !== null}
     >
       {#snippet text()}
-        Delete this backup
+        {globalTexts.overview.configurationTab.destructiveSection.delete}
       {/snippet}
       {#snippet icon()}
         <Icon name="delete" extraCSS="fill-gray-50" />
@@ -52,7 +53,8 @@
           disabled={popup.value !== null}
         >
           {#snippet text()}
-            REALLY delete?
+            {globalTexts.overview.configurationTab.destructiveSection
+              .reallyDelete}
           {/snippet}
         </Button>
       </div>

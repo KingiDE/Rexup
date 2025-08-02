@@ -46,7 +46,7 @@ export type LocalStateBackupEntry = {
 		local_file_system: string;
 	};
 	target: string;
-	// If the value is empty, the entry won't be renamed
+	// If the value is empty, the entry isn't renamed
 	rename_to: string;
 	is_active: boolean;
 	// Used for visual indication as both directories and files can contain a "."

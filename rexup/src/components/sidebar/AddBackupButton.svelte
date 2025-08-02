@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../globalTexts";
   import { popup } from "../../hooks/useHotkeyHandler.svelte";
   import Button from "../ui/Button.svelte";
   import Icon from "../ui/Icon.svelte";
@@ -11,7 +12,7 @@
   disabled={popup.value !== null}
 >
   {#snippet text()}
-    Create backup
+    {globalTexts.sidebar.addBackup}
   {/snippet}
   {#snippet icon()}
     <Icon name="add" extraCSS="fill-gray-50" />

@@ -6,6 +6,7 @@ mod path_selector;
 mod backup_execution;
 mod extra;
 mod path_utils;
+mod global_texts;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -14,7 +15,7 @@ pub fn run() {
 		.plugin(tauri_plugin_opener::init())
 		.invoke_handler(
 			tauri::generate_handler![
-				// Read and write the config- and backups-files
+				// Read and write the config and backup files
 				storage::read_config_file,
 				storage::read_backups_file,
 				storage::write_config_file,

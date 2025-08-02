@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { popup } from "../../../../hooks/useHotkeyHandler.svelte";
-  import type { LocalStateBackupEntry } from "../../../types";
-  import Button from "../../../ui/Button.svelte";
-  import Input from "../../../ui/Input.svelte";
-  import Slider from "../../../ui/Slider.svelte";
+  import { globalTexts } from "../../../../../globalTexts";
+  import { popup } from "../../../../../hooks/useHotkeyHandler.svelte";
+  import type { LocalStateBackupEntry } from "../../../../types";
+  import Button from "../../../../ui/Button.svelte";
+  import Input from "../../../../ui/Input.svelte";
   import {
     updateEntryOrigin,
     displayedCommandList,
     displayedLocalFileSystemPath,
-  } from "../../../../hooks/overview/useEditBackupEntryPopupOrigin.svelte";
+  } from "../../../../../hooks/overview/useEditBackupEntryPopupOrigin.svelte";
 
   let {
     entry = $bindable(),
@@ -16,9 +16,9 @@
     entry: LocalStateBackupEntry;
   } = $props();
 
-  // Detects when the backup entry changes
-  // It holds the id of the entry inside the props. If not only one value but the entire backup changes, the id will be different.
-  // Then, this will be passed as a reset to the `updateEntryOrigin` function.
+  // Detects when the backup entry changes:
+  // The state holds the id of the entry inside the props. If not only one value but the entire backup entry changes, the id is different.
+  // Then, this change is passed as a `false` to the `updateEntryOrigin` function which leads to a reset.
   let previousId = $state<string | null>(null);
 
   $effect(() => {
@@ -27,46 +27,10 @@
   });
 </script>
 
-<div class="font-semibold">Origin:</div>
-<div class="opacity-75">
-  Here you can select the resource to copy. It can either be a file or directory
-  on your local machine or commands that e.g. clone a Git-Repository and install
-  the dependencies.
+<div class="mt-2 font-semibold">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.originTab.actualInput
+    .heading}
 </div>
-<div class="opacity-75">
-  For further assistance, switch to the Overview-Tab that explains the
-  copy-process in detail.
-</div>
-<div class="mt-2 font-semibold">Mode:</div>
-<Slider
-  extraCSS="justify-self-start"
-  sizeOfSingleElement={180}
-  indexOfSelectedElement={entry.origin.active_mode === "LocalFileSystem"
-    ? 0
-    : 1}
->
-  {#snippet elements()}
-    <Button
-      onClick={() => (entry.origin.active_mode = "LocalFileSystem")}
-      meaning="discrete-neutral"
-      extraCSS="w-[180px] px-4 py-1"
-    >
-      {#snippet text()}
-        Local File-System
-      {/snippet}
-    </Button>
-    <Button
-      onClick={() => (entry.origin.active_mode = "Commands")}
-      meaning="discrete-neutral"
-      extraCSS="w-[180px] px-4 py-1"
-    >
-      {#snippet text()}
-        Commands
-      {/snippet}
-    </Button>
-  {/snippet}
-</Slider>
-<div class="mt-2 font-semibold">Value:</div>
 <div class="relative h-[280px] overflow-hidden">
   <!-- Local File-System -->
   <div
@@ -74,7 +38,8 @@
   >
     <Input
       labelExtraCSS="grow"
-      placeholder="Unset"
+      placeholder={globalTexts.overview.entriesTab.editBackupEntryPopup
+        .originTab.actualInput.localFileSystem.placeholder}
       getter={() =>
         displayedLocalFileSystemPath.value === null
           ? ""
@@ -89,7 +54,8 @@
       extraCSS="py-1 w-20"
     >
       {#snippet text()}
-        Edit
+        {globalTexts.overview.entriesTab.editBackupEntryPopup.originTab
+          .actualInput.localFileSystem.edit}
       {/snippet}
     </Button>
     <Button
@@ -104,7 +70,8 @@
       disabled={entry.origin.local_file_system === ""}
     >
       {#snippet text()}
-        Reset
+        {globalTexts.overview.entriesTab.editBackupEntryPopup.originTab
+          .actualInput.localFileSystem.reset}
       {/snippet}
     </Button>
   </div>
@@ -116,7 +83,8 @@
       {#each displayedCommandList.value as cmd, index}
         <Input
           inputExtraCSS="w-full"
-          placeholder="Command to execute"
+          placeholder={globalTexts.overview.entriesTab.editBackupEntryPopup
+            .originTab.actualInput.commandListPlaceholder}
           getter={() => cmd}
           setter={(newValue) => {
             if (displayedCommandList.value !== null) {
@@ -128,7 +96,8 @@
     {:else}
       <Input
         inputExtraCSS="w-full"
-        placeholder="Command to execute"
+        placeholder={globalTexts.overview.entriesTab.editBackupEntryPopup
+          .originTab.actualInput.commandListPlaceholder}
         getter={() => ""}
         setter={(newValue) => (displayedCommandList.value = [newValue])}
       />

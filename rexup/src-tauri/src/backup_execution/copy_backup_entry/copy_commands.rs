@@ -10,16 +10,15 @@ use crate::backup_execution::copy_backup_entry::processes::{
 	copy_file_process,
 };
 use crate::path_utils::get_desktop_path;
-use crate::{ BackupEntryFilters, BackupExecutionLog };
+use crate::{ global_texts, BackupExecutionLog };
 
 /// Handles copying of an backup entry that runs commands.
 ///
 /// # Arguments
-/// * `commands` - A `Vec<String>` of commands that will be executed
+/// * `commands` - A `Vec<String>` of commands that are executed
 /// * `parent_path` - Path to the root of the backup location.
 /// * `zip_writer` - Zip writer that allows writing to the zip file the backup consists of.
 /// * `corrected_relative_target` - Path within the backup destination relative to the backup root but without the file or directory name.
-/// * `filters` - Backup entry filters (like allowed names, path elements and size limits) applied before copying.
 ///
 /// # Returns
 /// An `Vec<BackupExecutionLog>`:
@@ -28,8 +27,7 @@ pub fn copy_commands(
 	commands: Vec<String>,
 	parent_path: &Path,
 	zip_writer: &mut Option<ZipWriter<File>>,
-	corrected_relative_target: &Path,
-	filters: &BackupEntryFilters
+	corrected_relative_target: &Path
 ) -> Vec<BackupExecutionLog> {
 	match zip_writer {
 		Some(_writer) => {
@@ -42,10 +40,7 @@ pub fn copy_commands(
 
 			if let Err(_err) = fs::create_dir(&directory_of_commands) {
 				return vec![
-					BackupExecutionLog::ErrorCopying(
-						"Couldn't create a temporary directory to store the results of the executed commands before copying them into the zip file. 
-							Therefore, the execution of this backup entry is cancelled.".to_string()
-					)
+					BackupExecutionLog::ErrorCopying(global_texts::TEMP_DIR_NOT_CREATED.to_string())
 				];
 			}
 
@@ -56,7 +51,7 @@ pub fn copy_commands(
 				corrected_relative_target
 			);
 
-			// Copy this entire contents of the temporary directory into the backup parent
+			// Copy the entire contents of the temporary directory into the backup parent
 			if let Ok(readable_dir) = fs::read_dir(&directory_of_commands) {
 				for entry in readable_dir {
 					if let Ok(entry) = entry {
@@ -67,7 +62,7 @@ pub fn copy_commands(
 								zip_writer,
 								corrected_relative_target,
 								&entry.file_name(),
-								filters
+								None
 							);
 						} else if entry.path().is_dir() {
 							copy_directory_process(
@@ -76,7 +71,7 @@ pub fn copy_commands(
 								zip_writer,
 								corrected_relative_target,
 								&entry.file_name(),
-								filters
+								None
 							);
 						}
 					}
@@ -85,11 +80,7 @@ pub fn copy_commands(
 
 			// Delete the temporary directory on the desktop
 			if let Err(_err) = fs::remove_dir_all(directory_of_commands) {
-				logs.push(
-					BackupExecutionLog::Information(
-						"Could not delete the temporary desktop on the user's desktop after zipping all the files.".to_string()
-					)
-				);
+				logs.push(BackupExecutionLog::Information(global_texts::TEMP_DIR_NOT_DELETED.to_string()));
 			}
 
 			logs
@@ -101,10 +92,9 @@ pub fn copy_commands(
 			if let Err(_err) = fs::create_dir_all(&parent_directory_and_relative_target) {
 				return vec![
 					BackupExecutionLog::ErrorCopying(
-						format!(
-							"The subdirectories at {:?} inside the backup-parent-directory couldn't be created. Therefore, the command(s) {:?} can't be executed.",
+						global_texts::subdirectories_for_commands_in_backup_parent_not_created(
 							corrected_relative_target,
-							commands
+							&commands
 						)
 					)
 				];
@@ -155,11 +145,7 @@ fn execute_all_commands(
 
 		logs.push(
 			BackupExecutionLog::ErrorCopying(
-				format!(
-					"The command '{}' at {:?} inside the backup-parent-directory couldn't be executed. Therefore, its execution will be skipped.",
-					command,
-					corrected_relative_target
-				)
+				global_texts::commands_in_backup_parent_not_executed(corrected_relative_target, &command)
 			)
 		);
 	}

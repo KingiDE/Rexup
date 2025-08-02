@@ -4,6 +4,7 @@ use zip::ZipWriter;
 
 use crate::{
 	backup_execution::copy_backup_entry::processes::{ copy_directory_process, copy_file_process },
+	global_texts,
 	BackupEntryFilters,
 	BackupExecutionLog,
 	FileOrDirectory,
@@ -39,12 +40,7 @@ pub fn copy_local_file_system(
 		Some(name) => { name }
 		None => {
 			return vec![
-				BackupExecutionLog::ErrorCopying(
-					format!(
-						"Couldn't get the origin's file or directory name of '{:?}'. Therefore, copying this file or directory is not possible.",
-						origin
-					)
-				)
+				BackupExecutionLog::ErrorCopying(global_texts::origin_name_not_found(origin_path))
 			];
 		}
 	};
@@ -80,7 +76,7 @@ pub fn copy_local_file_system(
 				zip_writer,
 				corrected_relative_target,
 				&renamed_file_or_dir_name,
-				&filters
+				Some(&filters)
 			)
 		{
 			Some(log) => vec![log],
@@ -102,7 +98,7 @@ pub fn copy_local_file_system(
 			zip_writer,
 			corrected_relative_target,
 			&renamed_file_or_dir_name,
-			&filters
+			Some(&filters)
 		);
 
 		logs.push(BackupExecutionLog::SuccessCopyingFileOrDirectory {
@@ -116,13 +112,6 @@ pub fn copy_local_file_system(
 
 		logs
 	} else {
-		return vec![
-			BackupExecutionLog::ErrorCopying(
-				format!(
-					"The location at '{:?}' doesn't exist and could therefore not be copied.",
-					origin_path
-				)
-			)
-		];
+		return vec![BackupExecutionLog::ErrorCopying(global_texts::origin_not_found(origin_path))];
 	}
 }

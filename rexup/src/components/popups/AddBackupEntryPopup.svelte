@@ -11,6 +11,7 @@
   import Input from "../ui/Input.svelte";
   import { closePopup, popup } from "../../hooks/useHotkeyHandler.svelte";
   import { addBackupEntry } from "../../hooks/overview/useEntriesTab.svelte";
+  import { globalTexts } from "../../globalTexts";
 </script>
 
 {#if popup.value === "add_backup_entry"}
@@ -30,10 +31,11 @@
         <Icon name="close" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
-    <h2 class="font-poppins text-2xl font-bold">Create Backup-Entry</h2>
+    <h2 class="font-poppins text-2xl font-bold">
+      {globalTexts.overview.entriesTab.addBackupEntryPopup.heading}
+    </h2>
     <p class="mt-4">
-      Create a new backup-entry that is added to the list on the overview-tab.
-      Please enter a name to proceed.
+      {globalTexts.overview.entriesTab.addBackupEntryPopup.description}
     </p>
     <Input
       inputExtraCSS={`mt-2 ${!getValidInput().value && triedToSubmit.value ? "outline outline-red-500" : ""}`}
@@ -41,7 +43,8 @@
       setter={(newValue: string) => {
         addBackupEntryInput.value.name = newValue;
       }}
-      placeholder="A fantastic name"
+      placeholder={globalTexts.overview.entriesTab.addBackupEntryPopup
+        .placeholder}
     />
     <Button
       meaning="positive"
@@ -52,7 +55,7 @@
       disabled={!getValidInput().value}
     >
       {#snippet text()}
-        Create
+        {globalTexts.overview.entriesTab.addBackupEntryPopup.confirm}
       {/snippet}
     </Button>
   </div>

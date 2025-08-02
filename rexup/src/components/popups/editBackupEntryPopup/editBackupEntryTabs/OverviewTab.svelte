@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../../globalTexts";
   import type { LocalStateBackupEntry } from "../../../types";
   import Input from "../../../ui/Input.svelte";
 
@@ -8,65 +9,105 @@
     entry: LocalStateBackupEntry;
   } = $props();
 
-  let correctDescription = $derived.by(() => {
-    if (entry.variant === "File") {
-      return "file";
-    } else if (entry.variant === "Directory") {
-      return "directory";
-    }
-  });
+  function getCountOfActivatedFilters() {
+    let activeCount = 0;
+
+    if (entry.filters.max_size_in_mb !== null) activeCount++;
+    if (entry.filters.file_names.length !== 0) activeCount++;
+    if (entry.filters.path_elements.length !== 0) activeCount++;
+
+    return activeCount;
+  }
+
+  function getActiveFiltersInPretty() {
+    const filters = [];
+
+    if (entry.filters.max_size_in_mb !== null)
+      filters.push(
+        globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+          .localFileSystemMode.filterAbbreviations.maximumFileSize,
+      );
+    if (entry.filters.file_names.length !== 0)
+      filters.push(
+        globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+          .localFileSystemMode.filterAbbreviations.fileNames,
+      );
+    if (entry.filters.path_elements.length !== 0)
+      filters.push(
+        globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+          .localFileSystemMode.filterAbbreviations.pathElements,
+      );
+
+    return filters.join(", ");
+  }
 </script>
 
-<div class="font-semibold">Name:</div>
+<div class="font-semibold">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab.nameLabel}
+</div>
 <Input
   getter={() => entry.name}
   setter={(newValue) => {
     entry.name = newValue;
   }}
 />
-<div class="mt-2 font-semibold">Explanation:</div>
+<div class="mt-2 font-semibold">
+  {globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+    .explanationLabel}
+</div>
+<!-- LocalFileSystem explanation -->
 {#if entry.origin.active_mode === "LocalFileSystem"}
   <p class="mt-1">
-    Currently, you have the <span class="px-1 py-0.5 bg-gray-900 rounded-md"
-      >LocalFileSystem-Mode</span
-    > enabled. This means that this backup entry copies files and directories from
-    your machine into the backup.
+    {globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+      .localFileSystemMode.description}
   </p>
-  {#if entry.variant === null}
-    <p class="mt-1">
-      Because there's no file or origin selected that should be copied, no more
-      detailed explanation can be generated.
-    </p>
-  {:else}
-    <p class="mt-1">
-      In this case, the {correctDescription} located at
-      <span class="px-1 py-0.5 bg-gray-900 rounded-md"
-        >{entry.origin.local_file_system}</span
-      >
-      on your machine will be copied {correctDescription === "file"
-        ? "to"
-        : "into"}
-      <span class="px-1 py-0.5 bg-gray-900 rounded-md"
-        >{entry.target === "" || entry.target === "/"
-          ? "/"
-          : entry.target}</span
-      >
-      {entry.target === "" || entry.target === "/" ? "(= root)" : ""} inside the
-      backup directory.
-    </p>
-    {#if entry.rename_to !== ""}
-      <p class="mt-1">
-        Additionally it will be renamed to <span
-          class="px-1 py-0.5 bg-gray-900 rounded-md">{entry.rename_to}</span
-        > after it has been placed in this directory.
-      </p>
+  <div class="mt-1">
+    {#if entry.variant === null}
+      {globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+        .localFileSystemMode.noOrigin}
+    {:else}
+      {@html globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab.localFileSystemMode.detailedExplanation(
+        entry.variant,
+        entry.origin.local_file_system,
+        entry.target,
+      )}
+      {#if entry.rename_to !== ""}
+        <div>
+          {@html globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab.localFileSystemMode.renameExplanation(
+            entry.rename_to,
+          )}
+        </div>
+      {/if}
+      {#if getCountOfActivatedFilters() > 0}
+        <div>
+          {globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab.localFileSystemMode.filterExplanation(
+            getCountOfActivatedFilters(),
+            getActiveFiltersInPretty(),
+          )}
+        </div>
+      {/if}
     {/if}
-  {/if}
+  </div>
+  <!-- Commands explanation -->
 {:else if entry.origin.active_mode === "Commands"}
   <p class="mt-1">
-    Currently, you have the <span class="px-1 py-0.5 bg-gray-900 rounded-md"
-      >Commands-Mode</span
-    > enabled. This means that this backup entry executes the specified commands
-    inside the backup at the target location.
+    {globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+      .commandsMode.description}
   </p>
+  <div class="mt-1">
+    {#if entry.origin.commands.length === 0}
+      {globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab
+        .commandsMode.noCommands}
+    {:else}
+      {@html globalTexts.overview.entriesTab.editBackupEntryPopup.overviewTab.commandsMode.detailedExplanation(
+        entry.origin.commands.length,
+        entry.target,
+      )}
+      <ol>
+        {#each entry.origin.commands as command}
+          <li>{globalTexts.overview.listIcon} {command}</li>
+        {/each}
+      </ol>
+    {/if}
+  </div>
 {/if}

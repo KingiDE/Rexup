@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../globalTexts";
   import AddBackupPopup from "../popups/AddBackupPopup.svelte";
   import SettingsPopup from "../popups/SettingsPopup.svelte";
   import type { LocalStateBackup } from "../types";
@@ -14,7 +15,9 @@
 </script>
 
 <nav class="bg-gray-800 rounded-md p-4 flex flex-col h-full overflow-y-hidden">
-  <h2 class="font-poppins text-2xl font-bold mb-4">Backups</h2>
+  <h2 class="font-poppins text-2xl font-bold mb-4">
+    {globalTexts.sidebar.heading}
+  </h2>
   {#if backups.length > 0}
     <div class="mb-4 grid gap-2 pr-1.5 overflow-y-scroll">
       {#each backups as backup}

@@ -3,7 +3,7 @@
 use std::{ ffi::OsStr, fs::File, io::Write, path::Path };
 use zip::{ write::SimpleFileOptions, ZipWriter };
 
-use crate::{ BackupExecutionLog };
+use crate::{ global_texts, BackupExecutionLog };
 
 /// Handles copying of an individual file to a zip file.
 ///
@@ -34,11 +34,7 @@ pub fn zip_file(
 	{
 		return Some(
 			BackupExecutionLog::ErrorCopying(
-				format!(
-					"The zip-writer couldn't start a new file at {:?}. Therefore, the file at {:?} can't be copied.",
-					relative_target_and_file_name,
-					origin
-				)
+				global_texts::file_in_zip_writer_not_started(&relative_target_and_file_name, origin)
 			)
 		);
 	}
@@ -46,11 +42,7 @@ pub fn zip_file(
 	if let Err(_err) = zip_writer.write(&file_contents) {
 		return Some(
 			BackupExecutionLog::ErrorCopying(
-				format!(
-					"The zip-writer couldn't write to the file at {:?} inside the zip-file. Therefore, this file at {:?} can't be copied.",
-					relative_target_and_file_name,
-					origin
-				)
+				global_texts::file_in_zip_writer_not_written_to(&relative_target_and_file_name, origin)
 			)
 		);
 	}

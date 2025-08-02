@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../../globalTexts";
   import { popup } from "../../../../hooks/useHotkeyHandler.svelte";
   import type { LocalStateBackup } from "../../../types";
   import Button from "../../../ui/Button.svelte";
@@ -14,7 +15,8 @@
 <div class="mt-2 flex gap-2">
   <Input
     inputExtraCSS="min-w-[400px]"
-    placeholder="Your desktop"
+    placeholder={globalTexts.overview.configurationTab.locationSection
+      .inputPlaceholder}
     getter={() => currentBackup.location}
     setter={() => {}}
     disabled
@@ -27,7 +29,7 @@
     disabled={popup.value !== null}
   >
     {#snippet text()}
-      Edit
+      {globalTexts.overview.configurationTab.locationSection.editInput}
     {/snippet}
   </Button>
   <Button
@@ -37,7 +39,7 @@
     disabled={currentBackup.location === "" || popup.value !== null}
   >
     {#snippet text()}
-      Reset
+      {globalTexts.overview.configurationTab.locationSection.resetInput}
     {/snippet}
   </Button>
 </div>

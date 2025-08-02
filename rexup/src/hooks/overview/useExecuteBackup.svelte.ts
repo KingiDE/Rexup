@@ -22,7 +22,7 @@ export async function executeBackup(currentBackup: LocalStateBackup | null) {
 	currentBackup.logs_of_last_execution = [];
 
 	currentBackup.logs_of_last_execution.push({
-		Information: `Started the backup-execution of '${currentBackup.name}' successfully.`,
+		Information: `Started the backup execution of "${currentBackup.name}" successfully.`,
 	});
 
 	// Call the backup-execution on the backend.
@@ -33,7 +33,7 @@ export async function executeBackup(currentBackup: LocalStateBackup | null) {
 	// When the execution is successfully finished:
 	currentBackup.executions.push(Date.now().toString());
 	currentBackup.logs_of_last_execution.push({
-		Finished: `Finished the backup-execution of '${currentBackup.name}' successfully.`,
+		Finished: `Finished the backup execution of "${currentBackup.name}" successfully.`,
 	});
 	isBackupExecuting.value = false;
 }
