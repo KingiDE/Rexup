@@ -10,11 +10,11 @@ pub fn backup_parent_not_created(path: &str) -> String {
 	if path.is_empty() {
 		real_path = "your desktop".to_string();
 	} else {
-		real_path = format!("\"{path:?}\"");
+		real_path = format!("{path:?}");
 	}
 
 	format!(
-		"Can't create the backup parent directory at \"{real_path}\" so the backup can't be executed."
+		"Can't create the backup parent directory at {real_path} so the backup can't be executed."
 	)
 }
 
@@ -62,18 +62,18 @@ pub fn commands_in_backup_parent_not_executed(
 	command: &str
 ) -> String {
 	format!(
-		"The command \"{command}\" at \"{corrected_relative_target:?}\" inside the backup parent directory couldn't be executed. Therefore, its skipped."
+		"The command \"{command}\" at {corrected_relative_target:?} inside the backup parent directory can't be executed. Therefore, its skipped."
 	)
 }
 
 pub fn origin_name_not_found(origin: &Path) -> String {
 	format!(
-		"Can't get the origin's file or directory name of \"{origin:?}\". Therefore, copying this file or directory is not possible."
+		"Can't get the origin's file or directory name of {origin:?}. Therefore, copying this file or directory is not possible."
 	)
 }
 
 pub fn origin_not_found(origin: &Path) -> String {
-	format!("The location at \"{origin:?}\" doesn't exist and therefore can't be copied.")
+	format!("The location at {origin:?} doesn't exist and therefore can't be copied.")
 }
 
 pub fn prefix_not_stripped(target: &str) -> String {
@@ -84,23 +84,23 @@ pub fn prefix_not_stripped(target: &str) -> String {
 
 pub fn file_not_copied(origin: &Path, target: PathBuf) -> String {
 	format!(
-		"The file at \"{origin:?}\" can't be be written to \"{target:?}\". Therefore, this file can't be copied."
+		"The file at \"{origin:?}\" can't be be written to {target:?}. Therefore, this file can't be copied."
 	)
 }
 
 pub fn file_not_read(path: &Path) -> String {
-	format!("The file at \"{path:?}\" can't be be read and therefore can't be copied.")
+	format!("The file at {path:?} can't be be read and therefore can't be copied.")
 }
 
 pub fn directory_not_read(path: &Path) -> String {
 	format!(
-		"The directory at \"{path:?}\" can't be read. Therefore, copying this directory is not possible."
+		"The directory at {path:?} can't be read. Therefore, copying this directory is not possible."
 	)
 }
 
 pub fn entry_not_read(error: Error, path: &Path) -> String {
 	format!(
-		"An entry \"{error:?}\" in \"{path:?}\" can't be read. Therefore, reading and possibly copying this entry is not possible."
+		"An entry \"{error:?}\" in {path:?} can't be read. Therefore, reading and possibly copying this entry is not possible."
 	)
 }
 
@@ -109,7 +109,7 @@ pub fn file_in_zip_writer_not_started(
 	origin: &Path
 ) -> String {
 	format!(
-		"The zip writer can't start a new file at \"{relative_target_and_file_name:?}\". Therefore, the file at \"{origin:?}\" can't be copied."
+		"The zip writer can't start a new file at {relative_target_and_file_name:?}. Therefore, the file at {origin:?} can't be copied."
 	)
 }
 
@@ -118,6 +118,6 @@ pub fn file_in_zip_writer_not_written_to(
 	origin: &Path
 ) -> String {
 	format!(
-		"The zip writer can't write to the file at \"{relative_target_and_file_name:?}\" inside the zip file. Therefore, this file at \"{origin:?}\" can't be copied."
+		"The zip writer can't write to the file at {relative_target_and_file_name:?} inside the zip file. Therefore, this file at {origin:?} can't be copied."
 	)
 }

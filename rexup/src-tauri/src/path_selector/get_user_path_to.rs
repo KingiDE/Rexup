@@ -49,13 +49,24 @@ pub fn get_user_path_to(location: UserLocation) -> Vec<PathElement> {
 	for (_i, part) in get_home_path().components().enumerate() {
 		let part_as_string = part.as_os_str().to_string_lossy().to_string();
 
-		// Skip current iteration because on Windows there comes an "\" after the drive letter
-		if let Component::RootDir = part {
-			continue;
+		// Skip current iteration on Windows because there comes an "\" after the drive letter
+		if cfg!(target_family = "windows") {
+			if let Component::RootDir = part {
+				continue;
+			}
 		}
 
 		current_path.push_str(&part_as_string);
-		current_path.push('/');
+
+		if cfg!(target_family = "unix") {
+			if let Component::RootDir = part {
+				// Don't push another "/" after the root "/" on Linux
+			} else {
+				current_path.push('/');
+			}
+		} else {
+			current_path.push('/');
+		}
 
 		base_path.push(PathElement {
 			id: current_path.clone(),

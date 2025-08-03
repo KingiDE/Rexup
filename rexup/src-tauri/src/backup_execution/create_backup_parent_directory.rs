@@ -1,4 +1,5 @@
 use std::{ fs, path::PathBuf };
+use chrono::Local;
 
 use crate::path_utils::get_desktop_path;
 
@@ -40,12 +41,15 @@ pub fn create_backup_parent_directory(
 	}
 
 	// Add the actual name to the path
-	used_directory_path.push(format!("Backup {}", name));
+	let date_in_pretty = Local::now().format("%d.%m.%Y %H.%M").to_string();
 
 	if is_zipped {
-		// Add the ".zip"-extension for zip files
-		used_directory_path.set_extension("zip");
+		used_directory_path.push(format!("Backup {name} {date_in_pretty}.zip"));
+	} else {
+		used_directory_path.push(format!("Backup {name} {date_in_pretty}"));
+	}
 
+	if is_zipped {
 		// If the path with .zip already exists, return None
 		if std::path::Path::new(&used_directory_path).exists() {
 			return None;

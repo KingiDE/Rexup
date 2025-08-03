@@ -127,11 +127,13 @@ fn execute_all_commands(
 	let mut logs = vec![];
 
 	for command in commands {
+		let shell_command = if cfg!(target_family = "windows") { "powershell" } else { "sh" };
+
 		// If the execution succeeded and the status indicates a successful execution, add a `BackupExecutionLog::SuccessExecutingCommand` log and continue with the next iteration.
 		if
-			let Ok(status) = Command::new("powershell")
+			let Ok(status) = Command::new(shell_command)
 				.current_dir(&parent_directory_and_relative_target)
-				.args(&["-Command", &command])
+				.args(&["-c", &command])
 				.status()
 		{
 			if status.success() {

@@ -36,7 +36,7 @@ export const globalTexts = {
 				home: "Home",
 				desktop: "Desktop",
 				downloads: "Downloads",
-				documents: "Desktop",
+				documents: "Documents",
 			},
 			results: {
 				heading: "Nested directories in the current directory:",
