@@ -53,9 +53,9 @@ If you want to install Rexup, just look over there.
 
 - [x] Migrate from React to Svelte  
 - [x] Add Linux support  
-- [ ] Allow renaming of backuped directories and files  
-- [ ] Add remote sources (e.g., Git repositories) and execute commands in them (bun install) for backing up GitHub repos  
-- [ ] Extend filter functionality  
+- [x] Allow renaming of backuped directories and files  
+- [x] Add remote sources (e.g., Git repositories) and execute commands in them (bun install) for backing up GitHub repos  
+- [x] Extend filter functionality  
 - [ ] Add macOS support (planned)  
 
 ## ⁉️ Help
@@ -87,4 +87,5 @@ Thank you to everyone contributing to Rexup!
 ### ❓ FAQ
 
 This section will contain frequently asked questions to help users with quick guidance. Currently, there are no entries, but they will be added soon.
+
 
