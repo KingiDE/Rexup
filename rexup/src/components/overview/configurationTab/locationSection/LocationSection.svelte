@@ -1,22 +1,22 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
   import PathSelectorPopup from "../../../popups/pathSelectorPopup/PathSelectorPopup.svelte";
-  import type { CurrentPopup, LocalStateBackup } from "../../../types";
+  import type { LocalStateBackup } from "../../../types";
   import WriteAccessBox from "./WriteAccessBox.svelte";
   import BackupLocationInput from "./BackupLocationInput.svelte";
+  import { closePopup } from "../../../../hooks/useHotkeyHandler.svelte";
+  import { globalTexts } from "../../../../globalTexts";
 
   let {
     currentBackup = $bindable(),
-    popup = $bindable(),
   }: {
     currentBackup: LocalStateBackup;
-    popup: CurrentPopup;
   } = $props();
 
-  // When the user clicks "Select path", this function is passed to the PathSelectorPopup and will be called with the new location
+  // When the user clicks "Select path", this function is called with the updated location
   function setCurrentBackupPath(path: string) {
-    currentBackup.location = path === "" ? null : path;
-    popup = null;
+    currentBackup.location = path;
+    closePopup();
   }
 
   // Checks whether the user has write access to this location
@@ -36,16 +36,16 @@
 </script>
 
 <div class="mt-4">
-  <div class="font-semibold">Backup-Location</div>
-  <div class="opacity-75 max-w-[600px]">
-    After your backup has been executed, it will be placed somewhere. This
-    location can be configured here. To change it, simply click the
-    "Edit"-button below and choose a diretory, the backup will be placed in.
+  <div class="font-semibold">
+    {globalTexts.overview.configurationTab.locationSection.label}
   </div>
-  <BackupLocationInput bind:popup bind:currentBackup />
+  <div class="opacity-75 max-w-[700px]">
+    {globalTexts.overview.configurationTab.locationSection.description}
+  </div>
+  <BackupLocationInput bind:currentBackup />
   <PathSelectorPopup
-    heading="Select backup location"
-    bind:popup
+    heading={globalTexts.overview.configurationTab.locationSection
+      .pathSelectorHeading}
     popupToShowUp="select_backup_location"
     setOuterPath={setCurrentBackupPath}
   />

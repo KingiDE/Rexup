@@ -32,35 +32,15 @@ To format code correctly on save, configure your editor to use Biome as the defa
 There are three important scripts in the package.json file:
 
 - tsc-check: Checks for any TypeScript errors  
-- format: Lints and formats the code (even without the extension installed) and shows possible issues  
-- svelte-check: Reports Svelte-related errors  
+- svelte-check: Reports Svelte-related errors 
+- biome-check: Lints and formats the code (even without the extension installed) and shows possible issues  
 
 ## 📦 Installation
 
 > Currently, only Windows and Linux are supported. This may change in the future, but you can already build Rexup for other systems.
 
-### 🟦 Windows
-
-Download either rexup_2.0.0_x64_en-US.msi or rexup_2.0.0_x64-setup.exe and follow the installation instructions.  
-If you prefer a standalone executable, download rexup_2.0.0.exe, which runs without creating a Start Menu entry.
-
-### 🐧 Linux
-
-Due to the variety of Linux distributions, the best installation method may vary. The following section provides general guidance.
-
-**AppImage:**  
-AppImages should work on nearly all distributions. They are not installed – just double-click to run.  
-They also do not create a Start Menu entry. Download rexup_2.0.0_amd64.AppImage and run it.  
-You may need to make it executable first (chmod +x filename or via file properties).
-
-**Debian:**  
-.deb files work on Debian-based distributions (this means also Ubuntu and Linux Mint).  
-To install rexup_2.0.0_amd64.deb, right-click the file and open it with "Software Install" if your system doesn’t do so automatically.  
-Follow the prompts to complete installation.
-
-**RPM:**  
-For RPM-based distributions like Fedora, openSUSE, and CentOS, use rexup_2.0.0_x86_64.rpm.  
-Download the file, right-click it, and choose "Software Install" to begin the installation.
+To always present the most updated guide, the installation guide has been moved into the Releases section on the right. 
+If you want to install Rexup, just look over there.
 
 ## ⚙️ Workflow
 
@@ -73,10 +53,9 @@ Download the file, right-click it, and choose "Software Install" to begin the in
 
 - [x] Migrate from React to Svelte  
 - [x] Add Linux support  
-- [ ] Use TOML instead of JSON for storing data
-- [ ] Allow renaming of backuped directories and files  
-- [ ] Add remote sources (e.g., Git repositories) and execute commands in them (bun install) for backing up GitHub repos  
-- [ ] Extend filter functionality  
+- [x] Allow renaming of backuped directories and files  
+- [x] Add remote sources (e.g., Git repositories) and execute commands in them (bun install) for backing up GitHub repos  
+- [x] Extend filter functionality  
 - [ ] Add macOS support (planned)  
 
 ## ⁉️ Help
@@ -108,3 +87,5 @@ Thank you to everyone contributing to Rexup!
 ### ❓ FAQ
 
 This section will contain frequently asked questions to help users with quick guidance. Currently, there are no entries, but they will be added soon.
+
+

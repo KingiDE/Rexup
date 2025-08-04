@@ -29,7 +29,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Manually added
-bun.lockb
-bun.lock

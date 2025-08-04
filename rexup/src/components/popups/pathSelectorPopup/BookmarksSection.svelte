@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { updatePathElementsFromUserLocationTo } from "../../../hooks/usePathSelectorPopup";
+  import { globalTexts } from "../../../globalTexts";
+  import { updatePathElementsFromUserLocationTo } from "../../../hooks/overview/usePathSelectorPopup";
   import type { PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
@@ -22,9 +23,9 @@
 </script>
 
 <div
-  class="row-start-1 row-end-3 col-start-1 grid gap-1 content-start self-start h-[300px] overflow-y-scroll"
+  class="row-start-1 row-end-3 col-start-1 grid gap-1 content-start self-start h-full overflow-y-scroll"
 >
-  <div>Bookmarks:</div>
+  <div>{globalTexts.overview.pathSelectorPopup.bookmarks.heading}</div>
   <Button
     onClick={async () =>
       (pathElements = await updatePathElementsFromUserLocationTo("Home"))}
@@ -32,10 +33,10 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Home
+      {globalTexts.overview.pathSelectorPopup.bookmarks.home}
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="home" extraCSS="fill-gray-50" />
+      <Icon name="home" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <!-- List bookmarks -->
@@ -46,10 +47,10 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Desktop
+      {globalTexts.overview.pathSelectorPopup.bookmarks.desktop}
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="pin" extraCSS="fill-gray-50" />
+      <Icon name="pin" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <Button
@@ -59,10 +60,10 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Downloads
+      {globalTexts.overview.pathSelectorPopup.bookmarks.downloads}
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="pin" extraCSS="fill-gray-50" />
+      <Icon name="pin" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <Button
@@ -72,16 +73,16 @@
     extraCSS="py-1"
   >
     {#snippet text()}
-      Documents
+      {globalTexts.overview.pathSelectorPopup.bookmarks.documents}
     {/snippet}
     {#snippet icon()}
-      <Icon width={24} height={24} name="pin" extraCSS="fill-gray-50" />
+      <Icon name="pin" extraCSS="fill-gray-50" />
     {/snippet}
   </Button>
   <!-- List drives -->
   {#each drives as drive}
     <Button
-      onClick={async () => (pathElements = drive)}
+      onClick={async () => (pathElements = [...drive])}
       meaning="neutral"
       extraCSS="py-1"
     >
@@ -89,7 +90,7 @@
         {drive.at(-1)?.name}
       {/snippet}
       {#snippet icon()}
-        <Icon width={24} height={24} name="drive" extraCSS="fill-gray-50" />
+        <Icon name="drive" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
   {/each}

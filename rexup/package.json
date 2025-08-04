@@ -1,7 +1,7 @@
 {
 	"name": "rexup",
 	"private": true,
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"description": "Rexup is a backup creation tool",
 	"type": "module",
 	"scripts": {
@@ -12,7 +12,7 @@
 		"tauri": "tauri",
 		"tsc-check": "tsc --noEmit --skipLibCheck",
 		"svelte-check": "svelte-check",
-		"format": "biome check --write ./src astro.config.mjs package.json svelte.config.js tsconfig.json"
+		"biome-check": "biome check --write ./src astro.config.mjs package.json svelte.config.js tsconfig.json"
 	},
 	"dependencies": {
 		"@astrojs/svelte": "^7.0.13",

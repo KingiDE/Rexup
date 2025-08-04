@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { globalTexts } from "../../../../globalTexts";
   import Icon from "../../../ui/Icon.svelte";
 
   let {
@@ -13,24 +14,13 @@
 >
   {#if hasWriteAccess}
     <div class="flex gap-2">
-      <Icon
-        width={24}
-        height={24}
-        name="checked"
-        extraCSS="fill-gray-50 shrink-0"
-      />
-      Everything is fine! You have access to this location on your filesystem.
+      <Icon name="checked" extraCSS="fill-gray-50 shrink-0" />
+      {globalTexts.overview.configurationTab.locationSection.accessGranted}
     </div>
   {:else}
     <div class="flex gap-2">
-      <Icon
-        width={24}
-        height={24}
-        name="close"
-        extraCSS="fill-gray-50 shrink-0"
-      />
-      Something is not working! You don't seem to have access to this location on
-      your filesystem. Please choose a different directory.
+      <Icon name="close" extraCSS="fill-gray-50 shrink-0" />
+      {globalTexts.overview.configurationTab.locationSection.accessProhibited}
     </div>
   {/if}
 </div>

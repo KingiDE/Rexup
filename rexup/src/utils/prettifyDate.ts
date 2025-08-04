@@ -2,7 +2,7 @@
 export function prettifyDate(miliseconds: string) {
 	const milisecondsAsNumber = Number(miliseconds);
 
-	if(Number.isNaN(milisecondsAsNumber)) return;
+	if (Number.isNaN(milisecondsAsNumber)) return;
 
 	const date = new Date(milisecondsAsNumber);
 
@@ -72,7 +72,7 @@ export function prettifyDate(miliseconds: string) {
 	return `${addZero(date.getHours())}:${addZero(date.getMinutes())} ${weekday}, ${date.getDate()}. ${month} ${date.getFullYear()}`;
 }
 
-// If the value is one digit long, a "0" in front will be added
+// If the value is one digit long, a "0" in front is added
 function addZero(value: number) {
 	if (value < 10) return `0${value}`;
 	return `${value}`;

@@ -1,4 +1,5 @@
-use std::{ fs::{ self, OpenOptions }, time::{ SystemTime, UNIX_EPOCH }, path::Path };
+use std::{ fs::{ self, OpenOptions }, path::Path };
+use chrono::Utc;
 
 /// Checks whether the current process has write access to the specified directory path.
 ///
@@ -16,22 +17,17 @@ use std::{ fs::{ self, OpenOptions }, time::{ SystemTime, UNIX_EPOCH }, path::Pa
 ///   where write access should be checked.
 ///
 /// # Notes
-/// - The test file is not guaranteed to be removed if the process crashes or is terminated
+/// - The test file is not guaranteed to be removed if the process fails or is terminated
 ///   between file creation and deletion.
 #[tauri::command]
 pub fn has_write_access_to(path: String) -> bool {
-	let path = Path::new(&path);
+	let file_path = Path::new(&path).join(&format!("temp_rexup_{}", Utc::now().timestamp_millis()));
 
-	let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
-	let test_file = path.join(format!(".perm_test_{}", timestamp));
-
-	match OpenOptions::new().write(true).create_new(true).open(&test_file) {
-		Ok(_) => {
-			match fs::remove_file(&test_file) {
-				Ok(_nothing) => true,
-				Err(_err) => false,
-			}
+	if let Ok(_) = OpenOptions::new().write(true).create_new(true).open(&file_path) {
+		if let Ok(_) = fs::remove_file(&file_path) {
+			return true;
 		}
-		Err(_) => false,
 	}
+
+	false
 }

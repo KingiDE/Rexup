@@ -1,7 +1,10 @@
+use std::path::Component;
+
 use serde::{ Deserialize, Serialize };
 
 use crate::FileOrDirectory;
 use crate::path_selector::PathElement;
+use crate::path_utils::get_home_path;
 
 /// Stores all variants of locations the frontend might want to know.
 #[derive(Debug, Serialize, Deserialize)]
@@ -14,12 +17,6 @@ pub enum UserLocation {
 
 /// Returns the full path to a user-specific directory (e.g., Desktop, Downloads, Documents)
 /// as a sequence of `PathElement`s, which represent each component of the file path.
-///
-/// This function abstracts away the platform-specific details of user directories
-/// and provides a consistent structure across different operating systems.
-///
-/// Internally, it calls `get_os_specific_path()` to construct the path based on the
-/// current operating system:
 ///
 /// - **On Windows**: Builds a path starting from `C:/Users/{username}/` and appends
 ///   the selected subdirectory (e.g., `Downloads`).
@@ -46,103 +43,61 @@ pub enum UserLocation {
 ///   default structure based on conventional OS layouts.
 #[tauri::command]
 pub fn get_user_path_to(location: UserLocation) -> Vec<PathElement> {
-	get_os_specific_path(location)
-}
+	let mut base_path = Vec::new();
+	let mut current_path = String::new();
 
-/// Helper function that returns the path to a user's OS-specific directory-`location` in form of `PathElements` on Windows.
-#[cfg(target_family = "windows")]
-fn get_os_specific_path(location: UserLocation) -> Vec<PathElement> {
-	let username = whoami::username();
+	for (_i, part) in get_home_path().components().enumerate() {
+		let part_as_string = part.as_os_str().to_string_lossy().to_string();
 
-	let mut base_path = vec![
-		PathElement {
-			id: "C:/".to_string(),
-			name: "C:".to_string(),
-			variant: FileOrDirectory::Directory,
-		},
-		PathElement {
-			id: "C:/Users/".to_string(),
-			name: "Users".to_string(),
-			variant: FileOrDirectory::Directory,
-		},
-		PathElement {
-			id: format!("C:/Users/{}/", &username),
-			name: username.clone(),
-			variant: FileOrDirectory::Directory,
+		// Skip current iteration on Windows because there comes an "\" after the drive letter
+		if cfg!(target_family = "windows") {
+			if let Component::RootDir = part {
+				continue;
+			}
 		}
-	];
 
-	match location {
-		UserLocation::Downloads => {
-			base_path.push(PathElement {
-				id: format!("C:/Users/{}/Downloads/", &username),
-				name: "Downloads".to_string(),
-				variant: FileOrDirectory::Directory,
-			});
+		current_path.push_str(&part_as_string);
+
+		if cfg!(target_family = "unix") {
+			if let Component::RootDir = part {
+				// Don't push another "/" after the root "/" on Linux
+			} else {
+				current_path.push('/');
+			}
+		} else {
+			current_path.push('/');
 		}
-		UserLocation::Documents => {
-			base_path.push(PathElement {
-				id: format!("C:/Users/{}/Documents/", &username),
-				name: "Documents".to_string(),
-				variant: FileOrDirectory::Directory,
-			});
-		}
-		UserLocation::Desktop => {
-			base_path.push(PathElement {
-				id: format!("C:/Users/{}/Desktop/", &username),
-				name: "Desktop".to_string(),
-				variant: FileOrDirectory::Directory,
-			});
-		}
-		// Append nothing if the value is "Home"
-		_ => {}
+
+		base_path.push(PathElement {
+			id: current_path.clone(),
+			name: part_as_string,
+			variant: FileOrDirectory::Directory,
+		});
 	}
 
-	base_path
-}
-
-/// Helper function that returns the path to a user's OS-specific directory-`location` in form of `PathElements` on Linux.
-#[cfg(target_family = "unix")]
-fn get_os_specific_path(location: UserLocation) -> Vec<PathElement> {
-	let username = whoami::username();
-
-	let mut base_path = vec![
-		PathElement { id: "/".to_string(), name: "/".to_string(), variant: FileOrDirectory::Directory },
-		PathElement {
-			id: "/home/".to_string(),
-			name: "home".to_string(),
-			variant: FileOrDirectory::Directory,
-		},
-		PathElement {
-			id: format!("/home/{}/", &username),
-			name: username.clone(),
-			variant: FileOrDirectory::Directory,
-		}
-	];
-
 	match location {
 		UserLocation::Downloads => {
 			base_path.push(PathElement {
-				id: format!("/home/{}/Downloads/", &username),
+				id: get_home_path().join("Downloads").to_string_lossy().to_string(),
 				name: "Downloads".to_string(),
 				variant: FileOrDirectory::Directory,
 			});
 		}
 		UserLocation::Documents => {
 			base_path.push(PathElement {
-				id: format!("/home/{}/Documents/", &username),
+				id: get_home_path().join("Documents").to_string_lossy().to_string(),
 				name: "Documents".to_string(),
 				variant: FileOrDirectory::Directory,
 			});
 		}
 		UserLocation::Desktop => {
 			base_path.push(PathElement {
-				id: format!("/home/{}/Desktop/", &username),
+				id: get_home_path().join("Desktop").to_string_lossy().to_string(),
 				name: "Desktop".to_string(),
 				variant: FileOrDirectory::Directory,
 			});
 		}
-		// Append nothing if the value is "Home"
+		// Append nothing if the `location` is "UserLocation::Home"
 		_ => {}
 	}
 

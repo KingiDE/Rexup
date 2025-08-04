@@ -10,6 +10,7 @@ The getter function returns the actual value while the setter function updates t
     labelExtraCSS,
     inputExtraCSS,
     disabled,
+    alwaysReadable,
     type,
     searchbar = $bindable(),
     onFocus,
@@ -21,6 +22,7 @@ The getter function returns the actual value while the setter function updates t
     labelExtraCSS?: string;
     inputExtraCSS?: string;
     disabled?: boolean;
+    alwaysReadable?: boolean;
     type?: "text" | "number";
     searchbar?: HTMLInputElement | null;
     onFocus?: () => void;
@@ -33,7 +35,12 @@ The getter function returns the actual value while the setter function updates t
     bind:this={searchbar}
     onfocus={onFocus}
     {type}
-    class={`block -outline-offset-1 outline-1 outline-gray-500 rounded-md px-2 py-1.5 w-full focus-visible:outline-white transition-[outline] ${inputExtraCSS} ${label ? "mt-1" : ""}`}
+    class={`
+      block -outline-offset-1 outline-1 outline-gray-500 rounded-md px-2 py-1.5 w-full focus-visible:outline-white transition-[outline] 
+      ${inputExtraCSS} 
+      ${label ? "mt-1" : ""}
+      ${disabled && !alwaysReadable ? "opacity-50" : ""} 
+    `}
     bind:value={getter, setter}
     {placeholder}
     {disabled}

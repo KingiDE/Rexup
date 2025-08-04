@@ -9,13 +9,18 @@ export type CurrentPopup =
 
 export type CurrentOverviewTab = "entries" | "logs" | "configuration";
 
-export type EditBackupEntryTab = "overview" | "filters" | "destructive";
+export type EditBackupEntryTab =
+	| "overview"
+	| "origin"
+	| "target"
+	| "filters"
+	| "destructive";
 
 //
 // Types, the backend also has:
 //
 
-// A utility type; the values start with a captial letter because they are returned by a Rust enum
+// A utility type
 export type FileOrDirectory = "File" | "Directory";
 
 // The structure a loaded backup has
@@ -24,7 +29,7 @@ export type LocalStateBackup = {
 	name: string;
 	entries: Array<LocalStateBackupEntry>;
 	is_zipped: boolean;
-	location: string | null;
+	location: string;
 	// Stores the execution times in miliseconds after 1. January 1970 by calling "Date.getTime()"
 	executions: Array<string>;
 	logs_of_last_execution: Array<BackupExecutionLog>;
@@ -34,8 +39,15 @@ export type LocalStateBackup = {
 export type LocalStateBackupEntry = {
 	id: string;
 	name: string;
-	origin: string;
+	// The origin can be a local file-system path or one/multiple commands that are executed.
+	origin: {
+		active_mode: "Commands" | "LocalFileSystem";
+		commands: Array<string>;
+		local_file_system: string;
+	};
 	target: string;
+	// If the value is empty, the entry isn't renamed
+	rename_to: string;
 	is_active: boolean;
 	// Used for visual indication as both directories and files can contain a "."
 	variant: FileOrDirectory | null;
@@ -44,25 +56,36 @@ export type LocalStateBackupEntry = {
 
 // The filters each backup-entry has
 type LocalStateBackupFilters = {
+	// The file is only copied if it is smaller than the given size
 	max_size_in_mb: number | null;
-	included_file_extensions: Array<string>;
-	included_file_names: Array<string>;
+	// If mode is "Exclude", the filter is inverted. This does not influence the behaviour of "max_size_in_mb".
+	mode: "Include" | "Exclude";
+	// The file is only copied if it has at least one of the given elements in its path or name
+	path_elements: Array<string>;
+	// The file is only copied if it has one of the given names
+	file_names: Array<string>;
 };
 
-// The structure a backup-execution log has, that is shown in its specific tab inside the overview
+// The structure a backup-execution log has, that is shown in its own tab inside the overview
 export type BackupExecutionLog =
 	| { Finished: string }
 	| { Information: string }
 	| { ErrorCopying: string }
 	| {
-			SuccessCopying: {
+			SuccessExecutingCommand: {
+				command: string;
+				to_path: string;
+			};
+	  }
+	| {
+			SuccessCopyingFileOrDirectory: {
 				variant: FileOrDirectory;
 				from_path: string;
 				to_path: string;
 			};
 	  }
 	| {
-			IgnoreCopying: {
+			IgnoreCopyingFile: {
 				from_path: string;
 				to_path: string;
 				reason: IgnoreFileReason;
@@ -70,7 +93,10 @@ export type BackupExecutionLog =
 	  };
 
 // The reasons a file is ignored and not copied
-export type IgnoreFileReason = "WrongName" | "WrongExtension" | "TooLargeSize";
+export type IgnoreFileReason =
+	| "WrongPathElements"
+	| "WrongName"
+	| "TooLargeSize";
 
 // The blocks at the top bar in the PathSelector that indicate directories
 export type PathElement = {

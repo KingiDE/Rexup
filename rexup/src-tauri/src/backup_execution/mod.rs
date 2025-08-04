@@ -1,10 +1,9 @@
 use tauri::AppHandle;
-use std::{ fs::{ File, OpenOptions }, vec };
+use std::{ fs::OpenOptions, vec };
 use zip::ZipWriter;
 
-use crate::{ Backup, BackupExecutionLog };
+use crate::{ global_texts, Backup, BackupExecutionLog };
 
-mod procedures;
 mod create_backup_parent_directory;
 mod copy_backup_entry;
 mod emit;
@@ -13,32 +12,30 @@ use create_backup_parent_directory::create_backup_parent_directory;
 use copy_backup_entry::copy_backup_entry;
 use emit::emit_to_frontend;
 
-/// Manages creating the backup-parent-directory as well as copying all the contained `entries` of the given `backup`.
+/// Manages creating the backup parent directory as well as copying all the contained entries of the passed `backup`.
 ///
-/// ## Note:
-/// Instead of returning errors or one long success-object, this function will actually send events to the frontend to display important information.
+/// # Note
+/// Instead of returning errors or one heavy success object, this function sends events to the frontend to display important information.
 /// This way, it becomes like a "live-ticker" by regularly reporting finished entries in contrast of having to wait for the entire execution to finish and return all the
 /// results afterwards.
 ///
-/// ## Returns:
+/// # Returns
 /// This function returns early but no value if some crucial error occurs.
 ///
 /// These are the possible reasons of an early return:
-/// - If the backup-parent-directory cannot be created
+/// - If the backup parent directory cannot be created
 /// - If a `ZipWriter` needs to be created because of `is_zipped` being `true` and the creation fails
 #[tauri::command]
 pub fn execute_backup(app: AppHandle, backup: Backup) {
 	let parent_path = match
-		create_backup_parent_directory(backup.name, backup.location, backup.is_zipped)
+		create_backup_parent_directory(backup.name, &backup.location, backup.is_zipped)
 	{
 		Some(path) => path,
 		None => {
 			emit_to_frontend(
 				&app,
 				vec![
-					BackupExecutionLog::Information(
-						"Couldn't create the backup-parent-directory so the backup cannot be executed.".to_string()
-					)
+					BackupExecutionLog::Information(global_texts::backup_parent_not_created(&backup.location))
 				],
 				"Couldn't send an event to the frontend when calling `create_backup_parent_directory` in `execute_backup`!"
 			);
@@ -46,7 +43,7 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 		}
 	};
 
-	let mut zip_writer: Option<ZipWriter<File>> = None;
+	let mut opt_zip_writer = None;
 
 	if backup.is_zipped {
 		// Create a ZipWriter
@@ -55,18 +52,14 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 			Err(_err) => {
 				emit_to_frontend(
 					&app,
-					vec![
-						BackupExecutionLog::Information(
-							"Couldn't create the zip-writer so the backup cannot be executed.".to_string()
-						)
-					],
-					"Couldn't send an event to the frontend when creating a zip-writer in `execute_backup`!"
+					vec![BackupExecutionLog::Information(global_texts::ZIP_WRITER_NOT_CREATED.to_string())],
+					"Couldn't send an event to the frontend when creating a zip writer in `execute_backup`!"
 				);
 				return;
 			}
 		};
 
-		zip_writer = Some(ZipWriter::new(file));
+		opt_zip_writer = Some(ZipWriter::new(file));
 	}
 
 	for backup_entry in backup.entries {
@@ -75,9 +68,7 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 			emit_to_frontend(
 				&app,
 				vec![
-					BackupExecutionLog::Information(
-						format!("Skipped execution of entry '{}' because its disabled.", backup_entry.name)
-					)
+					BackupExecutionLog::Information(global_texts::skipped_backup_entry(&backup_entry.name))
 				],
 				"Couldn't send an event to the frontend when skipping the execution of a backup-entry in `execute_backup`!"
 			);
@@ -85,25 +76,22 @@ pub fn execute_backup(app: AppHandle, backup: Backup) {
 		}
 
 		let mut logs = vec![
-			BackupExecutionLog::Information(
-				format!("Started the execution of entry '{}'.", backup_entry.name)
-			)
+			BackupExecutionLog::Information(global_texts::started_backup_entry(&backup_entry.name))
 		];
 
 		let mut entry_logs = copy_backup_entry(
 			backup_entry.origin,
 			backup_entry.target,
+			backup_entry.rename_to,
 			&parent_path,
-			&mut zip_writer,
+			&mut opt_zip_writer,
 			backup_entry.filters
 		);
 
 		logs.append(&mut entry_logs);
 
 		logs.push(
-			BackupExecutionLog::Information(
-				format!("Finished the execution of entry '{}'.", backup_entry.name)
-			)
+			BackupExecutionLog::Information(global_texts::finished_backup_entry(&backup_entry.name))
 		);
 
 		emit_to_frontend(

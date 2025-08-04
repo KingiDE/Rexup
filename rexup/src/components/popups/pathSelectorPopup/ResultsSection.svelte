@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { globalTexts } from "../../../globalTexts";
   import {
     pushDirectoryToPathElements,
     replaceLastPathElement,
-  } from "../../../hooks/usePathSelectorPopup";
+  } from "../../../hooks/overview/usePathSelectorPopup";
   import type { DirectoryContent, PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
@@ -24,16 +25,18 @@
   });
 </script>
 
-<div>
-  <div>Directories in this directory:</div>
+<div class="overflow-hidden grid gap-1 grid-rows-[24px_auto] h-[400px]">
+  <div>{globalTexts.overview.pathSelectorPopup.results.heading}</div>
   <div
-    class={`mt-1 grid gap-1 h-[300px] overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
+    class={`grid gap-1 h-full overflow-y-scroll pr-1 ${shownResults.length === 0 ? "content-center" : "content-start"}`}
   >
     {#if shownResults.length === 0}
       <div class="text-center self-center">
-        <div class="font-bold">:/</div>
         <div class="font-bold">
-          There don't exist any entries in this directory
+          {globalTexts.overview.pathSelectorPopup.results.noResults.infoEmoji}
+        </div>
+        <div class="font-bold">
+          {globalTexts.overview.pathSelectorPopup.results.noResults.info}
         </div>
       </div>
     {:else}
@@ -44,7 +47,43 @@
             onClick={() => {
               // If the last element is already a file, replace it
               if (pathElements.at(-1)?.variant === "File") {
-                replaceLastPathElement(pathElements, result.name, result.id);
+                replaceLastPathElement(
+                  pathElements,
+                  result.name,
+                  result.id,
+                  "File",
+                );
+              } else {
+                pushDirectoryToPathElements(
+                  pathElements,
+                  result.name,
+                  result.id,
+                  result.variant,
+                );
+              }
+            }}
+            extraRules={["no-outline"]}
+            meaning="neutral"
+            extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""} outline -outline-offset-1 ${result.id === pathElements.at(-1)?.id ? "outline-gray-50" : "outline-gray-500"}`}
+          >
+            {#snippet text()}
+              {result.name}
+            {/snippet}
+            {#snippet icon()}
+              <Icon name="file" extraCSS="fill-gray-50" />
+            {/snippet}
+          </Button>
+        {:else if result.variant === "Directory"}
+          <Button
+            onClick={() => {
+              // If the last element is already a file, replace it
+              if (pathElements.at(-1)?.variant === "File") {
+                replaceLastPathElement(
+                  pathElements,
+                  result.name,
+                  result.id,
+                  "Directory",
+                );
               } else {
                 pushDirectoryToPathElements(
                   pathElements,
@@ -55,43 +94,13 @@
               }
             }}
             meaning="neutral"
-            extraRules={["no-outline"]}
-            extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""} ${result.id === pathElements.at(-1)?.id ? "outline-gray-50" : "outline-gray-500"}`}
-          >
-            {#snippet text()}
-              {result.name}
-            {/snippet}
-            {#snippet icon()}
-              <Icon
-                width={24}
-                height={24}
-                name="file"
-                extraCSS="fill-gray-50"
-              />
-            {/snippet}
-          </Button>
-        {:else if result.variant === "Directory"}
-          <Button
-            onClick={() =>
-              pushDirectoryToPathElements(
-                pathElements,
-                result.name,
-                result.id,
-                result.variant,
-              )}
-            meaning="neutral"
             extraCSS={`text-start py-1 h-8 ${result.is_hidden ? "opacity-50" : ""}`}
           >
             {#snippet text()}
               {result.name}
             {/snippet}
             {#snippet icon()}
-              <Icon
-                width={24}
-                height={24}
-                name="directory"
-                extraCSS="fill-gray-50"
-              />
+              <Icon name="directory" extraCSS="fill-gray-50" />
             {/snippet}
           </Button>
         {/if}

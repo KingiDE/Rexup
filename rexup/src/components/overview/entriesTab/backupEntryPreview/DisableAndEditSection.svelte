@@ -1,15 +1,14 @@
 <script lang="ts">
-  import type { CurrentPopup, LocalStateBackupEntry } from "../../../types";
+  import { globalTexts } from "../../../../globalTexts";
+  import { selectThisBackupEntry } from "../../../../hooks/overview/useEntriesTab.svelte";
+  import { popup } from "../../../../hooks/useHotkeyHandler.svelte";
+  import type { LocalStateBackupEntry } from "../../../types";
   import Button from "../../../ui/Button.svelte";
 
   let {
     entry = $bindable(),
-    popup = $bindable(),
-    selectThisBackupEntry = $bindable(),
   }: {
     entry: LocalStateBackupEntry;
-    popup: CurrentPopup;
-    selectThisBackupEntry: (entry: LocalStateBackupEntry) => void;
   } = $props();
 </script>
 
@@ -18,21 +17,25 @@
     meaning="neutral"
     onClick={() => (entry.is_active = !entry.is_active)}
     extraCSS={`py-1 w-[100px] justify-self-end`}
+    disabled={popup.value !== null}
   >
     {#snippet text()}
-      {entry.is_active ? "Enabled" : "Disabled"}
+      {entry.is_active
+        ? globalTexts.overview.entriesTab.backupEntryPreview.entryEnabled
+        : globalTexts.overview.entriesTab.backupEntryPreview.entryDisabled}
     {/snippet}
   </Button>
   <Button
     meaning="positive"
     onClick={() => {
-      popup = "edit_backup_entry";
+      popup.value = "edit_backup_entry";
       selectThisBackupEntry(entry);
     }}
     extraCSS="py-1 w-[100px] justify-self-end"
+    disabled={popup.value !== null}
   >
     {#snippet text()}
-      Edit
+      {globalTexts.overview.entriesTab.backupEntryPreview.edit}
     {/snippet}
   </Button>
 </div>

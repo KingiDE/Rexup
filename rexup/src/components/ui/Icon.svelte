@@ -6,8 +6,8 @@
   const {
     name,
     extraCSS,
-    width,
-    height,
+    width = 24,
+    height = 24,
     id,
   }: {
     name: keyof typeof icons;

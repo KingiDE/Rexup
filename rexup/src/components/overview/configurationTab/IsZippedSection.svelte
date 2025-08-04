@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { globalTexts } from "../../../globalTexts";
+  import { popup } from "../../../hooks/useHotkeyHandler.svelte";
   import type { LocalStateBackup } from "../../types";
   import Button from "../../ui/Button.svelte";
+  import Slider from "../../ui/Slider.svelte";
 
   let {
     currentBackup = $bindable(),
@@ -9,37 +12,40 @@
   } = $props();
 </script>
 
-<div class="mt-4">
-  <div class="font-semibold">Output-Variant</div>
-  <div class="opacity-75 max-w-[600px]">
-    Your backup can either be a simple directory containing files or it can be a
-    Zip-Folder. Zip-Folders have the advantage of being smaller and easier to
-    transfer between devices. On the other hand, Zip-Folders need to be
-    extracted if you want to work with the files inside them.
+<div class="grid mt-4">
+  <div class="font-semibold">
+    {globalTexts.overview.configurationTab.isZippedSection.label}
   </div>
-  <div
-    class="relative isolate mt-2 inline-flex -outline-offset-1 outline-1 outline-gray-500 rounded-md"
+  <div class="opacity-75 max-w-[700px]">
+    {globalTexts.overview.configurationTab.isZippedSection.description}
+  </div>
+  <Slider
+    extraCSS="mt-2 justify-self-start"
+    sizeOfSingleElement={120}
+    indexOfSelectedElement={currentBackup.is_zipped ? 1 : 0}
   >
-    <div
-      class={`-z-10 absolute h-full w-[120px] bg-gray-500 rounded-md transition-[left] ${currentBackup.is_zipped ? "left-[120px]" : "left-0"}`}
-    ></div>
-    <Button
-      onClick={() => (currentBackup.is_zipped = false)}
-      meaning="discrete-neutral"
-      extraCSS="w-[120px] px-4 py-1"
-    >
-      {#snippet text()}
-        Directory
-      {/snippet}
-    </Button>
-    <Button
-      onClick={() => (currentBackup.is_zipped = true)}
-      meaning="discrete-neutral"
-      extraCSS="w-[120px] px-4 py-1"
-    >
-      {#snippet text()}
-        Zip-Folder
-      {/snippet}
-    </Button>
-  </div>
+    {#snippet elements()}
+      <Button
+        onClick={() => (currentBackup.is_zipped = false)}
+        meaning="discrete-neutral"
+        extraCSS="w-[120px] px-4 py-1"
+        disabled={popup.value !== null}
+      >
+        {#snippet text()}
+          {globalTexts.overview.configurationTab.isZippedSection
+            .directoryOption}
+        {/snippet}
+      </Button>
+      <Button
+        onClick={() => (currentBackup.is_zipped = true)}
+        meaning="discrete-neutral"
+        extraCSS="w-[120px] px-4 py-1"
+        disabled={popup.value !== null}
+      >
+        {#snippet text()}
+          {globalTexts.overview.configurationTab.isZippedSection.zipFileOption}
+        {/snippet}
+      </Button>
+    {/snippet}
+  </Slider>
 </div>

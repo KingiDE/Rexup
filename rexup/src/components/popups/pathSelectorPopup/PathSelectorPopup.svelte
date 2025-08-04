@@ -1,10 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import type {
-    CurrentPopup,
-    DirectoryContent,
-    PathElement,
-  } from "../../types";
+  import type { DirectoryContent, PathElement } from "../../types";
   import Button from "../../ui/Button.svelte";
   import Icon from "../../ui/Icon.svelte";
   import { onMount } from "svelte";
@@ -12,19 +8,19 @@
     getPathString,
     read_contents_of_path,
     updatePathElementsFromUserLocationTo,
-  } from "../../../hooks/usePathSelectorPopup";
+  } from "../../../hooks/overview/usePathSelectorPopup";
   import PathElementsSection from "./PathElementsSection.svelte";
   import BookmarksSection from "./BookmarksSection.svelte";
   import ResultsSection from "./ResultsSection.svelte";
+  import { closePopup, popup } from "../../../hooks/useHotkeyHandler.svelte";
+  import { globalTexts } from "../../../globalTexts";
 
   let {
-    popup = $bindable(),
     setOuterPath,
     showFiles,
     popupToShowUp,
     heading,
   }: {
-    popup: CurrentPopup;
     setOuterPath: (location: string) => void;
     showFiles?: boolean;
     popupToShowUp:
@@ -36,7 +32,7 @@
   // Stores the current path that is selected at the top bar
   let pathElements = $state<Array<PathElement>>([]);
 
-  // Stores the results of files and direcotires in the current path
+  // Stores the results of files and directories in the current path
   let directoryResults = $state<Array<DirectoryContent>>([]);
 
   // When the user clicks "Select path", this function combines all path elements and call the function passed through props with it
@@ -64,7 +60,7 @@
   });
 </script>
 
-{#if popup === popupToShowUp}
+{#if popup.value === popupToShowUp}
   <div
     transition:fade={{ duration: 100 }}
     class={`grid w-[600px] z-10 shadow-lg bg-gray-800 fixed left-1/2 top-1/2 -translate-1/2 outline-1 outline-gray-500 rounded-md p-4`}
@@ -72,18 +68,24 @@
     <Button
       meaning="neutral"
       onClick={() => {
-        popup = null;
+        if (popup.value === "select_backup_entry_origin_location") {
+          popup.value = "edit_backup_entry";
+        } else {
+          closePopup();
+        }
       }}
       extraCSS="absolute top-4 right-4 "
     >
       {#snippet icon()}
-        <Icon name="close" width={24} height={24} extraCSS="fill-gray-50" />
+        <Icon name="close" extraCSS="fill-gray-50" />
       {/snippet}
     </Button>
     <!-- Display the current path in form of block at the top bar -->
     <PathElementsSection bind:pathElements {heading} />
     <!-- Display the bookmars, all drives and the directories in the current one -->
-    <div class="mt-2 grid grid-cols-[150px_auto] grid-flow-row gap-x-8">
+    <div
+      class="mt-2 grid grid-cols-[150px_auto] h-[400px] grid-flow-row gap-x-8"
+    >
       <BookmarksSection bind:pathElements />
       <ResultsSection bind:pathElements {showFiles} {directoryResults} />
     </div>
@@ -93,7 +95,7 @@
       extraCSS="mt-4 px-8 justify-self-end"
     >
       {#snippet text()}
-        Select path
+        {globalTexts.overview.pathSelectorPopup.selectPathConfirm}
       {/snippet}
     </Button>
   </div>
