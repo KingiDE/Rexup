@@ -32,8 +32,8 @@ To format code correctly on save, configure your editor to use Biome as the defa
 There are three important scripts in the package.json file:
 
 - tsc-check: Checks for any TypeScript errors  
-- format: Lints and formats the code (even without the extension installed) and shows possible issues  
-- svelte-check: Reports Svelte-related errors  
+- svelte-check: Reports Svelte-related errors 
+- biome-check: Lints and formats the code (even without the extension installed) and shows possible issues  
 
 ## 📦 Installation
 

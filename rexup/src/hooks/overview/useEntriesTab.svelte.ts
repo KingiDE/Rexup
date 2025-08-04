@@ -1,11 +1,11 @@
 import type { LocalStateBackupEntry } from "../../components/types";
+import { closePopup, popup } from "../useHotkeyHandler.svelte";
+import { currentBackup } from "../useTwoColumns.svelte";
 import {
 	getValidInput,
 	resetAddBackupEntryInput,
 	triedToSubmit,
 } from "./useAddBackupEntryPopup.svelte";
-import { closePopup, popup } from "../useHotkeyHandler.svelte";
-import { currentBackup } from "../useTwoColumns.svelte";
 import { displayedLocalFileSystemPath } from "./useEditBackupEntryPopupOrigin.svelte";
 
 export const currentBackupEntry = $state<{

@@ -1,10 +1,10 @@
 // Is placed inside the TwoColumn (= root) component.
 
 import type { CurrentPopup } from "../components/types";
-import { addBackupInput } from "./sidebar/useAddBackupPopup.svelte";
-import { addBackup } from "./sidebar/useSidebar.svelte";
 import { addBackupEntryInput } from "./overview/useAddBackupEntryPopup.svelte";
 import { addBackupEntry } from "./overview/useEntriesTab.svelte";
+import { addBackupInput } from "./sidebar/useAddBackupPopup.svelte";
+import { addBackup } from "./sidebar/useSidebar.svelte";
 
 // Every time a hotkey is pressed, the handler goes down the hierarchy and chooses the correct function to call.
 export function initializeHotkeys() {
